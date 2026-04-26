@@ -2,7 +2,7 @@ package com.v1rex.warehouse_dispatcher.mapper;
 
 import com.v1rex.warehouse_dispatcher.domain.Location;
 import com.v1rex.warehouse_dispatcher.domain.Forklift;
-import com.v1rex.warehouse_dispatcher.domain.PickTask;
+import com.v1rex.warehouse_dispatcher.domain.Task;
 import com.v1rex.warehouse_dispatcher.dto.WarehouseScheduleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,12 +15,12 @@ public class WarehouseScheduleMapper {
 
     private final LocationMapper locationMapper;
     private final ForkliftMapper forkliftMapper;
-    private final PickTaskMapper taskMapper;
+    private final TaskMapper taskMapper;
 
     public WarehouseScheduleResponse toResponse(
             List<Location> locations,
             List<Forklift> forklifts,
-            List<PickTask> unassignedTasks) {
+            List<Task> unassignedTasks) {
 
         return new WarehouseScheduleResponse(
                 locations.stream().map(locationMapper::toResponse).toList(),

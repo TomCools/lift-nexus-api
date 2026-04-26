@@ -5,7 +5,7 @@ import java.util.List;
 public record WarehouseScheduleResponse(
         List<LocationResponse> locations,
         List<ForkliftResponse> forkLifts,
-        List<PickTaskResponse> unassignedTasks) {
+        List<TaskResponse> unassignedTasks) {
 
 
 }

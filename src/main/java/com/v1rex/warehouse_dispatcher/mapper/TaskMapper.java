@@ -1,32 +1,35 @@
 package com.v1rex.warehouse_dispatcher.mapper;
 
-import com.v1rex.warehouse_dispatcher.domain.PickTask;
-import com.v1rex.warehouse_dispatcher.dto.PickTaskRequest;
-import com.v1rex.warehouse_dispatcher.dto.PickTaskResponse;
+import com.v1rex.warehouse_dispatcher.domain.Task;
+import com.v1rex.warehouse_dispatcher.dto.TaskRequest;
+import com.v1rex.warehouse_dispatcher.dto.TaskResponse;
+import com.v1rex.warehouse_dispatcher.enums.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor // Automatically injects the LocationMapper
-public class PickTaskMapper {
+public class TaskMapper {
 
     private final LocationMapper locationMapper;
 
-    public PickTask toEntity(PickTaskRequest request){
+    public Task toEntity(TaskRequest request){
         if (request == null) return null;
-        return PickTask.builder()
+        return Task.builder()
                 .weight(request.weight())
+                .status(request.status() != null ? request.status() : TaskStatus.OPEN)
                 .build();
 
     }
 
-    public PickTaskResponse toResponse(PickTask entity) {
+    public TaskResponse toResponse(Task entity) {
         if (entity == null) return null;
-        return new PickTaskResponse(
+        return new TaskResponse(
                 entity.getId(),
                 locationMapper.toResponse(entity.getPickLocation()) ,
                 locationMapper.toResponse(entity.getDeliveryLocation()),
                 entity.getWeight(),
+                entity.getStatus(),
                 entity.getForklift() != null ? entity.getForklift().getId() : null
         );
     }
