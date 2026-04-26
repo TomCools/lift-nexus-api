@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Forklift {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
