@@ -1,0 +1,70 @@
+package com.v1rex.warehouse_dispatcher.service;
+
+
+import ai.timefold.solver.core.api.solver.SolverManager;
+import com.v1rex.warehouse_dispatcher.domain.Forklift;
+import com.v1rex.warehouse_dispatcher.domain.Location;
+import com.v1rex.warehouse_dispatcher.domain.PickTask;
+import com.v1rex.warehouse_dispatcher.domain.WarehouseSchedule;
+import com.v1rex.warehouse_dispatcher.repository.ForkliftRepository;
+import com.v1rex.warehouse_dispatcher.repository.LocationRepository;
+import com.v1rex.warehouse_dispatcher.repository.PickTaskRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class WarehouseDispatcherService {
+    private final LocationRepository locationRepository;
+    private final ForkliftRepository forkliftRepository;
+    private final PickTaskRepository pickTaskRepository;
+
+    private final SolverManager<WarehouseSchedule> solverManager;
+
+    private WarehouseSchedule bestSolution;
+
+    public WarehouseSchedule buildCurrentState() {
+        // 1. Fetch data from the database
+        List<Location> locations = locationRepository.findAll();
+        List<Forklift> forklifts = forkliftRepository.findAll();
+        List<PickTask> unassignedTasks = pickTaskRepository.findByForkliftIsNull();
+
+        // 2. Assemble the "Whiteboard" (The Planning Solution)
+        WarehouseSchedule schedule = new WarehouseSchedule();
+        schedule.setLocations(locations);
+        schedule.setForklifts(forklifts);
+        schedule.setTaskPool(unassignedTasks);
+
+        // 3. Return the fully loaded state ready for optimization
+        return schedule;
+    }
+
+    public void startSolving() {
+        WarehouseSchedule problem = buildCurrentState();
+        // Update the bestSolution as the solver finds better ones
+        // Explicitly define the ID and the lambda
+        Long problemId = 1L;
+        solverManager.solveAndListen(problemId,
+                problem,
+                this::saveSolution);
+    }
+
+    public WarehouseSchedule getSolution() {
+        return bestSolution != null ? bestSolution : buildCurrentState();
+    }
+
+    @Transactional
+    public void saveSolution(WarehouseSchedule solution) {
+        for (Forklift forklift : solution.getForklifts()) {
+            for (PickTask task : forklift.getTasks()) {
+                // MANUALLY sync the relationship before saving
+                task.setForklift(forklift);
+                pickTaskRepository.save(task);
+            }
+            forkliftRepository.save(forklift);
+        }
+    }
+}
