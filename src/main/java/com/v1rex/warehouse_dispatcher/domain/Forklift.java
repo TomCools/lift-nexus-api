@@ -28,5 +28,5 @@ public class Forklift {
     @OneToMany(mappedBy = "forklift",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER)
-    private List<PickTask> tasks = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
 }

@@ -4,11 +4,11 @@ package com.v1rex.warehouse_dispatcher.service;
 import ai.timefold.solver.core.api.solver.SolverManager;
 import com.v1rex.warehouse_dispatcher.domain.Forklift;
 import com.v1rex.warehouse_dispatcher.domain.Location;
-import com.v1rex.warehouse_dispatcher.domain.PickTask;
+import com.v1rex.warehouse_dispatcher.domain.Task;
 import com.v1rex.warehouse_dispatcher.domain.WarehouseSchedule;
 import com.v1rex.warehouse_dispatcher.repository.ForkliftRepository;
 import com.v1rex.warehouse_dispatcher.repository.LocationRepository;
-import com.v1rex.warehouse_dispatcher.repository.PickTaskRepository;
+import com.v1rex.warehouse_dispatcher.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ import java.util.List;
 public class WarehouseDispatcherService {
     private final LocationRepository locationRepository;
     private final ForkliftRepository forkliftRepository;
-    private final PickTaskRepository pickTaskRepository;
+    private final TaskRepository taskRepository;
 
     private final SolverManager<WarehouseSchedule> solverManager;
 
@@ -30,7 +30,7 @@ public class WarehouseDispatcherService {
         // 1. Fetch data from the database
         List<Location> locations = locationRepository.findAll();
         List<Forklift> forklifts = forkliftRepository.findAll();
-        List<PickTask> unassignedTasks = pickTaskRepository.findByForkliftIsNull();
+        List<Task> unassignedTasks = taskRepository.findByForkliftIsNull();
 
         // 2. Assemble the "Whiteboard" (The Planning Solution)
         WarehouseSchedule schedule = new WarehouseSchedule();
@@ -59,10 +59,10 @@ public class WarehouseDispatcherService {
     @Transactional
     public void saveSolution(WarehouseSchedule solution) {
         for (Forklift forklift : solution.getForklifts()) {
-            for (PickTask task : forklift.getTasks()) {
+            for (Task task : forklift.getTasks()) {
                 // MANUALLY sync the relationship before saving
                 task.setForklift(forklift);
-                pickTaskRepository.save(task);
+                taskRepository.save(task);
             }
             forkliftRepository.save(forklift);
         }

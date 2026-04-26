@@ -5,7 +5,7 @@ import ai.timefold.solver.core.api.score.stream.Constraint;
 import ai.timefold.solver.core.api.score.stream.ConstraintFactory;
 import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
 import com.v1rex.warehouse_dispatcher.domain.Forklift;
-import com.v1rex.warehouse_dispatcher.domain.PickTask;
+import com.v1rex.warehouse_dispatcher.domain.Task;
 
 public class WarehouseConstraintProvider implements ConstraintProvider {
 
@@ -24,7 +24,7 @@ public class WarehouseConstraintProvider implements ConstraintProvider {
                 .penalize(HardSoftScore.ONE_HARD,
                         forklift -> {
                             int totalWeight = forklift.getTasks().stream()
-                                    .mapToInt(PickTask::getWeight)
+                                    .mapToInt(Task::getWeight)
                                     .sum();
                             return Math.max(0, totalWeight - forklift.getWeightCapacity());
                         })

@@ -19,7 +19,7 @@ public class WarehouseSchedule {
 
     @ValueRangeProvider(id = "taskPoolRange")
     @ProblemFactCollectionProperty
-    private List<PickTask> taskPool;
+    private List<Task> taskPool;
 
     @PlanningEntityCollectionProperty
     private List<Forklift> forklifts;

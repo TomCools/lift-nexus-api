@@ -6,13 +6,11 @@ import com.v1rex.warehouse_dispatcher.dto.ForkliftResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
-
 @Component
 @RequiredArgsConstructor
 public class ForkliftMapper {
 
-    private final PickTaskMapper taskMapper;
+    private final TaskMapper taskMapper;
 
     public ForkliftResponse toResponse(Forklift entity) {
         if (entity == null) return null;

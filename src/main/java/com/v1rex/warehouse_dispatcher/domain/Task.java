@@ -1,7 +1,8 @@
 package com.v1rex.warehouse_dispatcher.domain;
 
-import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
+import ai.timefold.solver.core.api.domain.entity.PlanningPin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.v1rex.warehouse_dispatcher.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -9,8 +10,7 @@ import lombok.*;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class PickTask {
-
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,9 +28,19 @@ public class PickTask {
     @Column(name = "weight", nullable = false, columnDefinition = "integer check (weight > 0)")
     private Integer weight;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private TaskStatus status = TaskStatus.OPEN;
+
 
     @ManyToOne
     @JoinColumn(name = "forklift_id")
     @JsonIgnore
     private Forklift forklift;
+
+    @PlanningPin
+    public boolean isPinned() {
+        return status == TaskStatus.IN_PROGRESS || status == TaskStatus.COMPLETED;
+    }
 }

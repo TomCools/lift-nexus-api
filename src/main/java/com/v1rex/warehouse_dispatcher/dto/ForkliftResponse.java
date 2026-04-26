@@ -5,5 +5,5 @@ import java.util.List;
 public record ForkliftResponse(
         Long id,
         Integer weightCapacity,
-        List<PickTaskResponse> tasks
+        List<TaskResponse> tasks
 ) {}
