@@ -17,18 +17,15 @@ public class WarehouseConstraintProvider implements ConstraintProvider {
         };
     }
 
-    // 1. HARD CONSTRAINT: Sum weights inside the Forklift's list
+
+    // Hard constraint: check if all the assigned tasks to a Forklift does
+    // not exceed the capacity of the forklift
     private Constraint forkliftCapacity(ConstraintFactory factory) {
-        return factory.forEach(Forklift.class)
-                .filter(forklift -> !forklift.getTasks().isEmpty())
-                .penalize(HardSoftScore.ONE_HARD,
-                        forklift -> {
-                            int totalWeight = forklift.getTasks().stream()
-                                    .mapToInt(Task::getWeight)
-                                    .sum();
-                            return Math.max(0, totalWeight - forklift.getWeightCapacity());
-                        })
-                .asConstraint("Forklift capacity limit");
+        return factory.forEach(Task.class) // Start with the Task
+            .filter(task -> task.getForklift() != null)
+            .filter(task -> task.getWeight() > task.getForklift().getWeightCapacity())
+            .penalize(HardSoftScore.ONE_HARD)
+            .asConstraint("Forklift capacity limit");
     }
 
     // 2. SOFT CONSTRAINT: Sum travel distance for all tasks in all lists

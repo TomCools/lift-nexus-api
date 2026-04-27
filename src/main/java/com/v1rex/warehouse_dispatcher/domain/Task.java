@@ -1,6 +1,8 @@
 package com.v1rex.warehouse_dispatcher.domain;
 
+import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.entity.PlanningPin;
+import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.v1rex.warehouse_dispatcher.enums.TaskStatus;
 import jakarta.persistence.*;
@@ -8,6 +10,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+@PlanningEntity
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Task {
@@ -34,6 +37,7 @@ public class Task {
     private TaskStatus status = TaskStatus.OPEN;
 
 
+    @InverseRelationShadowVariable(sourceVariableName = "tasks")
     @ManyToOne
     @JoinColumn(name = "forklift_id")
     @JsonIgnore
