@@ -18,6 +18,7 @@ public class ForkliftMapper {
         return new ForkliftResponse(
                 entity.getId(),
                 entity.getWeightCapacity(),
+                entity.getEquipmentType(),
                 entity.getTasks().stream()
                         .map(taskMapper::toResponse)
                         .toList(),
@@ -29,6 +30,7 @@ public class ForkliftMapper {
     if (request == null) return null;
     return Forklift.builder()
             .weightCapacity(request.weightCapacity())
+            .equipmentType(request.equipmentType())
             .build();
     }
 }

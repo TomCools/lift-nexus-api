@@ -4,6 +4,7 @@ import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.entity.PlanningPin;
 import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.v1rex.warehouse_dispatcher.enums.EquipmentType;
 import com.v1rex.warehouse_dispatcher.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -35,6 +36,12 @@ public class Task {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private TaskStatus status = TaskStatus.OPEN;
+
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(name = "required_equipment", nullable = false)
+    private EquipmentType requiredEquipment = EquipmentType.STANDARD;
 
 
     @InverseRelationShadowVariable(sourceVariableName = "tasks")

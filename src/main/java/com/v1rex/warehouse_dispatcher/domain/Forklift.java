@@ -2,6 +2,7 @@ package com.v1rex.warehouse_dispatcher.domain;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
+import com.v1rex.warehouse_dispatcher.enums.EquipmentType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +30,12 @@ public class Forklift {
                 fetch = FetchType.EAGER)
     private List<Task> tasks = new ArrayList<>();
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(name = "equipment_type", nullable = false)
+    private EquipmentType equipmentType = EquipmentType.STANDARD;
 
+    
     @ManyToOne
     @JoinColumn(name = "current_location_id")
     private Location currentLocation;
