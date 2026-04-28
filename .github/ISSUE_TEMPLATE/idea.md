@@ -2,7 +2,7 @@
 name: "💡 Idea / Proposal"
 about: Suggest a new direction, feature, or experimental improvement.
 title: "[IDEA]: "
-labels: discussion, enhancement
+labels: spike, enhancement
 ---
 
 ### 🌟 The "Big Picture"
