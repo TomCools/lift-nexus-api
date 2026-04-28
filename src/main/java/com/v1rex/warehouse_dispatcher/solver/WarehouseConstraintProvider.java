@@ -15,7 +15,8 @@ public class WarehouseConstraintProvider implements ConstraintProvider {
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[]{
                 forkliftCapacity(constraintFactory),
-                minimizeTravelDistance(constraintFactory)
+                minimizeTravelDistance(constraintFactory),
+                taskEquipmentRequirement(constraintFactory)
         };
     }
 
@@ -29,6 +30,17 @@ public class WarehouseConstraintProvider implements ConstraintProvider {
             .penalize(HardSoftScore.ONE_HARD)
             .asConstraint("Forklift capacity limit");
     }
+
+    // Hard constraint: check if the assigned tasks to a Forklift is
+    // compatible with the requirement equipment type of the task
+    private Constraint taskEquipmentRequirement(ConstraintFactory factory) {
+        return factory.forEach(Task.class)
+            .filter(task -> task.getForklift() != null)
+            .filter(task -> task.getRequiredEquipment() != task.getForklift().getEquipmentType())
+            .penalize(HardSoftScore.ONE_HARD)
+            .asConstraint("Task equipment type requirement");
+    }
+
 
     // Soft constraint: sum complete travel distance of the forklift
     private Constraint minimizeTravelDistance(ConstraintFactory factory) {
