@@ -7,6 +7,8 @@ import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
 import com.v1rex.warehouse_dispatcher.domain.Forklift;
 import com.v1rex.warehouse_dispatcher.domain.Task;
 
+import java.util.List;
+
 public class WarehouseConstraintProvider implements ConstraintProvider {
 
     @Override
@@ -28,12 +30,39 @@ public class WarehouseConstraintProvider implements ConstraintProvider {
             .asConstraint("Forklift capacity limit");
     }
 
-    // 2. SOFT CONSTRAINT: Sum travel distance for all tasks in all lists
+    // Soft constraint: sum complete travel distance of the forklift
     private Constraint minimizeTravelDistance(ConstraintFactory factory) {
         return factory.forEach(Forklift.class)
-                .flattenLast(Forklift::getTasks) // This turns the list into individual tasks for the solver
-                .penalize(HardSoftScore.ONE_SOFT,
-                        task -> (int) task.getPickLocation().distanceTo(task.getDeliveryLocation()))
+                .filter(forklift -> !forklift.getTasks().isEmpty())
+                .penalize(HardSoftScore.ONE_SOFT, forklift ->{
+                    int totalTraveledDistance = 0;
+
+                    List<Task> tasks = forklift.getTasks();
+                    // initial drive to the first task
+                    totalTraveledDistance += (int) forklift.getCurrentLocation()
+                            .distanceTo(tasks.get(0).getPickLocation());
+
+                for (int i = 0; i < tasks.size(); i++) {
+                    Task current = tasks.get(i);
+
+                    // We calculate the travel distance from currentTask
+                    // to the Delivery Location
+                    totalTraveledDistance += (int) current.getPickLocation()
+                            .distanceTo(current.getDeliveryLocation());
+
+                    // if there is a next task, we calculate the travel distance
+                    // from the delivery location to the pick location
+                    // of the next task
+                    if (i < tasks.size() - 1) {
+                        Task next = tasks.get(i + 1);
+                        totalTraveledDistance += (int) current.getDeliveryLocation()
+                                .distanceTo(next.getPickLocation());
+                    }
+                }
+                // todo: think about the metrics!!
+                return totalTraveledDistance;
+
+                })
                 .asConstraint("Minimize travel distance");
     }
 }
