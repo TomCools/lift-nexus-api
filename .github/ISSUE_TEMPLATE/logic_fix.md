@@ -1,3 +1,4 @@
+---
 name: Logic or Optimization Refactor
 about: Fix mathematical errors or improve solver efficiency
 title: "logic:"
