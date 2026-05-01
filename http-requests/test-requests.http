@@ -1,11 +1,11 @@
-### 1. Trigger the Solver
-# This calls the method that runs solverManager.solveAndListen()
-POST http://localhost:8080/api/dispatcher/solve
+### Fetch all tasks
+GET  http://localhost:8080/api/v1/tasks/search
 Content-Type: application/json
 
-###
+### Find Solution
+POST http://localhost:8080/api/v1/dispatcher/solve
+Content-Type: application/json
 
-### 2. Get All Pick Tasks
-# Use this to check if "forklift_id" is still NULL or has been assigned
-GET http://localhost:8080/api/dispatcher/solution
-Accept: application/json
+### Get solution
+GET http://localhost:8080/api/v1/dispatcher/solve
+Content-Type: application/json
