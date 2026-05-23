@@ -3,9 +3,9 @@ package com.v1rex.liftnexus.planning.service;
 import ai.timefold.solver.core.api.solver.SolverManager;
 import com.v1rex.liftnexus.forklift.domain.Forklift;
 import com.v1rex.liftnexus.forklift.repository.ForkliftRepository;
-import com.v1rex.liftnexus.location.domain.Location;
-import com.v1rex.liftnexus.location.repository.LocationRepository;
 import com.v1rex.liftnexus.planning.domain.WarehouseSchedule;
+import com.v1rex.liftnexus.storagebin.domain.StorageBin;
+import com.v1rex.liftnexus.storagebin.repository.StorageBinRepository;
 import com.v1rex.liftnexus.task.domain.Task;
 import com.v1rex.liftnexus.task.repository.TaskRepository;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 public class WarehouseDispatcherService {
-  private final LocationRepository locationRepository;
+  private final StorageBinRepository storageBinRepository;
   private final ForkliftRepository forkliftRepository;
   private final TaskRepository taskRepository;
 
@@ -30,18 +30,18 @@ public class WarehouseDispatcherService {
 
   public WarehouseSchedule buildCurrentState() {
     log.info("Building current warehouse state for optimization...");
-    List<Location> locations = locationRepository.findAll();
+    List<StorageBin> storageBins = storageBinRepository.findAll();
     List<Forklift> forklifts = forkliftRepository.findAll();
     List<Task> tasks = taskRepository.findAll();
 
     log.debug(
-        "Found {} locations, {} forklifts, and {} tasks in DB.",
-        locations.size(),
+        "Found {} storageBins, {} forklifts, and {} tasks in DB.",
+        storageBins.size(),
         forklifts.size(),
         tasks.size());
 
     WarehouseSchedule schedule = new WarehouseSchedule();
-    schedule.setLocations(locations);
+    schedule.setStorageBins(storageBins);
     schedule.setForklifts(forklifts);
     schedule.setTaskPool(tasks);
 

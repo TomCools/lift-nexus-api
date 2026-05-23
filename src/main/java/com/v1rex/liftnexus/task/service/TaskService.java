@@ -1,8 +1,8 @@
 package com.v1rex.liftnexus.task.service;
 
 import com.v1rex.liftnexus.common.exception.ResourceNotFoundException;
-import com.v1rex.liftnexus.location.domain.Location;
-import com.v1rex.liftnexus.location.service.LocationService;
+import com.v1rex.liftnexus.storagebin.domain.StorageBin;
+import com.v1rex.liftnexus.storagebin.service.StorageBinService;
 import com.v1rex.liftnexus.task.domain.Task;
 import com.v1rex.liftnexus.task.dto.TaskRequest;
 import com.v1rex.liftnexus.task.dto.TaskResponse;
@@ -24,7 +24,7 @@ public class TaskService {
   private final TaskRepository taskRepository;
   private final TaskMapper taskMapper;
 
-  private final LocationService locationService;
+  private final StorageBinService storageBinService;
 
   @Transactional
   public TaskResponse createTask(TaskRequest request) {
@@ -33,23 +33,23 @@ public class TaskService {
         request.pickLocationId(),
         request.deliveryLocationId());
 
-    Location pickLocation = locationService.findEntityById(request.pickLocationId());
-    Location deliveryLocation = locationService.findEntityById(request.deliveryLocationId());
+    StorageBin pickStorageBin = storageBinService.findEntityById(request.pickLocationId());
+    StorageBin deliveryStorageBin = storageBinService.findEntityById(request.deliveryLocationId());
 
     Task task = taskMapper.toEntity(request);
 
     // we set always new tasks to OPEN
     task.setStatus(TaskStatus.OPEN);
-    task.setPickLocation(pickLocation);
-    task.setDeliveryLocation(deliveryLocation);
+    task.setPickStorageBin(pickStorageBin);
+    task.setDeliveryStorageBin(deliveryStorageBin);
 
     Task savedTask = taskRepository.save(task);
 
     log.info(
         "Successfully created Task with Id: {}, pickLocationId: {} and deliveryLocationId: {}",
         savedTask.getId(),
-        savedTask.getPickLocation().getId(),
-        savedTask.getDeliveryLocation().getId());
+        savedTask.getPickStorageBin().getId(),
+        savedTask.getDeliveryStorageBin().getId());
 
     return taskMapper.toResponse(savedTask);
   }
