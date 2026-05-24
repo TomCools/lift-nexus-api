@@ -1,5 +1,6 @@
 package com.v1rex.liftnexus.forklift.controller;
 
+import com.v1rex.liftnexus.forklift.domain.OperationalStatus;
 import com.v1rex.liftnexus.forklift.dto.ForkliftLocationUpdateRequest;
 import com.v1rex.liftnexus.forklift.dto.ForkliftRequest;
 import com.v1rex.liftnexus.forklift.dto.ForkliftResponse;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Validated
 @RequiredArgsConstructor
 public class ForkliftController {
+
   private final ForkliftService forkliftService;
 
   @GetMapping("/{id}")
@@ -29,16 +31,23 @@ public class ForkliftController {
     return ResponseEntity.ok(forkliftService.findById(id));
   }
 
-  @GetMapping("/search")
-  public ResponseEntity<Page<ForkliftResponse>> findWithCapacity(
-      @RequestParam @Min(1) Integer minCapacity,
-      @PageableDefault(size = 10, sort = "weightCapacity") Pageable pageable) {
-    return ResponseEntity.ok(forkliftService.findWithCapacityGreaterThan(minCapacity, pageable));
-  }
-
   @GetMapping
   public ResponseEntity<Page<ForkliftResponse>> findAllForklifts(
       @PageableDefault(size = 15, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    return ResponseEntity.ok(forkliftService.findAll(pageable));
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<Page<ForkliftResponse>> findWithCapacity(
+      @RequestParam(required = false) @Min(1) Integer minCapacity,
+      @RequestParam(required = false) OperationalStatus status,
+      @PageableDefault(size = 10, sort = "fleetNumber") Pageable pageable) {
+
+    if (minCapacity != null) {
+      return ResponseEntity.ok(forkliftService.findWithCapacityGreaterThan(minCapacity, pageable));
+    } else if (status != null) {
+      return ResponseEntity.ok(forkliftService.findByStatus(status, pageable));
+    }
     return ResponseEntity.ok(forkliftService.findAll(pageable));
   }
 
@@ -59,10 +68,13 @@ public class ForkliftController {
   @PutMapping("/{id}/location")
   public ResponseEntity<ForkliftResponse> updateForkliftLocation(
       @PathVariable Long id, @Valid @RequestBody ForkliftLocationUpdateRequest updateRequest) {
+    return ResponseEntity.ok(
+        forkliftService.updateForkliftLocation(id, updateRequest.locationId()));
+  }
 
-    ForkliftResponse updatedForklift =
-        forkliftService.updateForkliftLocation(id, updateRequest.locationId());
-
-    return ResponseEntity.ok(updatedForklift);
+  @PatchMapping("/{id}/status")
+  public ResponseEntity<ForkliftResponse> updateOperationalStatus(
+      @PathVariable Long id, @RequestParam OperationalStatus status) {
+    return ResponseEntity.ok(forkliftService.updateOperationalStatus(id, status));
   }
 }
