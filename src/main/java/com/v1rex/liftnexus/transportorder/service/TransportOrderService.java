@@ -12,6 +12,7 @@ import com.v1rex.liftnexus.transportorder.dto.TransportOrderResponse;
 import com.v1rex.liftnexus.transportorder.dto.TransportOrderStatusUpdateRequest;
 import com.v1rex.liftnexus.transportorder.mapper.TransportOrderMapper;
 import com.v1rex.liftnexus.transportorder.repository.TransportOrderRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -89,11 +90,30 @@ public class TransportOrderService {
         .map(transportOrderMapper::toResponse);
   }
 
+  @Transactional(readOnly = true)
   public TransportOrder findEntityById(Long id) {
     return transportOrderRepository
         .findById(id)
         .orElseThrow(
             () -> new ResourceNotFoundException("TransportOrder with ID " + id + " not found."));
+  }
+
+  public List<TransportOrder> findAllEntities() {
+    log.info("Fetching all managed transport order entities without pagination");
+    return transportOrderRepository.findAll();
+  }
+
+  @Transactional
+  public void updateForkliftAssignments(List<TransportOrder> orders) {
+    for (TransportOrder order : orders) {
+      TransportOrder databaseOrder = findEntityById(order.getId());
+
+      databaseOrder.setAssignedForklift(order.getAssignedForklift());
+
+      updateOrderStatus(
+          databaseOrder.getId(),
+          new TransportOrderStatusUpdateRequest(TransportOrderStatus.ASSIGNED));
+    }
   }
 
   private void checkStatusBeforeUpdate(
