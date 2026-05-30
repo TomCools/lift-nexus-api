@@ -13,18 +13,31 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>LiftNexus API</name>
     <description>High-performance asynchronous optimization and dispatching engine for intralogistics assets using Timefold and Spring Boot.</description>
-    <url/>
+    <url>https://github.com/v1rex/lift-nexus-api</url>
     <licenses>
-        <license/>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>v1rex</id>
+            <name>Mohamed Amine Bahij</name>
+            <email>medaminebahij02@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+                <role>Architect</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
     </developers>
     <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
+        <connection>scm:git:https://github.com/v1rex/lift-nexus-api.git</connection>
+        <developerConnection>scm:git:git@github.com:v1rex/lift-nexus-api.git</developerConnection>
+        <url>https://github.com/v1rex/lift-nexus-api</url>
+        <tag>HEAD</tag>
     </scm>
     <properties>
         <java.version>21</java.version>
