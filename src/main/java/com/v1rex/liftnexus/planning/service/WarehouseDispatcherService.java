@@ -3,12 +3,14 @@ package com.v1rex.liftnexus.planning.service;
 import ai.timefold.solver.core.api.solver.SolverManager;
 import com.v1rex.liftnexus.forklift.domain.Forklift;
 import com.v1rex.liftnexus.forklift.service.ForkliftService;
-import com.v1rex.liftnexus.planning.DispatchJobRepository;
 import com.v1rex.liftnexus.planning.domain.DispatchJob;
 import com.v1rex.liftnexus.planning.domain.JobStatus;
 import com.v1rex.liftnexus.planning.domain.WarehouseSchedule;
 import com.v1rex.liftnexus.planning.dto.DispatchJobResponse;
+import com.v1rex.liftnexus.planning.exception.DispatchJobInvalidStateException;
+import com.v1rex.liftnexus.planning.exception.DispatchJobNotFoundException;
 import com.v1rex.liftnexus.planning.mapper.DispatchJobMapper;
+import com.v1rex.liftnexus.planning.repository.DispatchJobRepository;
 import com.v1rex.liftnexus.storagebin.domain.StorageBin;
 import com.v1rex.liftnexus.storagebin.service.StorageBinService;
 import com.v1rex.liftnexus.transportorder.domain.TransportOrder;
@@ -108,7 +110,7 @@ public class WarehouseDispatcherService {
     DispatchJob job = findJobEntityById(jobId);
 
     if (job.getStatus() != JobStatus.QUEUED && job.getStatus() != JobStatus.SOLVING) {
-      throw new IllegalStateException(
+      throw new DispatchJobInvalidStateException(
           "Cannot terminate job " + jobId + " because it is already in status: " + job.getStatus());
     }
 
@@ -130,7 +132,15 @@ public class WarehouseDispatcherService {
     job.setStatus(JobStatus.SOLVING);
     jobRepository.save(job);
 
-    return buildCurrentState();
+    try {
+      return buildCurrentState();
+    } catch (Exception e) {
+      log.error("Failed to build current state for job {}: {}", jobId, e.getMessage(), e);
+      job.setStatus(JobStatus.FAILED);
+      job.setCompletedAt(Instant.now());
+      jobRepository.save(job);
+      throw e;
+    }
   }
 
   @Transactional
@@ -156,23 +166,26 @@ public class WarehouseDispatcherService {
     //       throws an exception here, the job status will remain stuck in 'SOLVING'.
     //       Catch exceptions and mark the job status as JobStatus.FAILED.
 
-    transportOrderService.updateForkliftAssignments(solution.getTransportOrderPool());
-    forkliftService.updateAssignedOrders(solution.getForklifts());
+    try {
+      transportOrderService.updateForkliftAssignments(solution.getTransportOrderPool());
+      forkliftService.updateAssignedOrders(solution.getForklifts());
 
-    job.setStatus(JobStatus.COMPLETED);
-    job.setCompletedAt(Instant.now());
-
-    if (solution.getScore() != null) {
-      job.setFinalScore(solution.getScore().toString());
+      job.setStatus(JobStatus.COMPLETED);
+      if (solution.getScore() != null) {
+        job.setFinalScore(solution.getScore().toString());
+      }
+    } catch (Exception e) {
+      log.error("Failed to persist solution for job {}: {}", jobId, e.getMessage(), e);
+      job.setStatus(JobStatus.FAILED);
+    } finally {
+      job.setCompletedAt(Instant.now());
+      jobRepository.save(job);
     }
-    jobRepository.save(job);
+
     log.info("Job {} successfully wrapped and saved.", jobId);
   }
 
   public DispatchJob findJobEntityById(UUID jobId) {
-    return jobRepository
-        .findById(jobId)
-        // TODO: implement proper Custom Exception in the API
-        .orElseThrow(() -> new RuntimeException("Job not found: " + jobId));
+    return jobRepository.findById(jobId).orElseThrow(() -> new DispatchJobNotFoundException(jobId));
   }
 }

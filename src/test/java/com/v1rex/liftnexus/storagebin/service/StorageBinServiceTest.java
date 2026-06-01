@@ -5,12 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import com.v1rex.liftnexus.common.exception.ResourceNotFoundException;
 import com.v1rex.liftnexus.storagebin.domain.StorageBin;
 import com.v1rex.liftnexus.storagebin.domain.ZoneType;
 import com.v1rex.liftnexus.storagebin.dto.CoordinateDto;
 import com.v1rex.liftnexus.storagebin.dto.StorageBinRequest;
 import com.v1rex.liftnexus.storagebin.dto.StorageBinResponse;
+import com.v1rex.liftnexus.storagebin.exception.StorageBinCodeExistsException;
+import com.v1rex.liftnexus.storagebin.exception.StorageBinNotFoundException;
 import com.v1rex.liftnexus.storagebin.mapper.StorageBinMapper;
 import com.v1rex.liftnexus.storagebin.repository.StorageBinRepository;
 import java.util.Optional;
@@ -79,8 +80,7 @@ public class StorageBinServiceTest {
 
       // Assert
       assertThatThrownBy(() -> storageBinService.createStorageBin(request))
-          .isInstanceOf(IllegalArgumentException.class)
-          .hasMessageContaining("already exists");
+          .isInstanceOf(StorageBinCodeExistsException.class);
 
       verify(storageBinRepository, never()).save(any());
     }
@@ -121,7 +121,7 @@ public class StorageBinServiceTest {
 
       // Act and Assert
       assertThatThrownBy(() -> storageBinService.findById(failingId))
-          .isInstanceOf(ResourceNotFoundException.class);
+          .isInstanceOf(StorageBinNotFoundException.class);
     }
   }
 

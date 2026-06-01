@@ -9,12 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.v1rex.liftnexus.common.exception.ResourceNotFoundException;
+import com.v1rex.liftnexus.common.exception.GlobalExceptionHandler;
+import com.v1rex.liftnexus.common.exception.ProblemDetailFactory;
 import com.v1rex.liftnexus.forklift.domain.EquipmentType;
 import com.v1rex.liftnexus.transportorder.domain.TransportOrderStatus;
 import com.v1rex.liftnexus.transportorder.dto.TransportOrderRequest;
 import com.v1rex.liftnexus.transportorder.dto.TransportOrderResponse;
 import com.v1rex.liftnexus.transportorder.dto.TransportOrderStatusUpdateRequest;
+import com.v1rex.liftnexus.transportorder.exception.TransportOrderNotFoundException;
 import com.v1rex.liftnexus.transportorder.service.TransportOrderService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +24,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +33,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(TransportOrderController.class)
+@Import({
+  GlobalExceptionHandler.class,
+  TransportOrderExceptionHandler.class,
+  ProblemDetailFactory.class
+})
 @DisplayName("TransportOrderController Gateway Tests")
 class TransportOrderControllerTest {
 
@@ -63,8 +71,7 @@ class TransportOrderControllerTest {
     @Test
     @DisplayName("Should return 404 Not Found when ID does not exist in system")
     void shouldReturn404_WhenIdDoesNotExist() throws Exception {
-      when(transportOrderService.findById(99L))
-          .thenThrow(new ResourceNotFoundException("TransportOrder with ID 99 not found."));
+      when(transportOrderService.findById(99L)).thenThrow(new TransportOrderNotFoundException(99L));
 
       mockMvc
           .perform(get("/api/v1/transport-orders/{id}", 99L))

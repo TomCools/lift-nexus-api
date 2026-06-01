@@ -5,7 +5,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import com.v1rex.liftnexus.common.exception.ResourceNotFoundException;
 import com.v1rex.liftnexus.forklift.domain.EquipmentType;
 import com.v1rex.liftnexus.loadunit.domain.LoadUnit;
 import com.v1rex.liftnexus.loadunit.service.LoadUnitService;
@@ -16,6 +15,8 @@ import com.v1rex.liftnexus.transportorder.domain.TransportOrderStatus;
 import com.v1rex.liftnexus.transportorder.dto.TransportOrderRequest;
 import com.v1rex.liftnexus.transportorder.dto.TransportOrderResponse;
 import com.v1rex.liftnexus.transportorder.dto.TransportOrderStatusUpdateRequest;
+import com.v1rex.liftnexus.transportorder.exception.TransportOrderInvalidStateException;
+import com.v1rex.liftnexus.transportorder.exception.TransportOrderNotFoundException;
 import com.v1rex.liftnexus.transportorder.mapper.TransportOrderMapper;
 import com.v1rex.liftnexus.transportorder.repository.TransportOrderRepository;
 import java.util.Optional;
@@ -97,8 +98,7 @@ class TransportOrderServiceTest {
       when(storageBinService.findEntityById(2L)).thenReturn(targetBin);
 
       assertThatThrownBy(() -> transportOrderService.createTransportOrder(request))
-          .isInstanceOf(IllegalStateException.class)
-          .hasMessageContaining("LoadUnit LU-NULL is not located in the requested source bin.");
+          .isInstanceOf(TransportOrderInvalidStateException.class);
 
       verify(transportOrderRepository, never()).save(any());
     }
@@ -125,8 +125,7 @@ class TransportOrderServiceTest {
       when(storageBinService.findEntityById(2L)).thenReturn(targetBin);
 
       assertThatThrownBy(() -> transportOrderService.createTransportOrder(request))
-          .isInstanceOf(IllegalStateException.class)
-          .hasMessageContaining("LoadUnit LU-WRONG is not located in the requested source bin.");
+          .isInstanceOf(TransportOrderInvalidStateException.class);
 
       verify(transportOrderRepository, never()).save(any());
     }
@@ -180,8 +179,7 @@ class TransportOrderServiceTest {
           new TransportOrderStatusUpdateRequest(TransportOrderStatus.OPEN);
 
       assertThatThrownBy(() -> transportOrderService.updateOrderStatus(1L, request))
-          .isInstanceOf(IllegalStateException.class)
-          .hasMessageContaining("Cannot update TransportOrder 1 because it is already COMPLETED.");
+          .isInstanceOf(TransportOrderInvalidStateException.class);
     }
 
     @Test
@@ -197,8 +195,7 @@ class TransportOrderServiceTest {
           new TransportOrderStatusUpdateRequest(TransportOrderStatus.OPEN);
 
       assertThatThrownBy(() -> transportOrderService.updateOrderStatus(2L, request))
-          .isInstanceOf(IllegalStateException.class)
-          .hasMessageContaining("Cannot roll back TransportOrder 2 from ACTIVE to OPEN.");
+          .isInstanceOf(TransportOrderInvalidStateException.class);
     }
 
     @Test
@@ -214,8 +211,7 @@ class TransportOrderServiceTest {
           new TransportOrderStatusUpdateRequest(TransportOrderStatus.OPEN);
 
       assertThatThrownBy(() -> transportOrderService.updateOrderStatus(3L, request))
-          .isInstanceOf(IllegalStateException.class)
-          .hasMessageContaining("Cannot roll back TransportOrder 3 from ASSIGNED to OPEN.");
+          .isInstanceOf(TransportOrderInvalidStateException.class);
     }
   }
 
@@ -242,13 +238,12 @@ class TransportOrderServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException when ID does not exist in DB")
+    @DisplayName("Should throw TransportOrderNotFoundException when ID does not exist in DB")
     void shouldThrowResourceNotFound_WhenMissing() {
       when(transportOrderRepository.findById(99L)).thenReturn(Optional.empty());
 
       assertThatThrownBy(() -> transportOrderService.findById(99L))
-          .isInstanceOf(ResourceNotFoundException.class)
-          .hasMessageContaining("TransportOrder with ID 99 not found.");
+          .isInstanceOf(TransportOrderNotFoundException.class);
     }
   }
 

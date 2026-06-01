@@ -7,10 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.v1rex.liftnexus.common.exception.ResourceNotFoundException;
+import com.v1rex.liftnexus.common.exception.GlobalExceptionHandler;
+import com.v1rex.liftnexus.common.exception.ProblemDetailFactory;
 import com.v1rex.liftnexus.loadunit.domain.LoadUnitStatus;
 import com.v1rex.liftnexus.loadunit.dto.LoadUnitRequest;
 import com.v1rex.liftnexus.loadunit.dto.LoadUnitResponse;
+import com.v1rex.liftnexus.loadunit.exception.LoadUnitNotFoundException;
 import com.v1rex.liftnexus.loadunit.service.LoadUnitService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +30,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(LoadUnitController.class)
+@Import({GlobalExceptionHandler.class, LoadUnitExceptionHandler.class, ProblemDetailFactory.class})
 @DisplayName("LoadUnitController Gateway Endpoint Tests")
 class LoadUnitControllerTest {
 
@@ -104,8 +108,7 @@ class LoadUnitControllerTest {
     @DisplayName(
         "Should transform infrastructure exception maps to standard 404 Not Found returns securely")
     void shouldReturnNotFoundOnMissingElement() throws Exception {
-      when(loadUnitService.findById(404L))
-          .thenThrow(new ResourceNotFoundException("Load Unit with ID 404 not found."));
+      when(loadUnitService.findById(404L)).thenThrow(new LoadUnitNotFoundException(404L));
 
       mockMvc.perform(get("/api/v1/load-units/404")).andExpect(status().isNotFound());
     }

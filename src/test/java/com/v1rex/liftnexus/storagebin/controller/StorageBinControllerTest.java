@@ -7,11 +7,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.v1rex.liftnexus.common.exception.ResourceNotFoundException;
+import com.v1rex.liftnexus.common.exception.GlobalExceptionHandler;
+import com.v1rex.liftnexus.common.exception.ProblemDetailFactory;
 import com.v1rex.liftnexus.storagebin.domain.ZoneType;
 import com.v1rex.liftnexus.storagebin.dto.CoordinateDto;
 import com.v1rex.liftnexus.storagebin.dto.StorageBinRequest;
 import com.v1rex.liftnexus.storagebin.dto.StorageBinResponse;
+import com.v1rex.liftnexus.storagebin.exception.StorageBinNotFoundException;
 import com.v1rex.liftnexus.storagebin.service.StorageBinService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -28,6 +31,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = StorageBinController.class)
+@Import({
+  GlobalExceptionHandler.class,
+  StorageBinExceptionHandler.class,
+  ProblemDetailFactory.class
+})
 @ActiveProfiles("test")
 @DisplayName("StorageBin REST API Gateway Endpoints Tests")
 public class StorageBinControllerTest {
@@ -89,8 +97,7 @@ public class StorageBinControllerTest {
       // Arrange
       Long missingId = 999L;
       Mockito.when(storageBinService.findById(missingId))
-          .thenThrow(
-              new ResourceNotFoundException("Storage bin with " + missingId + " not found."));
+          .thenThrow(new StorageBinNotFoundException(missingId));
 
       // Act & Assert
       mockMvc

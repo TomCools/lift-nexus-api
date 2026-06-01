@@ -1,11 +1,12 @@
 package com.v1rex.liftnexus.forklift.service;
 
-import com.v1rex.liftnexus.common.exception.ResourceNotFoundException;
 import com.v1rex.liftnexus.forklift.domain.Forklift;
 import com.v1rex.liftnexus.forklift.domain.ForkliftType;
 import com.v1rex.liftnexus.forklift.domain.OperationalStatus;
 import com.v1rex.liftnexus.forklift.dto.ForkliftRequest;
 import com.v1rex.liftnexus.forklift.dto.ForkliftResponse;
+import com.v1rex.liftnexus.forklift.exception.ForkliftFleetNumberExistsException;
+import com.v1rex.liftnexus.forklift.exception.ForkliftNotFoundException;
 import com.v1rex.liftnexus.forklift.mapper.ForkliftMapper;
 import com.v1rex.liftnexus.forklift.repository.ForkliftRepository;
 import com.v1rex.liftnexus.storagebin.domain.StorageBin;
@@ -33,8 +34,7 @@ public class ForkliftService {
     log.info("Provisioning new warehouse asset with fleet number: {}", request.fleetNumber());
 
     if (forkliftRepository.existsByFleetNumber(request.fleetNumber())) {
-      throw new IllegalStateException(
-          "A forklift with fleet number '" + request.fleetNumber() + "' already exists.");
+      throw new ForkliftFleetNumberExistsException(request.fleetNumber());
     }
 
     ForkliftType forkliftType = forkliftTypeService.findEntityById(request.forkliftTypeId());
@@ -110,7 +110,7 @@ public class ForkliftService {
         .orElseThrow(
             () -> {
               log.warn("Lookup failed: Forklift ID {} not found", id);
-              return new ResourceNotFoundException("Forklift with " + id + " not found.");
+              return new ForkliftNotFoundException(id);
             });
   }
 
@@ -129,7 +129,11 @@ public class ForkliftService {
   @Transactional
   public void updateAssignedOrders(List<Forklift> forklifts) {
     log.info("Updating assigned transport orders for Forklifts");
-    // TODO: write here a better log
+    List<Long> ids = forklifts.stream().map(Forklift::getId).toList();
+    List<Forklift> databaseForklifts = forkliftRepository.findAllById(ids);
+    if (databaseForklifts.size() != ids.size()) {
+      throw new IllegalStateException("One or more forklifts not found during assignment update");
+    }
 
     for (Forklift newForklift : forklifts) {
       Forklift databaseForklift = findEntityById(newForklift.getId());

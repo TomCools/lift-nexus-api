@@ -4,11 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
-import com.v1rex.liftnexus.common.exception.ResourceNotFoundException;
 import com.v1rex.liftnexus.forklift.domain.EquipmentType;
 import com.v1rex.liftnexus.forklift.domain.ForkliftType;
 import com.v1rex.liftnexus.forklift.dto.ForkliftTypeRequest;
 import com.v1rex.liftnexus.forklift.dto.ForkliftTypeResponse;
+import com.v1rex.liftnexus.forklift.exception.ForkliftTypeNameExistsException;
+import com.v1rex.liftnexus.forklift.exception.ForkliftTypeNotFoundException;
 import com.v1rex.liftnexus.forklift.mapper.ForkliftTypeMapper;
 import com.v1rex.liftnexus.forklift.repository.ForkliftTypeRepository;
 import java.util.List;
@@ -68,7 +69,7 @@ public class ForkliftTypeServiceTest {
       when(forkliftTypeRepository.existsByModelName("Toyota X")).thenReturn(true);
 
       assertThatThrownBy(() -> forkliftTypeService.createForkliftType(request))
-          .isInstanceOf(IllegalStateException.class)
+          .isInstanceOf(ForkliftTypeNameExistsException.class)
           .hasMessageContaining("already exists");
 
       verifyNoInteractions(forkliftTypeMapper);
@@ -93,13 +94,12 @@ public class ForkliftTypeServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException when ID does not exist")
+    @DisplayName("Should throw ForkliftTypeNotFoundException when ID does not exist")
     void shouldThrowWhenNotFound() {
       when(forkliftTypeRepository.findById(99L)).thenReturn(Optional.empty());
 
       assertThatThrownBy(() -> forkliftTypeService.findEntityById(99L))
-          .isInstanceOf(ResourceNotFoundException.class)
-          .hasMessageContaining("ForkliftType with ID 99 not found.");
+          .isInstanceOf(ForkliftTypeNotFoundException.class);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class ForkliftTypeServiceTest {
       Page<ForkliftTypeResponse> result = forkliftTypeService.findAll(pageRequest);
 
       assertThat(result.getContent()).hasSize(1);
-      assertThat(result.getContent().get(0)).isEqualTo(responseDto);
+      assertThat(result.getContent().getFirst()).isEqualTo(responseDto);
     }
   }
 }
