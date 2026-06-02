@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WarehouseDispatcherService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.planning.service</a> &gt; <span class="el_source">WarehouseDispatcherService.java</span></div><h1>WarehouseDispatcherService.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.planning.service;
+
+import ai.timefold.solver.core.api.solver.SolverManager;
+import com.v1rex.liftnexus.forklift.domain.Forklift;
+import com.v1rex.liftnexus.forklift.service.ForkliftService;
+import com.v1rex.liftnexus.planning.domain.DispatchJob;
+import com.v1rex.liftnexus.planning.domain.JobStatus;
+import com.v1rex.liftnexus.planning.domain.WarehouseSchedule;
+import com.v1rex.liftnexus.planning.dto.DispatchJobResponse;
+import com.v1rex.liftnexus.planning.exception.DispatchJobInvalidStateException;
+import com.v1rex.liftnexus.planning.exception.DispatchJobNotFoundException;
+import com.v1rex.liftnexus.planning.mapper.DispatchJobMapper;
+import com.v1rex.liftnexus.planning.repository.DispatchJobRepository;
+import com.v1rex.liftnexus.storagebin.domain.StorageBin;
+import com.v1rex.liftnexus.storagebin.service.StorageBinService;
+import com.v1rex.liftnexus.transportorder.domain.TransportOrder;
+import com.v1rex.liftnexus.transportorder.service.TransportOrderService;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Service responsible for orchestrating warehouse optimisation using Timefold Solver.
+ *
+ * &lt;p&gt;Manages the full lifecycle of a dispatch-optimisation job: submitting new jobs, monitoring
+ * their status, terminating running jobs, and persisting the final forklift-to-transport-order
+ * assignments. Acts as the bridge between the warehouse domain (bins, forklifts, transport orders)
+ * and the constraint-solving engine.
+ *
+ * &lt;p&gt;&lt;b&gt;Job lifecycle:&lt;/b&gt; {@code QUEUED → SOLVING → COMPLETED / FAILED / ABORTED}.
+ */
+@Service
+<span class="fc" id="L37">@Slf4j</span>
+@RequiredArgsConstructor
+public class WarehouseDispatcherService {
+
+  private final StorageBinService storageBinService;
+  private final ForkliftService forkliftService;
+  private final TransportOrderService transportOrderService;
+
+  private final DispatchJobRepository jobRepository;
+  private final DispatchJobMapper dispatchJobMapper;
+
+  /** Timefold solver manager that runs optimisation in a separate thread pool. */
+  private final SolverManager&lt;WarehouseSchedule&gt; solverManager;
+
+  /**
+   * Returns the current status of a dispatch job.
+   *
+   * &lt;p&gt;Intended to be extended with reconciliation logic that detects when Timefold has silently
+   * stopped solving (e.g., due to an internal error) while the job is still marked as {@code
+   * SOLVING} in the database, and marks it as {@code FAILED} accordingly.
+   *
+   * @param jobId The unique identifier of the dispatch job.
+   * @return A response DTO with the current job state.
+   * @throws DispatchJobNotFoundException if no job exists for the given ID.
+   */
+  public DispatchJobResponse getJobStatusAndReconcile(UUID jobId) {
+<span class="nc" id="L63">    DispatchJob job = findJobEntityById(jobId);</span>
+    // TODO: look for a better way to update the job status in case of TimeFold failure
+    /*
+     SolverStatus timefoldStatus = solverManager.getSolverStatus(jobId);
+     if (job.getStatus() == JobStatus.SOLVING &amp;&amp; timefoldStatus == SolverStatus.NOT_SOLVING) {
+        log.error(&quot;Reconciliation Alert: Job {} is {} in DB, &quot; +
+                        &quot;but Timefold is NOT_SOLVING. Marking job as FAILED.&quot;,
+        jobId, job.getStatus());
+
+        job.setStatus(JobStatus.FAILED);
+        job.setCompletedAt(Instant.now());
+        jobRepository.save(job);
+
+    }*/
+
+<span class="nc" id="L78">    return dispatchJobMapper.toResponse(job);</span>
+  }
+
+  /**
+   * Assembles the current warehouse snapshot that the solver will optimise.
+   *
+   * &lt;p&gt;Loads all storage bins, forklifts, and pending transport orders from the database into an
+   * in-memory {@link WarehouseSchedule} object. This serves as the problem fact set for the
+   * Timefold constraint solver.
+   *
+   * &lt;p&gt;&lt;b&gt;Known issue:&lt;/b&gt; Loading &lt;i&gt;all&lt;/i&gt; entities without pagination is a performance
+   * bottleneck for large datasets. A more selective fetching strategy (cursor-based pagination,
+   * lazy fields, caching) should be implemented.
+   *
+   * @return A fully populated {@link WarehouseSchedule} representing the current state of the
+   *     warehouse.
+   */
+  public WarehouseSchedule buildCurrentState() {
+<span class="fc" id="L96">    log.info(&quot;Building current warehouse state for optimization...&quot;);</span>
+
+    // TODO: this is a really great performance bottleneck.
+    //  If the database contains thousands of storage bins,
+    //  forklifts, and transport orders, this method will take a long
+    //  time to execute and may cause the worker thread to time out before optimization can even
+    // begin.
+    //  Action: Create in Milestone 2 an issue to fix the fetching of storageBins, forklifts, and
+    // transportOrders
+    //  by implementing a more efficient data retrieval strategy (e.g., pagination, selective field
+    // fetching, or caching).
+<span class="fc" id="L107">    List&lt;StorageBin&gt; storageBins = storageBinService.findAllEntities();</span>
+<span class="fc" id="L108">    List&lt;Forklift&gt; forklifts = forkliftService.findAllEntities();</span>
+<span class="fc" id="L109">    List&lt;TransportOrder&gt; transportOrders = transportOrderService.findAllEntities();</span>
+
+<span class="fc" id="L111">    log.debug(</span>
+        &quot;Found {} storageBins, {} forklifts, and {} transportOrders in DB.&quot;,
+<span class="fc" id="L113">        storageBins.size(),</span>
+<span class="fc" id="L114">        forklifts.size(),</span>
+<span class="fc" id="L115">        transportOrders.size());</span>
+
+<span class="fc" id="L117">    WarehouseSchedule schedule = new WarehouseSchedule();</span>
+<span class="fc" id="L118">    schedule.setStorageBins(storageBins);</span>
+<span class="fc" id="L119">    schedule.setForklifts(forklifts);</span>
+<span class="fc" id="L120">    schedule.setTransportOrderPool(transportOrders);</span>
+
+<span class="fc" id="L122">    return schedule;</span>
+  }
+
+  /**
+   * Submits a new asynchronous optimisation job to Timefold.
+   *
+   * &lt;p&gt;Creates a {@link DispatchJob} record in state {@code QUEUED}, then delegates to {@link
+   * SolverManager#solveAndListen} with:
+   *
+   * &lt;ol&gt;
+   *   &lt;li&gt;A problem-fetcher that transitions the job to {@code SOLVING} and builds the current
+   *       warehouse state.
+   *   &lt;li&gt;A best-solution consumer that persists the final assignments and marks the job as {@code
+   *       COMPLETED} (or {@code FAILED}).
+   * &lt;/ol&gt;
+   *
+   * @return The UUID assigned to the newly created optimisation job. The caller can use this ID to
+   *     poll status ({@link #getJobStatusAndReconcile}) or to terminate the job ({@link
+   *     #terminateOptimizationJob}).
+   */
+  public UUID submitOptimizationJob() {
+<span class="fc" id="L143">    UUID ticketId = UUID.randomUUID();</span>
+    DispatchJob job =
+<span class="fc" id="L145">        DispatchJob.builder()</span>
+<span class="fc" id="L146">            .id(ticketId)</span>
+<span class="fc" id="L147">            .status(JobStatus.QUEUED)</span>
+<span class="fc" id="L148">            .createdAt(Instant.now())</span>
+<span class="fc" id="L149">            .build();</span>
+<span class="fc" id="L150">    jobRepository.save(job);</span>
+
+<span class="fc" id="L152">    solverManager.solveAndListen(</span>
+        ticketId,
+<span class="fc" id="L154">        buildCurrentProblemAndSetSolvingStatus(ticketId),</span>
+<span class="nc" id="L155">        solution -&gt; saveFinalSolution(solution, ticketId));</span>
+
+<span class="fc" id="L157">    return ticketId;</span>
+  }
+
+  /**
+   * Attempts to gracefully terminate a running or queued optimisation job.
+   *
+   * &lt;p&gt;Only jobs in state {@code QUEUED} or {@code SOLVING} can be terminated. Once terminated, the
+   * job is marked as {@code ABORTED} and any partial results are discarded (the best-solution
+   * consumer checks for this flag).
+   *
+   * @param jobId The unique identifier of the job to terminate.
+   * @throws DispatchJobInvalidStateException if the job is already in a terminal state ({@code
+   *     COMPLETED}, {@code FAILED}, or {@code ABORTED}).
+   */
+  @Transactional
+  public void terminateOptimizationJob(UUID jobId) {
+<span class="fc" id="L173">    log.info(&quot;Request received to manually terminate optimization Job: {}&quot;, jobId);</span>
+
+<span class="fc" id="L175">    DispatchJob job = findJobEntityById(jobId);</span>
+
+<span class="pc bpc" id="L177" title="1 of 4 branches missed.">    if (job.getStatus() != JobStatus.QUEUED &amp;&amp; job.getStatus() != JobStatus.SOLVING) {</span>
+<span class="fc" id="L178">      throw new DispatchJobInvalidStateException(</span>
+<span class="fc" id="L179">          &quot;Cannot terminate job &quot; + jobId + &quot; because it is already in status: &quot; + job.getStatus());</span>
+    }
+
+    // Ask Timefold to stop solving as soon as possible
+<span class="fc" id="L183">    solverManager.terminateEarly(jobId);</span>
+
+<span class="fc" id="L185">    job.setStatus(JobStatus.ABORTED);</span>
+<span class="fc" id="L186">    job.setCompletedAt(Instant.now());</span>
+<span class="fc" id="L187">    jobRepository.save(job);</span>
+
+<span class="fc" id="L189">    log.info(&quot;Job {} has been successfully halted and marked as ABORTED.&quot;, jobId);</span>
+<span class="fc" id="L190">  }</span>
+
+  /**
+   * Fetcher callback used by Timefold at the start of solving.
+   *
+   * &lt;p&gt;Transitions the job from {@code QUEUED} to {@code SOLVING} in the database and then builds
+   * the current warehouse snapshot. If building the snapshot fails, the job is marked as {@code
+   * FAILED} and the exception is rethrown to Timefold.
+   *
+   * &lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; This method is annotated {@code @Transactional} so that the status update and
+   * snapshot build happen within the same persistence context.
+   *
+   * @param jobId The unique identifier of the job being started.
+   * @return A fully populated {@link WarehouseSchedule} for the solver.
+   */
+  @Transactional
+  public WarehouseSchedule buildCurrentProblemAndSetSolvingStatus(UUID jobId) {
+<span class="fc" id="L207">    log.info(&quot;Worker thread starting optimization for Job: {}&quot;, jobId);</span>
+
+<span class="fc" id="L209">    DispatchJob job = findJobEntityById(jobId);</span>
+
+<span class="fc" id="L211">    job.setStatus(JobStatus.SOLVING);</span>
+<span class="fc" id="L212">    jobRepository.save(job);</span>
+
+    try {
+<span class="fc" id="L215">      return buildCurrentState();</span>
+<span class="nc" id="L216">    } catch (Exception e) {</span>
+<span class="nc" id="L217">      log.error(&quot;Failed to build current state for job {}: {}&quot;, jobId, e.getMessage(), e);</span>
+<span class="nc" id="L218">      job.setStatus(JobStatus.FAILED);</span>
+<span class="nc" id="L219">      job.setCompletedAt(Instant.now());</span>
+<span class="nc" id="L220">      jobRepository.save(job);</span>
+<span class="nc" id="L221">      throw e;</span>
+    }
+  }
+
+  /**
+   * Best-solution consumer callback invoked by Timefold when a solution is available (either the
+   * final optimal solution or an intermediate best-effort one).
+   *
+   * &lt;p&gt;Persists the solver's assignments back to the database:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Updates forklift assignments on transport orders.
+   *   &lt;li&gt;Records assigned orders on forklifts.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;If the job was {@code ABORTED} during solving, the solution is silently discarded. Otherwise
+   * the job is marked as {@code COMPLETED} (or {@code FAILED} if persistence fails). Even
+   * infeasible solutions are saved as a best-effort fallback.
+   *
+   * @param solution The {@link WarehouseSchedule} produced by Timefold, which contains the
+   *     optimised assignments.
+   * @param jobId The unique identifier of the job that produced this solution.
+   */
+  @Transactional
+  public void saveFinalSolution(WarehouseSchedule solution, UUID jobId) {
+<span class="fc" id="L246">    log.info(&quot;Optimization completed for Job: {}&quot;, jobId);</span>
+
+<span class="fc" id="L248">    DispatchJob job = findJobEntityById(jobId);</span>
+
+    // Discard the result if the job was externally aborted while solving
+<span class="fc bfc" id="L251" title="All 2 branches covered.">    if (job.getStatus() == JobStatus.ABORTED) {</span>
+<span class="fc" id="L252">      log.warn(&quot;Job {} was aborted during optimization. Final solution will not be saved.&quot;, jobId);</span>
+<span class="fc" id="L253">      return;</span>
+    }
+
+<span class="pc bpc" id="L256" title="2 of 4 branches missed.">    if (solution.getScore() != null &amp;&amp; solution.getScore().isFeasible()) {</span>
+<span class="fc" id="L257">      log.info(&quot;Solution is feasible (Score: {}). Saving assignments to DB.&quot;, solution.getScore());</span>
+    } else {
+<span class="nc" id="L259">      log.warn(</span>
+          &quot;Solution is INFEASIBLE (Score: {}). Saving best-effort assignments anyway.&quot;,
+<span class="nc" id="L261">          solution.getScore());</span>
+    }
+
+    // TODO: Wrap data updates in a try-catch block. If transportOrderService or forkliftService
+    //       throws an exception here, the job status will remain stuck in 'SOLVING'.
+    //       Catch exceptions and mark the job status as JobStatus.FAILED.
+
+    try {
+      // Persist the optimised assignments to the underlying domain entities
+<span class="fc" id="L270">      transportOrderService.updateForkliftAssignments(solution.getTransportOrderPool());</span>
+<span class="fc" id="L271">      forkliftService.updateAssignedOrders(solution.getForklifts());</span>
+
+<span class="fc" id="L273">      job.setStatus(JobStatus.COMPLETED);</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">      if (solution.getScore() != null) {</span>
+<span class="fc" id="L275">        job.setFinalScore(solution.getScore().toString());</span>
+      }
+<span class="nc" id="L277">    } catch (Exception e) {</span>
+<span class="nc" id="L278">      log.error(&quot;Failed to persist solution for job {}: {}&quot;, jobId, e.getMessage(), e);</span>
+<span class="nc" id="L279">      job.setStatus(JobStatus.FAILED);</span>
+    } finally {
+<span class="fc" id="L281">      job.setCompletedAt(Instant.now());</span>
+<span class="fc" id="L282">      jobRepository.save(job);</span>
+    }
+
+<span class="fc" id="L285">    log.info(&quot;Job {} successfully wrapped and saved.&quot;, jobId);</span>
+<span class="fc" id="L286">  }</span>
+
+  /**
+   * Retrieves the raw {@link DispatchJob} entity by its ID.
+   *
+   * @param jobId The unique identifier of the dispatch job.
+   * @return The managed {@link DispatchJob} entity.
+   * @throws DispatchJobNotFoundException if no job exists for the given ID.
+   */
+  public DispatchJob findJobEntityById(UUID jobId) {
+<span class="fc" id="L296">    return jobRepository.findById(jobId).orElseThrow(() -&gt; new DispatchJobNotFoundException(jobId));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

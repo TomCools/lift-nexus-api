@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ForkliftTypeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.forklift.service</a> &gt; <span class="el_source">ForkliftTypeService.java</span></div><h1>ForkliftTypeService.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.forklift.service;
+
+import com.v1rex.liftnexus.forklift.domain.ForkliftType;
+import com.v1rex.liftnexus.forklift.dto.ForkliftTypeRequest;
+import com.v1rex.liftnexus.forklift.dto.ForkliftTypeResponse;
+import com.v1rex.liftnexus.forklift.exception.ForkliftTypeNameExistsException;
+import com.v1rex.liftnexus.forklift.exception.ForkliftTypeNotFoundException;
+import com.v1rex.liftnexus.forklift.mapper.ForkliftTypeMapper;
+import com.v1rex.liftnexus.forklift.repository.ForkliftTypeRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Service layer for managing {@link ForkliftType} entities.
+ *
+ * &lt;p&gt;Provides transactional operations for creating, retrieving, and querying forklift types.
+ * Enforces uniqueness constraints on model names and uses a mapper for entity-to-DTO conversion.
+ */
+@Service
+<span class="fc" id="L24">@Slf4j</span>
+@RequiredArgsConstructor
+public class ForkliftTypeService {
+
+  private final ForkliftTypeRepository forkliftTypeRepository;
+  private final ForkliftTypeMapper forkliftTypeMapper;
+
+  /**
+   * Creates a new forklift type after validating that the model name is unique.
+   *
+   * @param request the DTO containing forklift type details (model name, etc.)
+   * @return a {@link ForkliftTypeResponse} representing the persisted entity
+   * @throws ForkliftTypeNameExistsException if a type with the given model name already exists
+   */
+  @Transactional
+  public ForkliftTypeResponse createForkliftType(ForkliftTypeRequest request) {
+<span class="fc" id="L40">    log.info(&quot;Registering new forklift archetype blueprint: {}&quot;, request.modelName());</span>
+
+<span class="fc bfc" id="L42" title="All 2 branches covered.">    if (forkliftTypeRepository.existsByModelName(request.modelName())) {</span>
+<span class="fc" id="L43">      throw new ForkliftTypeNameExistsException(request.modelName());</span>
+    }
+
+<span class="fc" id="L46">    ForkliftType forkliftType = forkliftTypeMapper.toEntity(request);</span>
+<span class="fc" id="L47">    ForkliftType savedType = forkliftTypeRepository.save(forkliftType);</span>
+
+<span class="fc" id="L49">    return forkliftTypeMapper.toResponse(savedType);</span>
+  }
+
+  /**
+   * Retrieves a forklift type by its unique identifier.
+   *
+   * @param id the primary key of the forklift type
+   * @return a {@link ForkliftTypeResponse} representing the found entity
+   * @throws ForkliftTypeNotFoundException if no type exists with the given id
+   */
+  @Transactional(readOnly = true)
+  public ForkliftTypeResponse findById(Long id) {
+<span class="fc" id="L61">    return forkliftTypeMapper.toResponse(findEntityById(id));</span>
+  }
+
+  /**
+   * Retrieves a paginated list of all forklift types.
+   *
+   * @param pageable pagination and sorting parameters
+   * @return a {@link Page} of {@link ForkliftTypeResponse} DTOs
+   */
+  @Transactional(readOnly = true)
+  public Page&lt;ForkliftTypeResponse&gt; findAll(Pageable pageable) {
+<span class="fc" id="L72">    return forkliftTypeRepository.findAll(pageable).map(forkliftTypeMapper::toResponse);</span>
+  }
+
+  /**
+   * Finds the underlying {@link ForkliftType} entity by its id, throwing if not found.
+   *
+   * &lt;p&gt;This is an internal helper used by other service methods that need access to the entity
+   * object rather than its DTO representation.
+   *
+   * @param id the primary key of the forklift type
+   * @return the {@link ForkliftType} entity
+   * @throws ForkliftTypeNotFoundException if no type exists with the given id
+   */
+  @Transactional(readOnly = true)
+  public ForkliftType findEntityById(Long id) {
+<span class="fc" id="L87">    return forkliftTypeRepository</span>
+<span class="fc" id="L88">        .findById(id)</span>
+<span class="fc" id="L89">        .orElseThrow(() -&gt; new ForkliftTypeNotFoundException(id));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

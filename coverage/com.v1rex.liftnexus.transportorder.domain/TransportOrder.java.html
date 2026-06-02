@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransportOrder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.transportorder.domain</a> &gt; <span class="el_source">TransportOrder.java</span></div><h1>TransportOrder.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.transportorder.domain;
+
+import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
+import ai.timefold.solver.core.api.domain.entity.PlanningPin;
+import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.v1rex.liftnexus.forklift.domain.EquipmentType;
+import com.v1rex.liftnexus.forklift.domain.Forklift;
+import com.v1rex.liftnexus.loadunit.domain.LoadUnit;
+import com.v1rex.liftnexus.storagebin.domain.StorageBin;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+@PlanningEntity
+@Entity
+@Table(name = &quot;transport_orders&quot;)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class TransportOrder {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @NotNull
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;load_unit_id&quot;, nullable = false)
+  private LoadUnit targetLoadUnit;
+
+  @NotNull
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;target_bin_id&quot;, nullable = false)
+  private StorageBin targetBin;
+
+  @NotNull
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;source_bin_id&quot;, nullable = false)
+  private StorageBin sourceBin;
+
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  @Column(name = &quot;required_equipment&quot;, nullable = false)
+  private EquipmentType requiredEquipment = EquipmentType.STANDARD;
+
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  @Column(name = &quot;status&quot;, nullable = false)
+  private TransportOrderStatus status = TransportOrderStatus.OPEN;
+
+  @InverseRelationShadowVariable(sourceVariableName = &quot;transportOrders&quot;)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;forklift_id&quot;)
+  @JsonIgnore
+  private Forklift assignedForklift;
+
+  @PlanningPin
+  public boolean isPinned() {
+<span class="nc bnc" id="L62" title="All 6 branches missed.">    return status == TransportOrderStatus.IN_PROGRESS</span>
+        || status == TransportOrderStatus.COMPLETED
+        || status == TransportOrderStatus.FAILED;
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

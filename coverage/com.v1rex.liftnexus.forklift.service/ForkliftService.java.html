@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ForkliftService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.forklift.service</a> &gt; <span class="el_source">ForkliftService.java</span></div><h1>ForkliftService.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.forklift.service;
+
+import com.v1rex.liftnexus.forklift.domain.Forklift;
+import com.v1rex.liftnexus.forklift.domain.ForkliftType;
+import com.v1rex.liftnexus.forklift.domain.OperationalStatus;
+import com.v1rex.liftnexus.forklift.dto.ForkliftRequest;
+import com.v1rex.liftnexus.forklift.dto.ForkliftResponse;
+import com.v1rex.liftnexus.forklift.exception.ForkliftFleetNumberExistsException;
+import com.v1rex.liftnexus.forklift.exception.ForkliftNotFoundException;
+import com.v1rex.liftnexus.forklift.mapper.ForkliftMapper;
+import com.v1rex.liftnexus.forklift.repository.ForkliftRepository;
+import com.v1rex.liftnexus.storagebin.domain.StorageBin;
+import com.v1rex.liftnexus.storagebin.service.StorageBinService;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Service layer for the Forklift bounded context.
+ *
+ * &lt;p&gt;Manages the full lifecycle of warehouse forklifts: registration, location tracking,
+ * operational status updates, and assignment of transport orders during solver solution
+ * persistence. Cross-domain communication follows the anti-corruption rule — all external entity
+ * lookups go through the respective service interfaces, never directly through repositories.
+ */
+@Service
+<span class="fc" id="L31">@Slf4j</span>
+@RequiredArgsConstructor
+public class ForkliftService {
+
+  private final ForkliftRepository forkliftRepository;
+  private final ForkliftMapper forkliftMapper;
+  private final ForkliftTypeService forkliftTypeService;
+  private final StorageBinService storageBinService;
+
+  /**
+   * Registers a new forklift in the warehouse fleet.
+   *
+   * &lt;p&gt;Validates that the fleet number is unique, resolves the forklift type (archetype) and
+   * optional initial storage bin from their respective domains, persists the aggregate, and returns
+   * a {@link ForkliftResponse} DTO.
+   *
+   * @param request the inbound payload containing fleet number, type ID, and optional initial
+   *     storage bin ID (must not be {@code null}, must pass validation)
+   * @return a DTO representing the newly created forklift
+   * @throws ForkliftFleetNumberExistsException if a forklift with the given fleet number already
+   *     exists in the system
+   */
+  @Transactional
+  public ForkliftResponse createForklift(ForkliftRequest request) {
+<span class="fc" id="L55">    log.info(&quot;Provisioning new warehouse asset with fleet number: {}&quot;, request.fleetNumber());</span>
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">    if (forkliftRepository.existsByFleetNumber(request.fleetNumber())) {</span>
+<span class="fc" id="L58">      throw new ForkliftFleetNumberExistsException(request.fleetNumber());</span>
+    }
+
+<span class="fc" id="L61">    ForkliftType forkliftType = forkliftTypeService.findEntityById(request.forkliftTypeId());</span>
+
+    StorageBin initialBin =
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        request.currentStorageBinId() != null</span>
+<span class="fc" id="L65">            ? storageBinService.findEntityById(request.currentStorageBinId())</span>
+<span class="fc" id="L66">            : null;</span>
+
+<span class="fc" id="L68">    Forklift forklift = forkliftMapper.toEntity(request);</span>
+<span class="fc" id="L69">    forklift.setForkliftType(forkliftType);</span>
+<span class="fc" id="L70">    forklift.setCurrentStorageBin(initialBin);</span>
+
+<span class="fc" id="L72">    Forklift savedForklift = forkliftRepository.save(forklift);</span>
+<span class="fc" id="L73">    log.debug(&quot;Successfully registered asset ID {}&quot;, savedForklift.getId());</span>
+<span class="fc" id="L74">    return forkliftMapper.toResponse(savedForklift);</span>
+  }
+
+  /**
+   * Retrieves a single forklift by its unique identifier.
+   *
+   * @param id the forklift's database identifier (must be positive and exist)
+   * @return a DTO representing the forklift
+   * @throws ForkliftNotFoundException if no forklift with that ID is found
+   */
+  @Transactional(readOnly = true)
+  public ForkliftResponse findById(Long id) {
+<span class="fc" id="L86">    return forkliftMapper.toResponse(findEntityById(id));</span>
+  }
+
+  /**
+   * Returns a paginated list of all forklifts in the system.
+   *
+   * @param pageable pagination and sorting parameters (default sort: {@code id} ascending)
+   * @return a page of forklift DTOs
+   */
+  @Transactional(readOnly = true)
+  public Page&lt;ForkliftResponse&gt; findAll(Pageable pageable) {
+<span class="fc" id="L97">    return findAllEntities(pageable).map(forkliftMapper::toResponse);</span>
+  }
+
+  /**
+   * Searches for forklifts by minimum lifting capacity or operational status.
+   *
+   * &lt;p&gt;If {@code minCapacity} is provided, results are filtered by the forklift type's max
+   * capacity.
+   *
+   * @param minCapacity the minimum weight capacity in kilograms (optional, {@code &gt;= 1})
+   * @param pageable pagination parameters (default size: 10, sort: fleetNumber)
+   * @return a page of matching forklift DTOs
+   */
+  @Transactional(readOnly = true)
+  public Page&lt;ForkliftResponse&gt; findWithCapacityGreaterThan(
+      Integer minCapacity, Pageable pageable) {
+<span class="fc" id="L113">    log.info(&quot;Searching assets matching minimum operational lifting capacity: {}kg&quot;, minCapacity);</span>
+<span class="fc" id="L114">    return forkliftRepository</span>
+<span class="fc" id="L115">        .findByForkliftType_MaxCapacityKgGreaterThanEqual(minCapacity, pageable)</span>
+<span class="fc" id="L116">        .map(forkliftMapper::toResponse);</span>
+  }
+
+  /**
+   * Searches for forklifts by operational status.
+   *
+   * @param status the operational status to filter by (e.g. {@code ACTIVE}, {@code OFFLINE})
+   * @param pageable pagination parameters
+   * @return a page of forklift DTOs matching the given status
+   */
+  @Transactional(readOnly = true)
+  public Page&lt;ForkliftResponse&gt; findByStatus(OperationalStatus status, Pageable pageable) {
+<span class="fc" id="L128">    log.info(&quot;Filtering active assets by operational status: {}&quot;, status);</span>
+<span class="fc" id="L129">    return forkliftRepository.findByStatus(status, pageable).map(forkliftMapper::toResponse);</span>
+  }
+
+  /**
+   * Moves a forklift to a new storage bin location.
+   *
+   * &lt;p&gt;This operation updates the physical location of the forklift within the warehouse. Both the
+   * forklift and the target bin must exist.
+   *
+   * @param forkliftId the identifier of the forklift to relocate
+   * @param locationId the identifier of the destination storage bin
+   * @return a DTO representing the updated forklift
+   * @throws ForkliftNotFoundException if no forklift with the given ID exists
+   */
+  @Transactional
+  public ForkliftResponse updateForkliftLocation(Long forkliftId, Long locationId) {
+<span class="fc" id="L145">    log.info(&quot;Moving Forklift ID {} to StorageBin ID {}&quot;, forkliftId, locationId);</span>
+<span class="fc" id="L146">    Forklift forklift = findEntityById(forkliftId);</span>
+<span class="fc" id="L147">    StorageBin newStorageBin = storageBinService.findEntityById(locationId);</span>
+
+<span class="fc" id="L149">    forklift.setCurrentStorageBin(newStorageBin);</span>
+<span class="fc" id="L150">    Forklift updatedForklift = forkliftRepository.save(forklift);</span>
+
+<span class="fc" id="L152">    log.debug(&quot;Update successful for Forklift ID {}&quot;, forkliftId);</span>
+<span class="fc" id="L153">    return forkliftMapper.toResponse(updatedForklift);</span>
+  }
+
+  /**
+   * Transitions a forklift's operational status (e.g. from {@code OFFLINE} to {@code ACTIVE}).
+   *
+   * @param forkliftId the identifier of the target forklift
+   * @param status the new operational status
+   * @return a DTO representing the updated forklift
+   * @throws ForkliftNotFoundException if no forklift with the given ID exists
+   */
+  @Transactional
+  public ForkliftResponse updateOperationalStatus(Long forkliftId, OperationalStatus status) {
+<span class="fc" id="L166">    log.info(&quot;Transitioning Forklift ID {} state to: {}&quot;, forkliftId, status);</span>
+<span class="fc" id="L167">    Forklift forklift = findEntityById(forkliftId);</span>
+
+<span class="fc" id="L169">    forklift.setStatus(status);</span>
+<span class="fc" id="L170">    Forklift updatedForklift = forkliftRepository.save(forklift);</span>
+
+<span class="fc" id="L172">    return forkliftMapper.toResponse(updatedForklift);</span>
+  }
+
+  /**
+   * Internal domain-level lookup: retrieves the managed {@link Forklift} entity by its ID.
+   *
+   * &lt;p&gt;This method is exposed to other services within the same domain and to the planning service
+   * for solution persistence. External consumers receive a DTO; only domain-internal callers should
+   * use the entity directly.
+   *
+   * @param id the forklift's database identifier
+   * @return the persistent Forklift entity
+   * @throws ForkliftNotFoundException if no entity with that ID exists
+   */
+  @Transactional(readOnly = true)
+  public Forklift findEntityById(Long id) {
+<span class="fc" id="L188">    log.info(&quot;Fetching Forklift entity with id: {}&quot;, id);</span>
+<span class="fc" id="L189">    return forkliftRepository</span>
+<span class="fc" id="L190">        .findById(id)</span>
+<span class="fc" id="L191">        .orElseThrow(</span>
+            () -&gt; {
+<span class="fc" id="L193">              log.warn(&quot;Lookup failed: Forklift ID {} not found&quot;, id);</span>
+<span class="fc" id="L194">              return new ForkliftNotFoundException(id);</span>
+            });
+  }
+
+  /**
+   * Returns a paginated list of raw {@link Forklift} entities for internal domain usage.
+   *
+   * @param pageable pagination and sorting parameters
+   * @return a page of Forklift entities
+   */
+  @Transactional(readOnly = true)
+  public Page&lt;Forklift&gt; findAllEntities(Pageable pageable) {
+<span class="fc" id="L206">    log.info(&quot;Fetching all managed forklift entities and returning a page&quot;);</span>
+<span class="fc" id="L207">    return forkliftRepository.findAll(pageable);</span>
+  }
+
+  /**
+   * Returns all {@link Forklift} entities without pagination for solver consumption.
+   *
+   * &lt;p&gt;&lt;b&gt;Performance note:&lt;/b&gt; This method loads the entire fleet into memory and is called during
+   * {@code WarehouseDispatcherService.buildCurrentState()}. For large warehouses, consider
+   * paginated or selective fetching (addressed in Milestone 2).
+   *
+   * @return a list of all Forklift entities in the database
+   */
+  @Transactional(readOnly = true)
+  public List&lt;Forklift&gt; findAllEntities() {
+<span class="fc" id="L221">    log.info(&quot;Fetching all managed forklift entities without pagination&quot;);</span>
+<span class="fc" id="L222">    return forkliftRepository.findAll();</span>
+  }
+
+  /**
+   * Persists the solver's assignment results back to the database.
+   *
+   * &lt;p&gt;Called by {@code WarehouseDispatcherService.saveFinalSolution()} after the Timefold solver
+   * produces a solution. This method performs a bulk ID lookup to ensure all referenced forklifts
+   * exist &lt;em&gt;before&lt;/em&gt; applying any assignment changes. If a forklift was deleted between solver
+   * completion and persistence, the operation fails with an {@link IllegalStateException} to
+   * prevent partial updates.
+   *
+   * &lt;p&gt;Each database forklift's transport order list is cleared and repopulated with the
+   * solver-determined assignments.
+   *
+   * @param forklifts the list of solver-state forklifts containing updated order assignments
+   * @throws IllegalStateException if one or more forklift IDs from the solver solution no longer
+   *     exist in the database (stale data)
+   */
+  @Transactional
+  public void updateAssignedOrders(List&lt;Forklift&gt; forklifts) {
+<span class="nc" id="L243">    log.info(&quot;Updating assigned transport orders for Forklifts&quot;);</span>
+<span class="nc" id="L244">    List&lt;Long&gt; ids = forklifts.stream().map(Forklift::getId).toList();</span>
+<span class="nc" id="L245">    List&lt;Forklift&gt; databaseForklifts = forkliftRepository.findAllById(ids);</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">    if (databaseForklifts.size() != ids.size()) {</span>
+<span class="nc" id="L247">      throw new IllegalStateException(&quot;One or more forklifts not found during assignment update&quot;);</span>
+    }
+
+<span class="nc bnc" id="L250" title="All 2 branches missed.">    for (Forklift newForklift : forklifts) {</span>
+<span class="nc" id="L251">      Forklift databaseForklift = findEntityById(newForklift.getId());</span>
+
+<span class="nc" id="L253">      databaseForklift.getTransportOrders().clear();</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">      if (newForklift.getTransportOrders() != null) {</span>
+<span class="nc" id="L255">        databaseForklift.getTransportOrders().addAll(newForklift.getTransportOrders());</span>
+      }
+<span class="nc" id="L257">    }</span>
+<span class="nc" id="L258">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransportOrderService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.transportorder.service</a> &gt; <span class="el_source">TransportOrderService.java</span></div><h1>TransportOrderService.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.transportorder.service;
+
+import com.v1rex.liftnexus.loadunit.domain.LoadUnit;
+import com.v1rex.liftnexus.loadunit.service.LoadUnitService;
+import com.v1rex.liftnexus.storagebin.domain.StorageBin;
+import com.v1rex.liftnexus.storagebin.service.StorageBinService;
+import com.v1rex.liftnexus.transportorder.domain.TransportOrder;
+import com.v1rex.liftnexus.transportorder.domain.TransportOrderStatus;
+import com.v1rex.liftnexus.transportorder.dto.TransportOrderRequest;
+import com.v1rex.liftnexus.transportorder.dto.TransportOrderResponse;
+import com.v1rex.liftnexus.transportorder.dto.TransportOrderStatusUpdateRequest;
+import com.v1rex.liftnexus.transportorder.exception.TransportOrderInvalidStateException;
+import com.v1rex.liftnexus.transportorder.exception.TransportOrderNotFoundException;
+import com.v1rex.liftnexus.transportorder.mapper.TransportOrderMapper;
+import com.v1rex.liftnexus.transportorder.repository.TransportOrderRepository;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Service layer responsible for managing transport orders within the warehouse system.
+ *
+ * &lt;p&gt;Handles the full lifecycle of a transport order: creation, status transitions, assignment to
+ * forklifts, and retrieval. All public methods enforce business rules such as ensuring the load
+ * unit is physically present at the source bin before a transport order can be created.
+ */
+@Service
+<span class="fc" id="L32">@Slf4j</span>
+@RequiredArgsConstructor
+public class TransportOrderService {
+
+  private final TransportOrderRepository transportOrderRepository;
+  private final TransportOrderMapper transportOrderMapper;
+
+  private final StorageBinService storageBinService;
+  private final LoadUnitService loadUnitService;
+
+  /**
+   * Creates a new transport order that moves a load unit from a source storage bin to a destination
+   * storage bin.
+   *
+   * &lt;p&gt;Validates that the specified load unit is currently located in the requested source bin
+   * before proceeding. Throws an exception if the load unit is not present at the source location.
+   *
+   * @param request DTO containing the target load unit ID, source bin ID, and destination bin ID.
+   * @return The persisted transport order wrapped in a response DTO.
+   * @throws TransportOrderInvalidStateException if the load unit is not in the specified source
+   *     bin.
+   */
+  @Transactional
+  public TransportOrderResponse createTransportOrder(TransportOrderRequest request) {
+<span class="fc" id="L56">    log.info(</span>
+        &quot;Creating TransportOrder for LoadUnit: {} from Bin: {} to Bin: {}&quot;,
+<span class="fc" id="L58">        request.targetLoadUnitId(),</span>
+<span class="fc" id="L59">        request.sourceBinId(),</span>
+<span class="fc" id="L60">        request.destinationBinId());</span>
+
+    // Resolve referenced entities
+<span class="fc" id="L63">    LoadUnit loadUnit = loadUnitService.findEntityById(request.targetLoadUnitId());</span>
+<span class="fc" id="L64">    StorageBin sourceBin = storageBinService.findEntityById(request.sourceBinId());</span>
+<span class="fc" id="L65">    StorageBin destinationBin = storageBinService.findEntityById(request.destinationBinId());</span>
+
+    // Business rule: the load unit must physically reside in the source bin
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (loadUnit.getCurrentBin() == null</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        || !loadUnit.getCurrentBin().getId().equals(sourceBin.getId())) {</span>
+<span class="fc" id="L70">      throw new TransportOrderInvalidStateException(</span>
+          &quot;LoadUnit &quot;
+<span class="fc" id="L72">              + loadUnit.getTrackingCode()</span>
+              + &quot; is not located in the requested source bin.&quot;);
+    }
+
+    // Map request to entity and wire up the resolved domain objects
+<span class="fc" id="L77">    TransportOrder order = transportOrderMapper.toEntity(request);</span>
+<span class="fc" id="L78">    order.setTargetLoadUnit(loadUnit);</span>
+<span class="fc" id="L79">    order.setSourceBin(sourceBin);</span>
+<span class="fc" id="L80">    order.setTargetBin(destinationBin);</span>
+
+<span class="fc" id="L82">    TransportOrder savedOrder = transportOrderRepository.save(order);</span>
+
+<span class="fc" id="L84">    log.info(&quot;Successfully created TransportOrder ID: {}&quot;, savedOrder.getId());</span>
+<span class="fc" id="L85">    return transportOrderMapper.toResponse(savedOrder);</span>
+  }
+
+  /**
+   * Advances (or changes) the status of an existing transport order.
+   *
+   * &lt;p&gt;Applies state-machine rules defined in {@link #checkStatusBeforeUpdate} to prevent invalid
+   * transitions such as rolling back from {@code IN_PROGRESS} to {@code OPEN} or mutating a
+   * completed order.
+   *
+   * @param id The unique identifier of the transport order to update.
+   * @param request DTO carrying the desired new status.
+   * @return The updated transport order wrapped in a response DTO.
+   * @throws TransportOrderNotFoundException if no order exists for the given ID.
+   * @throws TransportOrderInvalidStateException if the requested transition is not allowed.
+   */
+  @Transactional
+  public TransportOrderResponse updateOrderStatus(
+      Long id, TransportOrderStatusUpdateRequest request) {
+<span class="fc" id="L104">    TransportOrder order = findEntityById(id);</span>
+<span class="fc" id="L105">    TransportOrderStatus currentStatus = order.getStatus();</span>
+<span class="fc" id="L106">    TransportOrderStatus newStatus = request.status();</span>
+
+<span class="fc" id="L108">    checkStatusBeforeUpdate(id, currentStatus, newStatus);</span>
+
+<span class="fc" id="L110">    order.setStatus(newStatus);</span>
+
+<span class="fc" id="L112">    log.info(&quot;TransportOrder {} transitioned: {} -&gt; {}&quot;, id, currentStatus, newStatus);</span>
+<span class="fc" id="L113">    return transportOrderMapper.toResponse(order);</span>
+  }
+
+  /**
+   * Looks up a transport order by its ID and returns the response DTO.
+   *
+   * @param id The unique identifier of the transport order.
+   * @return The transport order response DTO.
+   * @throws TransportOrderNotFoundException if no order exists for the given ID.
+   */
+  @Transactional(readOnly = true)
+  public TransportOrderResponse findById(Long id) {
+<span class="fc" id="L125">    return transportOrderMapper.toResponse(findEntityById(id));</span>
+  }
+
+  /**
+   * Searches for transport orders with optional filters and pagination.
+   *
+   * @param status Optional status filter (may be null).
+   * @param minWeight Optional minimum weight filter (may be null).
+   * @param pageable Pagination and sorting information.
+   * @return A page of matching transport order response DTOs.
+   */
+  @Transactional(readOnly = true)
+  public Page&lt;TransportOrderResponse&gt; searchOrders(
+      TransportOrderStatus status, Integer minWeight, Pageable pageable) {
+<span class="fc" id="L139">    return transportOrderRepository</span>
+<span class="fc" id="L140">        .searchOrders(status, minWeight, pageable)</span>
+<span class="fc" id="L141">        .map(transportOrderMapper::toResponse);</span>
+  }
+
+  /**
+   * Retrieves the raw {@link TransportOrder} entity by its ID.
+   *
+   * &lt;p&gt;This is used internally by other service methods that need to work with the managed JPA
+   * entity rather than the response DTO.
+   *
+   * @param id The unique identifier of the transport order.
+   * @return The managed {@link TransportOrder} entity.
+   * @throws TransportOrderNotFoundException if no order exists for the given ID.
+   */
+  @Transactional(readOnly = true)
+  public TransportOrder findEntityById(Long id) {
+<span class="fc" id="L156">    return transportOrderRepository</span>
+<span class="fc" id="L157">        .findById(id)</span>
+<span class="fc" id="L158">        .orElseThrow(() -&gt; new TransportOrderNotFoundException(id));</span>
+  }
+
+  /**
+   * Returns &lt;strong&gt;all&lt;/strong&gt; transport order entities without pagination.
+   *
+   * &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; This method should only be used in batch/background operations where
+   * fetching the full dataset is acceptable (e.g., scheduled forklift-assignment jobs). Prefer the
+   * paginated {@link #searchOrders} method for user-facing features.
+   *
+   * @return A list of every {@link TransportOrder} in the database.
+   */
+  public List&lt;TransportOrder&gt; findAllEntities() {
+<span class="nc" id="L171">    log.info(&quot;Fetching all managed transport order entities without pagination&quot;);</span>
+<span class="nc" id="L172">    return transportOrderRepository.findAll();</span>
+  }
+
+  /**
+   * Assigns forklifts to a list of transport orders and transitions them to the {@link
+   * TransportOrderStatus#ASSIGNED} state.
+   *
+   * &lt;p&gt;Each order in the provided list is fetched from the database to obtain the managed entity,
+   * then updated with the assigned forklift reference. The status is automatically advanced to
+   * {@code ASSIGNED}.
+   *
+   * @param orders List of transport order entities carrying at least the ID and the desired
+   *     forklift assignment.
+   */
+  @Transactional
+  public void updateForkliftAssignments(List&lt;TransportOrder&gt; orders) {
+<span class="nc bnc" id="L188" title="All 2 branches missed.">    for (TransportOrder order : orders) {</span>
+      // Re-fetch to work with the managed entity within this persistence context
+<span class="nc" id="L190">      TransportOrder databaseOrder = findEntityById(order.getId());</span>
+
+      // Update the forklift reference
+<span class="nc" id="L193">      databaseOrder.setAssignedForklift(order.getAssignedForklift());</span>
+
+      // Automatically transition the order to ASSIGNED status
+<span class="nc" id="L196">      updateOrderStatus(</span>
+<span class="nc" id="L197">          databaseOrder.getId(),</span>
+          new TransportOrderStatusUpdateRequest(TransportOrderStatus.ASSIGNED));
+<span class="nc" id="L199">    }</span>
+<span class="nc" id="L200">  }</span>
+
+  /**
+   * Enforces the transport-order state machine rules to prevent invalid status transitions.
+   *
+   * &lt;p&gt;Currently enforced rules:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;A {@code COMPLETED} order can never be changed.
+   *   &lt;li&gt;An {@code IN_PROGRESS} order cannot be rolled back to {@code OPEN}.
+   *   &lt;li&gt;An {@code ASSIGNED} order cannot be rolled back to {@code OPEN}.
+   * &lt;/ul&gt;
+   *
+   * @param id The transport order ID (used only in error messages).
+   * @param currentStatus The current status of the order.
+   * @param newStatus The desired new status.
+   * @throws TransportOrderInvalidStateException if the transition is forbidden.
+   */
+  private void checkStatusBeforeUpdate(
+      Long id, TransportOrderStatus currentStatus, TransportOrderStatus newStatus) {
+<span class="fc bfc" id="L220" title="All 2 branches covered.">    if (currentStatus == TransportOrderStatus.COMPLETED) {</span>
+<span class="fc" id="L221">      throw new TransportOrderInvalidStateException(</span>
+          &quot;Cannot update TransportOrder &quot; + id + &quot; because it is already COMPLETED.&quot;);
+    }
+<span class="pc bpc" id="L224" title="1 of 4 branches missed.">    if (currentStatus == TransportOrderStatus.IN_PROGRESS</span>
+        &amp;&amp; newStatus == TransportOrderStatus.OPEN) {
+<span class="fc" id="L226">      throw new TransportOrderInvalidStateException(</span>
+          &quot;Cannot roll back TransportOrder &quot; + id + &quot; from ACTIVE to OPEN.&quot;);
+    }
+<span class="pc bpc" id="L229" title="1 of 4 branches missed.">    if (currentStatus == TransportOrderStatus.ASSIGNED &amp;&amp; newStatus == TransportOrderStatus.OPEN) {</span>
+<span class="fc" id="L230">      throw new TransportOrderInvalidStateException(</span>
+          &quot;Cannot roll back TransportOrder &quot; + id + &quot; from ASSIGNED to OPEN.&quot;);
+    }
+<span class="fc" id="L233">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
