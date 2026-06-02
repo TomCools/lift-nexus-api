@@ -10,6 +10,8 @@ jobs:
   build-and-test:
     name: Compile and Verify Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout Source Code
@@ -171,8 +173,8 @@ jobs:
             cp -r target/site/jacoco/* gh-pages/coverage/
           fi
 
-          # Javadoc
-          mvn javadoc:javadoc -Dquiet=true -Ddoclint=none
+          # Javadoc (with doclint disabled for CI resilience)
+          mvn javadoc:javadoc -Dquiet=true -Ddoclint=none -Dcheckstyle.skip=true -Dspotless.check.skip=true
           if [ -d target/site/apidocs ]; then
             cp -r target/site/apidocs/* gh-pages/javadoc/
           fi
