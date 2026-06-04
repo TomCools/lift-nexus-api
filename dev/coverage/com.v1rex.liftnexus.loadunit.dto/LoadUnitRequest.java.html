@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoadUnitRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.loadunit.dto</a> &gt; <span class="el_source">LoadUnitRequest.java</span></div><h1>LoadUnitRequest.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.loadunit.dto;
+
+import com.v1rex.liftnexus.loadunit.domain.LoadUnitStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+@Schema(description = &quot;Request payload for registering a new load unit&quot;)
+<span class="fc" id="L10">public record LoadUnitRequest(</span>
+    @NotBlank(message = &quot;Tracking code is required&quot;)
+        @Schema(description = &quot;Unique tracking code for the load unit&quot;, example = &quot;LU-2024-001&quot;)
+        String trackingCode,
+    @Min(value = 0, message = &quot;Weight cannot be negative&quot;)
+        @Schema(description = &quot;Weight of the load unit in kg&quot;, example = &quot;450&quot;)
+        int weightKg,
+    @NotNull(message = &quot;Initial status is required&quot;)
+        @Schema(description = &quot;Initial status of the load unit&quot;)
+        LoadUnitStatus status,
+    @Schema(
+            description = &quot;ID of the storage bin where the unit is placed (nullable)&quot;,
+            example = &quot;3&quot;,
+            nullable = true)
+        Long currentStorageBinId) {}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

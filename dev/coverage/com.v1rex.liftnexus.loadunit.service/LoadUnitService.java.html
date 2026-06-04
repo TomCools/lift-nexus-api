@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoadUnitService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.loadunit.service</a> &gt; <span class="el_source">LoadUnitService.java</span></div><h1>LoadUnitService.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.loadunit.service;
+
+import com.v1rex.liftnexus.loadunit.domain.LoadUnit;
+import com.v1rex.liftnexus.loadunit.domain.LoadUnitStatus;
+import com.v1rex.liftnexus.loadunit.dto.LoadUnitRequest;
+import com.v1rex.liftnexus.loadunit.dto.LoadUnitResponse;
+import com.v1rex.liftnexus.loadunit.exception.LoadUnitNotFoundException;
+import com.v1rex.liftnexus.loadunit.exception.LoadUnitTrackingCodeExistsException;
+import com.v1rex.liftnexus.loadunit.mapper.LoadUnitMapper;
+import com.v1rex.liftnexus.loadunit.repository.LoadUnitRepository;
+import com.v1rex.liftnexus.storagebin.domain.StorageBin;
+import com.v1rex.liftnexus.storagebin.service.StorageBinService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Service layer for managing {@link LoadUnit} entities.
+ *
+ * &lt;p&gt;This class provides two tiers of access:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;&lt;b&gt;External API Boundary&lt;/b&gt; – Methods that return DTOs ({@link LoadUnitResponse}) to
+ *       controllers and external callers. These methods handle validation, business logic, and
+ *       mapping.
+ *   &lt;li&gt;&lt;b&gt;Internal Domain Boundary&lt;/b&gt; – Methods that return domain entities ({@link LoadUnit})
+ *       for use by other services, internal components, or the Timefold solver, bypassing DTO
+ *       conversion.
+ * &lt;/ul&gt;
+ */
+@Service
+<span class="fc" id="L35">@Slf4j</span>
+@RequiredArgsConstructor
+public class LoadUnitService {
+
+  private final LoadUnitRepository loadUnitRepository;
+  private final LoadUnitMapper loadUnitMapper;
+
+  private final StorageBinService storageBinService;
+
+  // =====================================================================
+  // EXTERNAL API BOUNDARY (Returns DTOs to Controllers)
+  // =====================================================================
+
+  /**
+   * Creates a new load unit and persists it to the database.
+   *
+   * &lt;p&gt;Before persisting, this method validates that the provided {@code trackingCode} is unique.
+   * If a storage bin ID is supplied, the load unit will be assigned to the referenced bin (the bin
+   * must already exist).
+   *
+   * @param request the DTO containing the load unit details (tracking code, weight, optional
+   *     storage bin ID, etc.)
+   * @return a {@link LoadUnitResponse} representing the newly created and saved load unit
+   * @throws LoadUnitTrackingCodeExistsException if a load unit with the same tracking code already
+   *     exists
+   */
+  @Transactional
+  public LoadUnitResponse createLoadUnit(LoadUnitRequest request) {
+<span class="fc" id="L63">    log.info(</span>
+        &quot;Creating load unit with tracking code: {} and weight: {}kg&quot;,
+<span class="fc" id="L65">        request.trackingCode(),</span>
+<span class="fc" id="L66">        request.weightKg());</span>
+
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (loadUnitRepository.existsByTrackingCode(request.trackingCode())) {</span>
+<span class="fc" id="L69">      log.warn(</span>
+          &quot;Creation failed: Load unit with tracking code {} already exists&quot;,
+<span class="fc" id="L71">          request.trackingCode());</span>
+<span class="fc" id="L72">      throw new LoadUnitTrackingCodeExistsException(request.trackingCode());</span>
+    }
+
+<span class="fc" id="L75">    StorageBin assignedBin = null;</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">    if (request.currentStorageBinId() != null) {</span>
+<span class="fc" id="L77">      assignedBin = storageBinService.findEntityById(request.currentStorageBinId());</span>
+    }
+
+<span class="fc" id="L80">    LoadUnit loadUnit = loadUnitMapper.toEntity(request, assignedBin);</span>
+<span class="fc" id="L81">    LoadUnit savedUnit = loadUnitRepository.save(loadUnit);</span>
+
+<span class="fc" id="L83">    log.info(</span>
+        &quot;Successfully created load unit with Id: {}, tracking code: {}&quot;,
+<span class="fc" id="L85">        savedUnit.getId(),</span>
+<span class="fc" id="L86">        savedUnit.getTrackingCode());</span>
+<span class="fc" id="L87">    return loadUnitMapper.toResponse(savedUnit);</span>
+  }
+
+  /**
+   * Retrieves a load unit by its database ID and returns it as a DTO.
+   *
+   * @param id the primary key of the load unit
+   * @return a {@link LoadUnitResponse} for the matching load unit
+   * @throws LoadUnitNotFoundException if no load unit exists with the given {@code id}
+   */
+  @Transactional(readOnly = true)
+  public LoadUnitResponse findById(Long id) {
+<span class="fc" id="L99">    return loadUnitMapper.toResponse(findEntityById(id));</span>
+  }
+
+  /**
+   * Retrieves a load unit by its unique tracking code and returns it as a DTO.
+   *
+   * @param trackingCode the unique tracking code to search for
+   * @return a {@link LoadUnitResponse} for the matching load unit
+   * @throws LoadUnitNotFoundException if no load unit exists with the given {@code trackingCode}
+   */
+  @Transactional(readOnly = true)
+  public LoadUnitResponse findByTrackingCode(String trackingCode) {
+<span class="nc" id="L111">    return loadUnitMapper.toResponse(findEntityByTrackingCode(trackingCode));</span>
+  }
+
+  /**
+   * Returns a paginated list of all load units as DTOs.
+   *
+   * @param pageable pagination and sorting configuration
+   * @return a {@link Page} of {@link LoadUnitResponse}
+   */
+  @Transactional(readOnly = true)
+  public Page&lt;LoadUnitResponse&gt; findAll(Pageable pageable) {
+<span class="nc" id="L122">    return findAllEntities(pageable).map(loadUnitMapper::toResponse);</span>
+  }
+
+  /**
+   * Returns a paginated list of load units filtered by the given {@link LoadUnitStatus} as DTOs.
+   *
+   * @param status the status to filter by (e.g. {@code AVAILABLE}, {@code RESERVED}, etc.)
+   * @param pageable pagination and sorting configuration
+   * @return a {@link Page} of {@link LoadUnitResponse} matching the specified status
+   */
+  @Transactional(readOnly = true)
+  public Page&lt;LoadUnitResponse&gt; findByStatus(LoadUnitStatus status, Pageable pageable) {
+<span class="fc" id="L134">    return findEntitiesByStatus(status, pageable).map(loadUnitMapper::toResponse);</span>
+  }
+
+  // =====================================================================
+  // INTERNAL DOMAIN BOUNDARY (Returns Entities to other Services/Timefold)
+  // =====================================================================
+
+  /**
+   * Finds a load unit entity by its database ID.
+   *
+   * &lt;p&gt;This method is intended for internal use by other services, domain components, or the
+   * Timefold solver that require direct access to the domain entity rather than a DTO.
+   *
+   * @param id the primary key of the load unit
+   * @return the {@link LoadUnit} entity
+   * @throws LoadUnitNotFoundException if no load unit exists with the given {@code id}
+   */
+  public LoadUnit findEntityById(Long id) {
+<span class="fc" id="L152">    return loadUnitRepository</span>
+<span class="fc" id="L153">        .findById(id)</span>
+<span class="fc" id="L154">        .orElseThrow(</span>
+            () -&gt; {
+<span class="fc" id="L156">              log.warn(&quot;Load unit with id: {} not found.&quot;, id);</span>
+<span class="fc" id="L157">              return new LoadUnitNotFoundException(id);</span>
+            });
+  }
+
+  /**
+   * Finds a load unit entity by its unique tracking code.
+   *
+   * &lt;p&gt;This method is intended for internal use by other services, domain components, or the
+   * Timefold solver that require direct access to the domain entity rather than a DTO.
+   *
+   * @param trackingCode the unique tracking code to search for
+   * @return the {@link LoadUnit} entity
+   * @throws LoadUnitNotFoundException if no load unit exists with the given {@code trackingCode}
+   */
+  public LoadUnit findEntityByTrackingCode(String trackingCode) {
+<span class="nc" id="L172">    return loadUnitRepository</span>
+<span class="nc" id="L173">        .findByTrackingCode(trackingCode)</span>
+<span class="nc" id="L174">        .orElseThrow(</span>
+            () -&gt; {
+<span class="nc" id="L176">              log.warn(&quot;Load unit with tracking code: {} not found.&quot;, trackingCode);</span>
+<span class="nc" id="L177">              return new LoadUnitNotFoundException(trackingCode);</span>
+            });
+  }
+
+  /**
+   * Returns a paginated list of all load unit entities.
+   *
+   * &lt;p&gt;This method is intended for internal use by other services, domain components, or the
+   * Timefold solver that require direct access to the domain entity rather than a DTO.
+   *
+   * @param pageable pagination and sorting configuration
+   * @return a {@link Page} of {@link LoadUnit} entities
+   */
+  public Page&lt;LoadUnit&gt; findAllEntities(Pageable pageable) {
+<span class="nc" id="L191">    return loadUnitRepository.findAll(pageable);</span>
+  }
+
+  /**
+   * Returns a paginated list of load unit entities filtered by the given {@link LoadUnitStatus}.
+   *
+   * &lt;p&gt;This method is intended for internal use by other services, domain components, or the
+   * Timefold solver that require direct access to the domain entity rather than a DTO.
+   *
+   * @param status the status to filter by
+   * @param pageable pagination and sorting configuration
+   * @return a {@link Page} of {@link LoadUnit} entities matching the specified status
+   */
+  public Page&lt;LoadUnit&gt; findEntitiesByStatus(LoadUnitStatus status, Pageable pageable) {
+<span class="fc" id="L205">    return loadUnitRepository.findByStatus(status, pageable);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

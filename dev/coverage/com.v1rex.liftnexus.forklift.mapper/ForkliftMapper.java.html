@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ForkliftMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.forklift.mapper</a> &gt; <span class="el_source">ForkliftMapper.java</span></div><h1>ForkliftMapper.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.forklift.mapper;
+
+import com.v1rex.liftnexus.forklift.domain.Forklift;
+import com.v1rex.liftnexus.forklift.domain.OperationalStatus;
+import com.v1rex.liftnexus.forklift.dto.ForkliftRequest;
+import com.v1rex.liftnexus.forklift.dto.ForkliftResponse;
+import com.v1rex.liftnexus.transportorder.domain.TransportOrder;
+import java.util.List;
+import org.springframework.stereotype.Component;
+
+@Component
+<span class="fc" id="L12">public class ForkliftMapper {</span>
+
+  public Forklift toEntity(ForkliftRequest request) {
+<span class="fc bfc" id="L15" title="All 2 branches covered.">    if (request == null) return null;</span>
+<span class="fc" id="L16">    return Forklift.builder()</span>
+<span class="fc" id="L17">        .fleetNumber(request.fleetNumber())</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        .status(request.status() != null ? request.status() : OperationalStatus.OFFLINE)</span>
+<span class="fc" id="L19">        .currentBatteryPercentage(</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">            request.currentBatteryPercentage() != null ? request.currentBatteryPercentage() : 100.0)</span>
+<span class="fc" id="L21">        .build();</span>
+  }
+
+  public ForkliftResponse toResponse(Forklift entity) {
+<span class="fc bfc" id="L25" title="All 2 branches covered.">    if (entity == null) return null;</span>
+<span class="fc" id="L26">    return new ForkliftResponse(</span>
+<span class="fc" id="L27">        entity.getId(),</span>
+<span class="fc" id="L28">        entity.getFleetNumber(),</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        entity.getForkliftType() != null ? entity.getForkliftType().getId() : null,</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        entity.getForkliftType() != null ? entity.getForkliftType().getModelName() : null,</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        entity.getForkliftType() != null ? entity.getForkliftType().getEquipmentType() : null,</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        entity.getForkliftType() != null ? entity.getForkliftType().getMaxCapacityKg() : null,</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        entity.getCurrentStorageBin() != null ? entity.getCurrentStorageBin().getId() : null,</span>
+<span class="fc" id="L34">        entity.getStatus(),</span>
+<span class="fc" id="L35">        entity.getCurrentBatteryPercentage(),</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        entity.getTransportOrders() != null</span>
+<span class="fc" id="L37">            ? entity.getTransportOrders().stream().map(TransportOrder::getId).toList()</span>
+<span class="pc" id="L38">            : List.of() // TODO: fix later as this can cause the N+1 Query Problem</span>
+        );
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

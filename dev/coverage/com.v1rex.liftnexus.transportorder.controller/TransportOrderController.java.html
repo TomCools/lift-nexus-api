@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransportOrderController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.transportorder.controller</a> &gt; <span class="el_source">TransportOrderController.java</span></div><h1>TransportOrderController.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.transportorder.controller;
+
+import com.v1rex.liftnexus.transportorder.domain.TransportOrderStatus;
+import com.v1rex.liftnexus.transportorder.dto.TransportOrderRequest;
+import com.v1rex.liftnexus.transportorder.dto.TransportOrderResponse;
+import com.v1rex.liftnexus.transportorder.dto.TransportOrderStatusUpdateRequest;
+import com.v1rex.liftnexus.transportorder.service.TransportOrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import java.net.URI;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+@RestController
+@RequestMapping(&quot;/api/v1/transport-orders&quot;)
+@Validated
+@RequiredArgsConstructor
+@Tag(
+    name = &quot;Transport Orders&quot;,
+    description = &quot;Manage transport orders for moving loads across the warehouse&quot;)
+public class TransportOrderController {
+
+  private final TransportOrderService transportOrderService;
+
+  @Operation(
+      summary = &quot;Get a transport order by ID&quot;,
+      description =
+          &quot;Retrieves details of a specific transport order, including its source/destination bins and assigned forklift.&quot;)
+  @ApiResponses({
+    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Transport order found&quot;),
+    @ApiResponse(
+        responseCode = &quot;404&quot;,
+        description = &quot;Transport order not found&quot;,
+        content = @io.swagger.v3.oas.annotations.media.Content)
+  })
+  @GetMapping(&quot;/{id}&quot;)
+  public ResponseEntity&lt;TransportOrderResponse&gt; getOrderById(@PathVariable Long id) {
+<span class="fc" id="L49">    return ResponseEntity.ok(transportOrderService.findById(id));</span>
+  }
+
+  @Operation(
+      summary = &quot;Search transport orders&quot;,
+      description =
+          &quot;Search transport orders by status and/or minimum weight. Returns a paginated result set.&quot;)
+  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Matching transport orders&quot;)
+  @GetMapping(&quot;/search&quot;)
+  public ResponseEntity&lt;Page&lt;TransportOrderResponse&gt;&gt; searchOrders(
+      @Parameter(description = &quot;Filter by order status&quot;) @RequestParam(required = false)
+          TransportOrderStatus status,
+      @Parameter(description = &quot;Minimum weight in kg&quot;) @RequestParam(required = false) @Min(1)
+          Integer minWeight,
+      @PageableDefault(size = 20, sort = &quot;id&quot;) Pageable pageable) {
+<span class="fc" id="L64">    return ResponseEntity.ok(transportOrderService.searchOrders(status, minWeight, pageable));</span>
+  }
+
+  @Operation(
+      summary = &quot;Create a new transport order&quot;,
+      description =
+          &quot;Creates a transport order to move a load unit from a source bin to a destination bin.&quot;)
+  @ApiResponses({
+    @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Transport order created&quot;),
+    @ApiResponse(
+        responseCode = &quot;400&quot;,
+        description = &quot;Invalid input&quot;,
+        content = @io.swagger.v3.oas.annotations.media.Content)
+  })
+  @PostMapping
+  public ResponseEntity&lt;TransportOrderResponse&gt; createOrder(
+      @RequestBody @Valid TransportOrderRequest request) {
+<span class="fc" id="L81">    TransportOrderResponse savedOrder = transportOrderService.createTransportOrder(request);</span>
+
+    URI location =
+<span class="fc" id="L84">        ServletUriComponentsBuilder.fromCurrentRequest()</span>
+<span class="fc" id="L85">            .path(&quot;/{id}&quot;)</span>
+<span class="fc" id="L86">            .buildAndExpand(savedOrder.id())</span>
+<span class="fc" id="L87">            .toUri();</span>
+
+<span class="fc" id="L89">    return ResponseEntity.created(location).body(savedOrder);</span>
+  }
+
+  @Operation(
+      summary = &quot;Update transport order status&quot;,
+      description =
+          &quot;Updates the status of a transport order along the lifecycle: OPEN → ASSIGNED → IN_PROGRESS → COMPLETED/FAILED.&quot;)
+  @ApiResponses({
+    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Status updated&quot;),
+    @ApiResponse(
+        responseCode = &quot;400&quot;,
+        description = &quot;Invalid state transition&quot;,
+        content = @io.swagger.v3.oas.annotations.media.Content),
+    @ApiResponse(
+        responseCode = &quot;404&quot;,
+        description = &quot;Transport order not found&quot;,
+        content = @io.swagger.v3.oas.annotations.media.Content)
+  })
+  @PutMapping(&quot;/{id}/status&quot;)
+  public ResponseEntity&lt;TransportOrderResponse&gt; updateOrderStatus(
+      @PathVariable Long id, @RequestBody @Valid TransportOrderStatusUpdateRequest request) {
+<span class="fc" id="L110">    return ResponseEntity.ok(transportOrderService.updateOrderStatus(id, request));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

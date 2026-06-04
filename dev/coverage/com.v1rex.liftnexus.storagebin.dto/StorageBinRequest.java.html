@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StorageBinRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.storagebin.dto</a> &gt; <span class="el_source">StorageBinRequest.java</span></div><h1>StorageBinRequest.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.storagebin.dto;
+
+import com.v1rex.liftnexus.storagebin.domain.ZoneType;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
+@Schema(description = &quot;Request payload for creating a new storage bin&quot;)
+<span class="fc" id="L10">public record StorageBinRequest(</span>
+    @NotNull(message = &quot;Bin code is required&quot;)
+        @Schema(
+            description = &quot;Human-readable bin identifier (e.g., A-01-02-03)&quot;,
+            example = &quot;A-01-02-03&quot;)
+        String binCode,
+    @NotNull(message = &quot;Coordinates are required&quot;)
+        @Valid
+        @Schema(description = &quot;3D warehouse coordinates (aisle, bay, tier)&quot;)
+        CoordinateDto coordinate,
+    @NotNull(message = &quot;Zone type is required&quot;)
+        @Schema(description = &quot;Functional zone of the storage bin&quot;)
+        ZoneType zoneType,
+    @NotNull(message = &quot;Max weight capacity is required&quot;)
+        @Min(value = 0, message = &quot;Weight capacity cannot be negative&quot;)
+        @Schema(description = &quot;Maximum weight capacity in kg&quot;, example = &quot;2000&quot;)
+        Integer maxWeightCapacityKg) {}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
