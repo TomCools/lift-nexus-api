@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StorageBinMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.storagebin.mapper</a> &gt; <span class="el_source">StorageBinMapper.java</span></div><h1>StorageBinMapper.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.storagebin.mapper;
+
+import com.v1rex.liftnexus.storagebin.domain.Coordinate3D;
+import com.v1rex.liftnexus.storagebin.domain.StorageBin;
+import com.v1rex.liftnexus.storagebin.dto.CoordinateDto;
+import com.v1rex.liftnexus.storagebin.dto.StorageBinRequest;
+import com.v1rex.liftnexus.storagebin.dto.StorageBinResponse;
+import org.springframework.stereotype.Component;
+
+@Component
+<span class="fc" id="L11">public class StorageBinMapper {</span>
+
+  public StorageBin toEntity(StorageBinRequest request) {
+<span class="fc bfc" id="L14" title="All 2 branches covered.">    if (request == null) return null;</span>
+
+<span class="fc" id="L16">    Coordinate3D domainCoordinate = null;</span>
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">    if (request.coordinate() != null) {</span>
+<span class="fc" id="L18">      domainCoordinate =</span>
+          new Coordinate3D(
+<span class="fc" id="L20">              request.coordinate().x(), request.coordinate().y(), request.coordinate().z());</span>
+    }
+
+<span class="fc" id="L23">    return StorageBin.builder()</span>
+<span class="fc" id="L24">        .binCode(request.binCode())</span>
+<span class="fc" id="L25">        .coordinate(domainCoordinate)</span>
+<span class="fc" id="L26">        .zoneType(request.zoneType())</span>
+<span class="fc" id="L27">        .maxWeightCapacityKg(request.maxWeightCapacityKg())</span>
+<span class="fc" id="L28">        .build();</span>
+  }
+
+  public StorageBinResponse toResponse(StorageBin entity) {
+<span class="fc bfc" id="L32" title="All 2 branches covered.">    if (entity == null) return null;</span>
+
+<span class="fc" id="L34">    CoordinateDto dtoCoordinate = null;</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">    if (entity.getCoordinate() != null) {</span>
+<span class="fc" id="L36">      dtoCoordinate =</span>
+          new CoordinateDto(
+<span class="fc" id="L38">              entity.getCoordinate().getX(),</span>
+<span class="fc" id="L39">              entity.getCoordinate().getY(),</span>
+<span class="fc" id="L40">              entity.getCoordinate().getZ());</span>
+    }
+
+<span class="fc" id="L43">    return new StorageBinResponse(</span>
+<span class="fc" id="L44">        entity.getId(),</span>
+<span class="fc" id="L45">        entity.getBinCode(),</span>
+        dtoCoordinate,
+<span class="fc" id="L47">        entity.getZoneType(),</span>
+<span class="fc" id="L48">        entity.getMaxWeightCapacityKg());</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

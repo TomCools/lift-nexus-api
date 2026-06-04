@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoadUnitController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LiftNexus API</a> &gt; <a href="index.source.html" class="el_package">com.v1rex.liftnexus.loadunit.controller</a> &gt; <span class="el_source">LoadUnitController.java</span></div><h1>LoadUnitController.java</h1><pre class="source lang-java linenums">package com.v1rex.liftnexus.loadunit.controller;
+
+import com.v1rex.liftnexus.loadunit.domain.LoadUnitStatus;
+import com.v1rex.liftnexus.loadunit.dto.LoadUnitRequest;
+import com.v1rex.liftnexus.loadunit.dto.LoadUnitResponse;
+import com.v1rex.liftnexus.loadunit.service.LoadUnitService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import java.net.URI;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+@RestController
+@RequestMapping(&quot;/api/v1/load-units&quot;)
+@Validated
+<span class="fc" id="L28">@Slf4j</span>
+@RequiredArgsConstructor
+@Tag(
+    name = &quot;Load Units&quot;,
+    description = &quot;Manage load units (pallets, containers) and their tracking&quot;)
+public class LoadUnitController {
+
+  private final LoadUnitService loadUnitService;
+
+  @Operation(
+      summary = &quot;Register a new load unit&quot;,
+      description =
+          &quot;Creates a new load unit with a unique tracking code, weight, initial status, and optional storage bin assignment.&quot;)
+  @ApiResponses({
+    @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Load unit created&quot;),
+    @ApiResponse(
+        responseCode = &quot;400&quot;,
+        description = &quot;Invalid input&quot;,
+        content = @io.swagger.v3.oas.annotations.media.Content),
+    @ApiResponse(
+        responseCode = &quot;409&quot;,
+        description = &quot;Tracking code already exists&quot;,
+        content = @io.swagger.v3.oas.annotations.media.Content)
+  })
+  @PostMapping
+  public ResponseEntity&lt;LoadUnitResponse&gt; createLoadUnit(
+      @RequestBody @Valid LoadUnitRequest request) {
+<span class="fc" id="L55">    log.info(&quot;REST request to create Load Unit with tracking code: {}&quot;, request.trackingCode());</span>
+<span class="fc" id="L56">    LoadUnitResponse savedUnit = loadUnitService.createLoadUnit(request);</span>
+
+    URI location =
+<span class="fc" id="L59">        ServletUriComponentsBuilder.fromCurrentRequest()</span>
+<span class="fc" id="L60">            .path(&quot;/{id}&quot;)</span>
+<span class="fc" id="L61">            .buildAndExpand(savedUnit.id())</span>
+<span class="fc" id="L62">            .toUri();</span>
+
+<span class="fc" id="L64">    return ResponseEntity.created(location).body(savedUnit);</span>
+  }
+
+  @Operation(
+      summary = &quot;Get a load unit by ID&quot;,
+      description = &quot;Retrieves details of a specific load unit.&quot;)
+  @ApiResponses({
+    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Load unit found&quot;),
+    @ApiResponse(
+        responseCode = &quot;404&quot;,
+        description = &quot;Load unit not found&quot;,
+        content = @io.swagger.v3.oas.annotations.media.Content)
+  })
+  @GetMapping(&quot;/{id}&quot;)
+  public ResponseEntity&lt;LoadUnitResponse&gt; findById(@PathVariable Long id) {
+<span class="fc" id="L79">    log.info(&quot;REST request to get Load Unit by ID: {}&quot;, id);</span>
+<span class="fc" id="L80">    return ResponseEntity.ok(loadUnitService.findById(id));</span>
+  }
+
+  @Operation(
+      summary = &quot;Find a load unit by tracking code&quot;,
+      description = &quot;Retrieves a load unit using its unique tracking code.&quot;)
+  @ApiResponses({
+    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Load unit found&quot;),
+    @ApiResponse(
+        responseCode = &quot;404&quot;,
+        description = &quot;Load unit not found&quot;,
+        content = @io.swagger.v3.oas.annotations.media.Content)
+  })
+  @GetMapping(&quot;/tracking/{trackingCode}&quot;)
+  public ResponseEntity&lt;LoadUnitResponse&gt; findByTrackingCode(@PathVariable String trackingCode) {
+<span class="nc" id="L95">    log.info(&quot;REST request to get Load Unit by tracking code: {}&quot;, trackingCode);</span>
+<span class="nc" id="L96">    return ResponseEntity.ok(loadUnitService.findByTrackingCode(trackingCode));</span>
+  }
+
+  @Operation(
+      summary = &quot;List all load units&quot;,
+      description = &quot;Returns a paginated list of all load units in the system.&quot;)
+  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Paginated list of load units&quot;)
+  @GetMapping
+  public ResponseEntity&lt;Page&lt;LoadUnitResponse&gt;&gt; findAll(
+      @PageableDefault(size = 20, sort = &quot;id&quot;, direction = Sort.Direction.ASC) Pageable pageable) {
+<span class="nc" id="L106">    log.info(</span>
+        &quot;REST request to get all Load Units (Page size: {}, Page number: {})&quot;,
+<span class="nc" id="L108">        pageable.getPageSize(),</span>
+<span class="nc" id="L109">        pageable.getPageNumber());</span>
+<span class="nc" id="L110">    return ResponseEntity.ok(loadUnitService.findAll(pageable));</span>
+  }
+
+  @Operation(
+      summary = &quot;Filter load units by status&quot;,
+      description =
+          &quot;Returns a paginated list of load units filtered by their current status (e.g., STORED, IN_TRANSIT).&quot;)
+  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Matching load units&quot;)
+  @GetMapping(&quot;/status/{status}&quot;)
+  public ResponseEntity&lt;Page&lt;LoadUnitResponse&gt;&gt; findByStatus(
+      @Parameter(description = &quot;Load unit status to filter by&quot;) @PathVariable LoadUnitStatus status,
+      @PageableDefault(size = 20, sort = &quot;id&quot;, direction = Sort.Direction.ASC) Pageable pageable) {
+<span class="fc" id="L122">    log.info(&quot;REST request to get Load Units by status: {}&quot;, status);</span>
+<span class="fc" id="L123">    return ResponseEntity.ok(loadUnitService.findByStatus(status, pageable));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
