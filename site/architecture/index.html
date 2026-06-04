@@ -13,6 +13,10 @@
         <link rel="canonical" href="https://v1rex.github.io/lift-nexus-api/architecture/">
       
       
+        <link rel="prev" href="../project-overview/">
+      
+      
+        <link rel="next" href="../domain-model/">
       
       
         
@@ -49,6 +53,8 @@
       
     
     
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -70,6 +76,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#architecture" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -243,6 +254,468 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-philosophy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture philosophy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-a-modular-monolith" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a modular monolith?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-level architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layering-inside-a-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layering inside a module
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layering inside a module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controller-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#service-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repository-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repository layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-boundary-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module boundary rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dispatch-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispatch flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#planning-and-optimization-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planning and optimization module
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current trade-offs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Current trade-offs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jpa-model-and-optimization-model-are-still-close" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JPA model and optimization model are still close
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services-may-grow-over-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Services may grow over time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-dispatching-is-not-implemented-yet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic dispatching is not implemented yet
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-architecture-is-useful-for-the-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this architecture is useful for the project
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../domain-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domain Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimization Approach
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known Limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -260,6 +733,215 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-philosophy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture philosophy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-a-modular-monolith" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a modular monolith?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-level architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layering-inside-a-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layering inside a module
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layering inside a module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controller-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#service-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repository-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repository layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-boundary-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module boundary rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dispatch-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispatch flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#planning-and-optimization-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planning and optimization module
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current trade-offs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Current trade-offs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jpa-model-and-optimization-model-are-still-close" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JPA model and optimization model are still close
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services-may-grow-over-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Services may grow over time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-dispatching-is-not-implemented-yet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic dispatching is not implemented yet
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-architecture-is-useful-for-the-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this architecture is useful for the project
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -279,9 +961,283 @@
   
 
 
-  <h1>Architecture</h1>
+<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
+<p>Lift Nexus API is currently built as a <strong>modular monolith</strong>. The goal is to keep the project simple to run and understand while still separating the main warehouse dispatching concerns into clear modules.</p>
+<p>This page documents the current architecture decisions, module boundaries, communication rules, and known trade-offs. It focuses on the current MVP state, not a future production system.</p>
+<div class="admonition info">
+<p class="admonition-title">Project status</p>
+<p>Lift Nexus API is a portfolio / learning project. The current architecture is designed for a <a href="../roadmap/">static dispatching MVP</a> and is expected to evolve as the project grows.</p>
+</div>
+<hr />
+<h2 id="architecture-philosophy">Architecture philosophy<a class="headerlink" href="#architecture-philosophy" title="Permanent link">&para;</a></h2>
+<div class="admonition dev-note">
+<p class="admonition-title">Developer note</p>
+<p>The architecture of Lift Nexus API follows a simple principle: <strong>keep the system understandable first, then evolve it when the problem requires it</strong>. Overcomplicating the system too early, while I am still learning the domain, would be overkill.</p>
+<p>For this MVP, I prefer clear module boundaries, simple deployment, and testable application logic over introducing distributed infrastructure too early. The goal is not to build the most advanced architecture possible, but to build an architecture that matches the current project scope, helps me learn how to integrate Timefold into a backend application, and helps me reason about the domain.</p>
+<p>In practice, this means organizing code around warehouse capabilities, keeping controllers thin, avoiding direct repository access across modules, and documenting trade-offs instead of hiding them.</p>
+<p>Core Philosophy: "Start Small".</p>
+</div>
+<hr />
+<h2 id="why-a-modular-monolith">Why a modular monolith?<a class="headerlink" href="#why-a-modular-monolith" title="Permanent link">&para;</a></h2>
+<div class="admonition dev-note">
+<p class="admonition-title">Developer note</p>
+<p>I intentionally chose a modular monolith because this is a learning project and I decided not to introduce distributed-system complexity too early.</p>
+<p>I am still learning architecture patterns such as microservices and event-driven systems. For this project, I wanted to focus first on understanding the warehouse domain, building a clean Spring Boot backend, integrating persistence and testing, and connecting an optimization solver to the application.</p>
+<p>The current package boundaries let me practice modular design while keeping the system simple to run, debug, and evolve.</p>
+<p>At this stage, adding distributed architecture would make the prototype harder to understand, run, debug, and test without solving the main learning goal yet. The current package boundaries let me practice modular design while keeping the system simple to evolve.</p>
+</div>
+<hr />
+<h2 id="module-overview">Module overview<a class="headerlink" href="#module-overview" title="Permanent link">&para;</a></h2>
+<p>The codebase is organized by business capability rather than by technical layer.</p>
+<div class="highlight"><pre><span></span><code>src/main/java/com/v1rex/liftnexus/
+├── common/
+├── forklift/
+├── loadunit/
+├── storagebin/
+├── transportorder/
+└── planning/
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common</code></td>
+<td>Shared exception handling and reusable infrastructure concerns</td>
+</tr>
+<tr>
+<td><code>forklift</code></td>
+<td>Forklifts and forklift types</td>
+</tr>
+<tr>
+<td><code>loadunit</code></td>
+<td>Physical load units stored in the warehouse</td>
+</tr>
+<tr>
+<td><code>storagebin</code></td>
+<td>Simplified warehouse storage locations</td>
+</tr>
+<tr>
+<td><code>transportorder</code></td>
+<td>Orders that move load units from source to target bins</td>
+</tr>
+<tr>
+<td><code>planning</code></td>
+<td>Dispatch jobs, solver orchestration, and Timefold integration</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="high-level-architecture">High-level architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart TB
+    Client[Client / Swagger UI]
 
+    subgraph API[REST API Layer]
+        ForkliftAPI[Forklift API]
+        LoadUnitAPI[Load Unit API]
+        StorageBinAPI[Storage Bin API]
+        OrderAPI[Transport Order API]
+        PlanningAPI[Planning / Dispatch API]
+    end
 
+    subgraph Domain[Application Modules]
+        Forklift[Forklift Module]
+        LoadUnit[Load Unit Module]
+        StorageBin[Storage Bin Module]
+        TransportOrder[Transport Order Module]
+        Planning[Planning Module]
+    end
+
+    subgraph Persistence[Persistence]
+        DB[(PostgreSQL)]
+        Flyway[Flyway Migrations]
+    end
+
+    subgraph Solver[Optimization]
+        Timefold[Timefold Solver]
+        Constraints[Constraint Classes]
+    end
+
+    Client --&gt; API
+
+    ForkliftAPI --&gt; Forklift
+    LoadUnitAPI --&gt; LoadUnit
+    StorageBinAPI --&gt; StorageBin
+    OrderAPI --&gt; TransportOrder
+    PlanningAPI --&gt; Planning
+
+    Forklift --&gt; DB
+    LoadUnit --&gt; DB
+    StorageBin --&gt; DB
+    TransportOrder --&gt; DB
+    Planning --&gt; DB
+
+    Flyway --&gt; DB
+
+    Planning --&gt; Timefold
+    Timefold --&gt; Constraints</code></pre>
+<p>The <code>planning</code> module is the orchestration point for dispatch optimization. It loads the required warehouse state, starts the solver process, tracks the dispatch job, and stores the result.</p>
+<hr />
+<h2 id="layering-inside-a-module">Layering inside a module<a class="headerlink" href="#layering-inside-a-module" title="Permanent link">&para;</a></h2>
+<p>Most modules follow the same basic structure:</p>
+<pre class="mermaid"><code>flowchart TD
+    Controller[Controller&lt;br/&gt;HTTP routing and validation]
+    DTO[Request / Response DTOs]
+    Service[Service&lt;br/&gt;business rules and transactions]
+    Repository[Repository&lt;br/&gt;Spring Data JPA]
+    Entity[Entity&lt;br/&gt;JPA model]
+
+    Controller --&gt; DTO
+    Controller --&gt; Service
+    Service --&gt; Repository
+    Repository --&gt; Entity</code></pre>
+<h3 id="controller-layer">Controller layer<a class="headerlink" href="#controller-layer" title="Permanent link">&para;</a></h3>
+<p>Controllers should stay thin. Their main responsibilities are:</p>
+<ul>
+<li>expose REST endpoints</li>
+<li>validate input with framework annotations</li>
+<li>map requests and responses</li>
+<li>delegate business logic to services</li>
+</ul>
+<h3 id="service-layer">Service layer<a class="headerlink" href="#service-layer" title="Permanent link">&para;</a></h3>
+<p>Services contain the application logic:</p>
+<ul>
+<li>transaction boundaries</li>
+<li>business rule checks</li>
+<li>cross-module orchestration</li>
+<li>domain-specific exceptions</li>
+<li>entity lifecycle operations</li>
+</ul>
+<h3 id="repository-layer">Repository layer<a class="headerlink" href="#repository-layer" title="Permanent link">&para;</a></h3>
+<p>Repositories are responsible for persistence through Spring Data JPA. Database schema changes are managed through Flyway migrations.</p>
+<hr />
+<h2 id="module-boundary-rules">Module boundary rules<a class="headerlink" href="#module-boundary-rules" title="Permanent link">&para;</a></h2>
+<p>The project intentionally avoids direct repository access across modules.</p>
+<pre class="mermaid"><code>flowchart LR
+    PlanningService[Planning Service]
+    ForkliftService[Forklift Service]
+    ForkliftRepository[Forklift Repository]
+
+    PlanningService --&gt;|allowed| ForkliftService
+    ForkliftService --&gt; ForkliftRepository
+
+    PlanningService -. not allowed .-&gt; ForkliftRepository</code></pre>
+<p>The rule is:</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A service from one module should not inject a repository from another module. Cross-module access should always go through the other module's service layer.</p>
+</div>
+<p>This keeps module boundaries visible and prevents the planning module from becoming tightly coupled to every persistence detail in the system.</p>
+<div class="admonition dev-note">
+<p class="admonition-title">Developer note</p>
+<p>This boundary rule is something I started using in another project and reused here because it made the code easier for me to understand and refactor.</p>
+<p>The planning module needs information from forklifts, storage bins, load units, and transport orders, but it should not know the persistence details of those modules. Going through services keeps those boundaries visible.</p>
+</div>
+<hr />
+<h2 id="dispatch-flow">Dispatch flow<a class="headerlink" href="#dispatch-flow" title="Permanent link">&para;</a></h2>
+<p>The current MVP supports a static, one-shot optimization flow.</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant API as Dispatch Controller
+    participant Service as Warehouse Dispatcher Service
+    participant DB as PostgreSQL
+    participant Solver as Timefold Solver
+
+    Client-&gt;&gt;API: Start dispatch job
+    API-&gt;&gt;Service: create and start job
+    Service-&gt;&gt;DB: load forklifts, bins, load units, orders
+    Service-&gt;&gt;Solver: solve assignment problem
+    Solver--&gt;&gt;Service: return solution
+    Service-&gt;&gt;DB: store job status and result
+    Client-&gt;&gt;API: Poll job status
+    API-&gt;&gt;Service: read job
+    Service-&gt;&gt;DB: fetch job result
+    Service--&gt;&gt;API: return status/result
+    API--&gt;&gt;Client: response</code></pre>
+<p>This flow is intentionally simple. The current system does not continuously react to every warehouse event yet. Dynamic dispatching is planned as a later milestone.</p>
+<hr />
+<h2 id="exception-handling">Exception handling<a class="headerlink" href="#exception-handling" title="Permanent link">&para;</a></h2>
+<p>The project uses a shared exception approach based on:</p>
+<ul>
+<li>domain-specific exceptions</li>
+<li>machine-readable error codes</li>
+<li>a global exception handler</li>
+<li>consistent error responses</li>
+</ul>
+<pre class="mermaid"><code>flowchart TD
+    DomainException[Domain Exception]
+    ErrorCode[Error Code]
+    GlobalHandler[Global Exception Handler]
+    ProblemDetail[ProblemDetail Response]
+
+    DomainException --&gt; ErrorCode
+    DomainException --&gt; GlobalHandler
+    GlobalHandler --&gt; ProblemDetail</code></pre>
+<p>This makes API errors more predictable than returning ad-hoc exception messages from different controllers.</p>
+<p>The current design is useful for a structured API, but it is also intentionally simple. It can be improved later with more detailed error documentation in the API reference.</p>
+<hr />
+<h2 id="planning-and-optimization-module">Planning and optimization module<a class="headerlink" href="#planning-and-optimization-module" title="Permanent link">&para;</a></h2>
+<p>The planning module is responsible for connecting the backend application with Timefold Solver.</p>
+<pre class="mermaid"><code>flowchart LR
+    Dispatcher[Warehouse Dispatcher Service]
+    Problem[Planning Problem]
+    Solver[Timefold Solver]
+    ConstraintProvider[Constraint Provider]
+    Result[Dispatch Result]
+
+    Dispatcher --&gt; Problem
+    Problem --&gt; Solver
+    Solver --&gt; ConstraintProvider
+    Solver --&gt; Result
+    Result --&gt; Dispatcher</code></pre>
+<p>The constraint provider delegates individual business rules to separate constraint classes where possible. This keeps the optimization logic easier to read and test than placing every rule in a single large class.</p>
+<p>Examples of current or planned constraint categories:</p>
+<ul>
+<li>forklift capacity</li>
+<li>equipment compatibility</li>
+<li>travel distance / deadheading</li>
+<li>order priority</li>
+<li>deadlines</li>
+<li>energy-aware dispatching</li>
+</ul>
+<p>More detail is documented in the <a href="../optimization/">Optimization Approach</a> page.</p>
+<hr />
+<h2 id="current-trade-offs">Current trade-offs<a class="headerlink" href="#current-trade-offs" title="Permanent link">&para;</a></h2>
+<p>The current architecture is intentionally pragmatic. Some choices are good enough for the MVP, but not final.</p>
+<h3 id="jpa-model-and-optimization-model-are-still-close">JPA model and optimization model are still close<a class="headerlink" href="#jpa-model-and-optimization-model-are-still-close" title="Permanent link">&para;</a></h3>
+<p>Some model classes currently serve both persistence and optimization needs. This is acceptable for the MVP, but it couples the database model to the solver model.</p>
+<h3 id="services-may-grow-over-time">Services may grow over time<a class="headerlink" href="#services-may-grow-over-time" title="Permanent link">&para;</a></h3>
+<p>The current project follows a "thin controller, thicker service" style. This is simple and readable for the MVP, but larger workflows can make services too broad.</p>
+<p>Possible future improvements:</p>
+<ul>
+<li>command/query handlers</li>
+<li>clearer application services</li>
+<li>dedicated orchestration classes for planning workflows</li>
+</ul>
+<h3 id="dynamic-dispatching-is-not-implemented-yet">Dynamic dispatching is not implemented yet<a class="headerlink" href="#dynamic-dispatching-is-not-implemented-yet" title="Permanent link">&para;</a></h3>
+<p>The current architecture focuses on static dispatching. The system starts an optimization job based on the current state and returns a result. It does not yet continuously react to warehouse changes in real time.</p>
+<div class="admonition dev-note">
+<p class="admonition-title">Developers note</p>
+<p>Some edge are still not yet to be covered: What happens when the state of warehouse changes during solving? How to trigger re-optimization when new orders arrive or forklifts break down?</p>
+</div>
+<hr />
+<h2 id="why-this-architecture-is-useful-for-the-project">Why this architecture is useful for the project<a class="headerlink" href="#why-this-architecture-is-useful-for-the-project" title="Permanent link">&para;</a></h2>
+<p>This architecture gives the project a structure that is more realistic than a basic CRUD application while still staying manageable for a single-developer portfolio project.</p>
+<p>It supports the current goals:</p>
+<ul>
+<li>model a warehouse dispatching domain</li>
+<li>expose a clean REST API</li>
+<li>persist state in PostgreSQL</li>
+<li>run asynchronous dispatch jobs</li>
+<li>integrate Timefold Solver</li>
+<li>test persistence and application logic</li>
+<li>document current limitations clearly</li>
+</ul>
+<p>The design is not meant to be final. It is a foundation for learning, iteration, future improvements and experimentation. </p>
 
 
 
