@@ -1,0 +1,55 @@
+site_name: Lift Nexus API
+site_description: Spring Boot backend MVP for warehouse dispatch optimization
+site_url: https://v1rex.github.io/lift-nexus-api/
+repo_url: https://github.com/v1rex/lift-nexus-api
+repo_name: v1rex/lift-nexus-api
+
+docs_dir: docs/mkdocs
+site_dir: build/site
+
+theme:
+  name: material
+  logo: assets/logo_without_text_white.png
+  favicon: assets/logo_without_text_black.png
+  palette:
+    scheme: default
+    primary: blue
+    accent: blue
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Overview: index.md
+  - Project Overview: project-overview.md
+  - Architecture: architecture.md
+  - Domain Model: domain-model.md
+  - Optimization Approach: optimization.md
+  - API Usage: api-usage.md
+  - Testing Strategy: testing.md
+  - Known Limitations: limitations.md
+  - Roadmap: roadmap.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+
+extra_css:
+  - stylesheets/extra.css
