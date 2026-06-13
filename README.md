@@ -1,11 +1,11 @@
-[![Build](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/v1rex/27dc15f2c2aeef4b021fdff63d7ba722/raw/lift-nexus-metrics.json&style=for-the-badge&logo=github&logoColor=white)](https://github.com/V1rex/lift-nexus-api/actions/workflows/ci.yml)
+[![Build](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/v1rex/27dc15f2c2aeef4b021fdff63d7ba722/raw/lift-nexus-metrics.json&style=for-the-badge&logo=github&logoColor=white)](https://github.com/v1rex/lift-nexus-api/actions/workflows/ci.yml)
 [![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/v1rex/27dc15f2c2aeef4b021fdff63d7ba722/raw/lift-nexus-coverage.json?v=1&style=for-the-badge&logo=github-actions&logoColor=white)](https://v1rex.github.io/lift-nexus-api/coverage/)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)
 
 <br />
 <div align="center">
   <a href="https://github.com/v1rex/lift-nexus-api">
-    <img src="docs/assets/logo_horizental_without_gradient_slim.png" alt="Lift Nexus API Logo">
+    <img src="docs/assets/logo_horizontal_without_gradient_slim.png" alt="Lift Nexus API Logo">
   </a>
 
   <h3 align="center">Lift Nexus API</h3>
@@ -47,7 +47,7 @@ The goal is to experiment with backend architecture and optimization in a realis
 ## Tech Stack
 ![Java 21+](https://img.shields.io/badge/Java-21+-ED8936?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.5-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
-![Timefold](https://img.shields.io/badge/Timefold-2.0.0--beta-blue?style=for-the-badge&logoColor=white)
+![Timefold](https://img.shields.io/badge/Timefold-blue?style=for-the-badge&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 

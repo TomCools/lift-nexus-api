@@ -85,7 +85,6 @@ These reports are generated from the build pipeline:
 - [Interactive API Reference](../api.html)
 - [Jacoco Test Coverage](../coverage/)
 - [Generated Javadoc](../javadoc/)
-- [Surefire Test Results](../tests/)
 
 ### Repository
 

@@ -304,7 +304,7 @@ Possible future improvements:
 
 The current architecture focuses on static dispatching. The system starts an optimization job based on the current state and returns a result. It does not yet continuously react to warehouse changes in real time.
 
-!!! dev-note "Developers note"
+!!! dev-note "Developer note"
     Some edge are still not yet to be covered: What happens when the state of warehouse changes during solving? How to trigger re-optimization when new orders arrive or forklifts break down?
 
 

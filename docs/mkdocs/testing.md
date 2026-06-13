@@ -107,16 +107,6 @@ A high coverage number does not automatically mean the most important behavior i
 
 ---
 
-## Test reports
-
-The CI pipeline also publishes test reports.
-
-These reports make it easier to inspect test results after a pipeline run.
-
-[View test results](../tests/)
-
----
-
 ## Current testing focus
 
 The current test focus is:
