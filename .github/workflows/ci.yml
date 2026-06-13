@@ -91,7 +91,7 @@ jobs:
         if: always()
         run: |
           mkdir -p ci-artifacts/quality/target/site
-          mkdir -p ci-artifacts/quality/target/surefire-reports
+
 
           if [ -f target/openapi.json ]; then
             cp target/openapi.json ci-artifacts/quality/target/openapi.json
@@ -101,9 +101,7 @@ jobs:
             cp -r target/site/jacoco ci-artifacts/quality/target/site/jacoco
           fi
 
-          if [ -d target/surefire-reports ]; then
-            cp -r target/surefire-reports/* ci-artifacts/quality/target/surefire-reports/
-          fi
+
 
       - name: Upload Quality Artifacts
         if: always()

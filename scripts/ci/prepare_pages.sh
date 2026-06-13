@@ -6,7 +6,7 @@ PAGES_DIR="gh-pages"
 echo "Preparing GitHub Pages output..."
 
 rm -rf "$PAGES_DIR"
-mkdir -p "$PAGES_DIR/coverage" "$PAGES_DIR/javadoc" "$PAGES_DIR/tests" "$PAGES_DIR/site"
+mkdir -p "$PAGES_DIR/coverage" "$PAGES_DIR/javadoc" "$PAGES_DIR/site"
 
 # Landing page + API docs
 cp docs/index.html "$PAGES_DIR/"
@@ -44,11 +44,5 @@ else
   exit 1
 fi
 
-# Surefire test reports
-if [ -d target/surefire-reports ]; then
-  cp -r target/surefire-reports/* "$PAGES_DIR/tests/"
-else
-  echo "Surefire directory missing: target/surefire-reports"
-fi
 
 echo "GitHub Pages output prepared in $PAGES_DIR/"
