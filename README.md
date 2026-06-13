@@ -1,5 +1,5 @@
 [![Build](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/v1rex/27dc15f2c2aeef4b021fdff63d7ba722/raw/lift-nexus-metrics.json&style=for-the-badge&logo=github&logoColor=white)](https://github.com/V1rex/lift-nexus-api/actions/workflows/ci.yml)
-![Doc Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/v1rex/27dc15f2c2aeef4b021fdff63d7ba722/raw/lift-nexus-docs.json&style=for-the-badge&logo=openjdk&logoColor=white)
+<!--- ![Doc Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/v1rex/27dc15f2c2aeef4b021fdff63d7ba722/raw/lift-nexus-docs.json&style=for-the-badge&logo=openjdk&logoColor=white) -->
 [![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/v1rex/27dc15f2c2aeef4b021fdff63d7ba722/raw/lift-nexus-coverage.json?v=1&style=for-the-badge&logo=github-actions&logoColor=white)](https://v1rex.github.io/lift-nexus-api/coverage/)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)
 
@@ -59,7 +59,7 @@ The goal is to experiment with backend architecture and optimization in a realis
 ![JUnit5](https://img.shields.io/badge/JUnit%205-25A162?style=for-the-badge&logoColor=white)
 ![Testcontainers](https://img.shields.io/badge/Testcontainers-092E20?style=for-the-badge&logoColor=white)
 ![Spotless](https://img.shields.io/badge/Spotless-333333?style=for-the-badge&logoColor=white)
-![Checkstyle](https://img.shields.io/badge/Checkstyle-333333?style=for-the-badge&logoColor=white)
+<!--- ![Checkstyle](https://img.shields.io/badge/Checkstyle-333333?style=for-the-badge&logoColor=white) -->
 ![JaCoCo](https://img.shields.io/badge/JaCoCo-4285F4?style=for-the-badge&logoColor=white)
 
 ## Features
