@@ -164,7 +164,7 @@ See the full [documentation](https://lift-nexus.amine-bahij.dev/site/limitations
 | Auth, Monitoring, Deployment | Planned      | Improve security, observability, and deployment readiness |
 | Performance/Benchmarking | Planned      | Measure behavior under larger scenarios |
 
-See the [open issues](https://github.com/v1rex/lift-nexus-api/issues) and the [project roadmap](https://lift-nexus.amine-bahij.dev/roadmap/) for more details.
+See the [open issues](https://github.com/v1rex/lift-nexus-api/issues) and the [project roadmap](https://lift-nexus.amine-bahij.dev/site/roadmap/) for more details.
 
 ## What I Learned
 
