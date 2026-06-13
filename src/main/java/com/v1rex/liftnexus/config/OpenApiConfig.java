@@ -19,14 +19,14 @@ public class OpenApiConfig {
         .info(
             new Info()
                 .title("LiftNexus API Engine")
-                .version("0.0.1-SNAPSHOT")
+                .version("0.0.1")
                 .description(
-                    "High-performance asynchronous optimization and dispatching engine for"
+                    "Asynchronous optimization and dispatching engine for"
                         + " intralogistics assets using Timefold.")
                 .contact(
                     new Contact()
                         .name("Mohamed Amine Bahij")
-                        .email("medaminebahij02@gmail.com")
+                        .email("contact@amine-bahij.dev")
                         .url("https://github.com/v1rex"))
                 .license(
                     new License()
