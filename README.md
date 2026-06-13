@@ -10,7 +10,7 @@
 
   <h3 align="center">Lift Nexus API</h3>
 
-  <p align="center">@
+  <p align="center">
     Spring Boot backend MVP for warehouse dispatch optimization.<br />
     Built to explore domain modeling, async job handling, PostgreSQL/Flyway persistence,
     integration testing, and Timefold-based constraint solving.

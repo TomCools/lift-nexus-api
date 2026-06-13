@@ -18,8 +18,8 @@ public class OpenApiConfig {
     return new OpenAPI()
         .info(
             new Info()
-                .title("LiftNexus API Engine")
-                .version("0.0.1")
+                .title("LiftNexus API")
+                .version("0.1.0")
                 .description(
                     "Asynchronous optimization and dispatching engine for"
                         + " intralogistics assets using Timefold.")
