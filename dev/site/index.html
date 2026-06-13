@@ -300,9 +300,10 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="What this documentation covers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#generated-reports" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -312,8 +313,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#repository" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -321,6 +322,11 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -583,9 +589,10 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="What this documentation covers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#generated-reports" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -595,8 +602,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#repository" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -604,6 +611,11 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -628,8 +640,8 @@
 
 
 <h1 id="lift-nexus-api-documentation">Lift Nexus API Documentation<a class="headerlink" href="#lift-nexus-api-documentation" title="Permanent link">&para;</a></h1>
-<p>Lift Nexus API is a Spring Boot backend MVP for warehouse dispatch optimization.</p>
-<p>It models a simplified warehouse scenario with forklifts, load units, storage bins, and transport orders. The current MVP focuses on static dispatching: creating a warehouse state, starting a one-shot optimization job, and assigning transport orders to forklifts using Timefold Solver.</p>
+<p><a href="../">Lift Nexus API</a> is a Spring Boot backend MVP for warehouse dispatch optimization.</p>
+<p>It models a simplified warehouse scenario with <a href="domain-model/#forklifts-">Forklifts</a>, <a href="domain-model/#load-units-">Load Units</a>, <a href="domain-model/#storage-bins-">Storage Bins</a>, and <a href="domain-model/#transport-orders">Transport Orders</a>. The current MVP focuses on <a href="roadmap/">static dispatching</a>: creating a warehouse state, starting a one-shot optimization job, and assigning transport orders to forklifts using <a href="https://docs.timefold.ai/">Timefold</a> Solver.</p>
 <div class="admonition info">
 <p class="admonition-title">Project status</p>
 <p>This is a portfolio / learning project, not a production warehouse management system yet.</p>
@@ -652,7 +664,7 @@
 <li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 10.96a.985.985 0 0 1-.37-1.37L3.13 7c.11-.2.28-.34.47-.42l7.83-4.4c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.19.1.35.26.44.46l1.45 2.52c.28.48.11 1.09-.36 1.36l-1 .58v4.96c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-5.54c-.3.17-.68.18-1 0m10-6.81v6.7l5.96-3.35zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-3.22l-5 2.9c-.33.18-.7.17-1 .01v3.69zm-5.15-2.55 6.28-3.63-.58-1.01-6.28 3.63z"/></svg></span> <strong>Domain Model</strong></p>
 <hr />
-<p>Explanation of forklifts, load units, storage bins, transport orders, and dispatch jobs.</p>
+<p>Explanation of Forklifts, Load Units, Storage Bins, Transport Orders, and Dispatch Jobs.</p>
 <p><a href="domain-model/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Read domain model</a></p>
 </li>
 <li>
@@ -687,15 +699,15 @@
 </li>
 </ul>
 </div>
-<h2 id="generated-reports">Generated reports<a class="headerlink" href="#generated-reports" title="Permanent link">&para;</a></h2>
+<h3 id="generated-reports">Generated reports<a class="headerlink" href="#generated-reports" title="Permanent link">&para;</a></h3>
 <p>These reports are generated from the build pipeline:</p>
 <ul>
 <li><a href="../api.html">Interactive API Reference</a></li>
-<li><a href="../coverage/">Test Coverage</a></li>
-<li><a href="../javadoc/">Javadoc</a></li>
-<li><a href="../tests/">Test Results</a></li>
+<li><a href="../coverage/">Jacoco Test Coverage</a></li>
+<li><a href="../javadoc/">Generated Javadoc</a></li>
+<li><a href="../tests/">Surefire Test Results</a></li>
 </ul>
-<h2 id="repository">Repository<a class="headerlink" href="#repository" title="Permanent link">&para;</a></h2>
+<h3 id="repository">Repository<a class="headerlink" href="#repository" title="Permanent link">&para;</a></h3>
 <p><a href="https://github.com/v1rex/lift-nexus-api">View the project on GitHub</a></p>
 
 

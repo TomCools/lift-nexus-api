@@ -77,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#api-usage" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -370,6 +375,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Usage
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -387,6 +412,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#local-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swagger-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Swagger UI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typical-static-dispatching-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical static dispatching flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example endpoints
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -490,6 +578,60 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#local-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swagger-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Swagger UI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typical-static-dispatching-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical static dispatching flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example endpoints
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -509,9 +651,24 @@
   
 
 
-  <h1>API Usage</h1>
-
-<p>Coming soon </p>
+<h1 id="api-usage">API Usage<a class="headerlink" href="#api-usage" title="Permanent link">&para;</a></h1>
+<h2 id="local-setup">Local setup<a class="headerlink" href="#local-setup" title="Permanent link">&para;</a></h2>
+<p>docker compose up --build</p>
+<h2 id="swagger-ui">Swagger UI<a class="headerlink" href="#swagger-ui" title="Permanent link">&para;</a></h2>
+<p>http://localhost:8080/swagger-ui.html</p>
+<h2 id="typical-static-dispatching-flow">Typical static dispatching flow<a class="headerlink" href="#typical-static-dispatching-flow" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Start application</li>
+<li>Use seeded dev data or create warehouse data</li>
+<li>Create transport orders</li>
+<li>Submit dispatch job</li>
+<li>Poll job status</li>
+<li>Inspect assignments</li>
+</ol>
+<h2 id="example-endpoints">Example endpoints<a class="headerlink" href="#example-endpoints" title="Permanent link">&para;</a></h2>
+<p>POST /api/v1/dispatcher/jobs
+GET /api/v1/dispatcher/jobs/{jobId}
+DELETE /api/v1/dispatcher/jobs/{jobId}</p>
 
 
 
