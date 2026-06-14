@@ -104,9 +104,9 @@ public class WarehouseDispatcherService {
     // transportOrders
     //  by implementing a more efficient data retrieval strategy (e.g., pagination, selective field
     // fetching, or caching).
-<span class="fc" id="L107">    List&lt;StorageBin&gt; storageBins = storageBinService.findAllEntities();</span>
-<span class="fc" id="L108">    List&lt;Forklift&gt; forklifts = forkliftService.findAllEntities();</span>
-<span class="fc" id="L109">    List&lt;TransportOrder&gt; transportOrders = transportOrderService.findAllEntities();</span>
+<span class="fc" id="L107">    List&lt;StorageBin&gt; storageBins = storageBinService.findAllEntitiesForPlanning();</span>
+<span class="fc" id="L108">    List&lt;Forklift&gt; forklifts = forkliftService.findAllEntitiesForPlanning();</span>
+<span class="fc" id="L109">    List&lt;TransportOrder&gt; transportOrders = transportOrderService.findAllEntitiesForPlanning();</span>
 
 <span class="fc" id="L111">    log.debug(</span>
         &quot;Found {} storageBins, {} forklifts, and {} transportOrders in DB.&quot;,
@@ -268,7 +268,7 @@ public class WarehouseDispatcherService {
     try {
       // Persist the optimised assignments to the underlying domain entities
 <span class="fc" id="L270">      transportOrderService.updateForkliftAssignments(solution.getTransportOrderPool());</span>
-<span class="fc" id="L271">      forkliftService.updateAssignedOrders(solution.getForklifts());</span>
+      // forkliftService.updateAssignedOrders(solution.getForklifts());
 
 <span class="fc" id="L273">      job.setStatus(JobStatus.COMPLETED);</span>
 <span class="pc bpc" id="L274" title="1 of 2 branches missed.">      if (solution.getScore() != null) {</span>

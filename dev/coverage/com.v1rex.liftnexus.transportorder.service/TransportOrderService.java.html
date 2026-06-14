@@ -200,6 +200,24 @@ public class TransportOrderService {
 <span class="nc" id="L200">  }</span>
 
   /**
+   * Retrieves all {@link TransportOrder} entities with the object graph required by the Timefold
+   * solver.
+   *
+   * &lt;p&gt;This is an &lt;b&gt;internal&lt;/b&gt; method for planning use cases. It intentionally loads load units,
+   * source bins, target bins and assigned forklifts because the solver evaluates constraints
+   * outside the Hibernate session.
+   *
+   * &lt;p&gt;Do not use this method for normal paginated REST API access.
+   *
+   * @return an unmodifiable list of all planning-ready {@link TransportOrder} entities
+   */
+  @Transactional(readOnly = true)
+  public List&lt;TransportOrder&gt; findAllEntitiesForPlanning() {
+<span class="nc" id="L216">    log.info(&quot;Fetching all transport order entities with planning graph&quot;);</span>
+<span class="nc" id="L217">    return List.copyOf(transportOrderRepository.findAllForPlanning());</span>
+  }
+
+  /**
    * Enforces the transport-order state machine rules to prevent invalid status transitions.
    *
    * &lt;p&gt;Currently enforced rules:
@@ -217,19 +235,19 @@ public class TransportOrderService {
    */
   private void checkStatusBeforeUpdate(
       Long id, TransportOrderStatus currentStatus, TransportOrderStatus newStatus) {
-<span class="fc bfc" id="L220" title="All 2 branches covered.">    if (currentStatus == TransportOrderStatus.COMPLETED) {</span>
-<span class="fc" id="L221">      throw new TransportOrderInvalidStateException(</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">    if (currentStatus == TransportOrderStatus.COMPLETED) {</span>
+<span class="fc" id="L239">      throw new TransportOrderInvalidStateException(</span>
           &quot;Cannot update TransportOrder &quot; + id + &quot; because it is already COMPLETED.&quot;);
     }
-<span class="pc bpc" id="L224" title="1 of 4 branches missed.">    if (currentStatus == TransportOrderStatus.IN_PROGRESS</span>
+<span class="pc bpc" id="L242" title="1 of 4 branches missed.">    if (currentStatus == TransportOrderStatus.IN_PROGRESS</span>
         &amp;&amp; newStatus == TransportOrderStatus.OPEN) {
-<span class="fc" id="L226">      throw new TransportOrderInvalidStateException(</span>
+<span class="fc" id="L244">      throw new TransportOrderInvalidStateException(</span>
           &quot;Cannot roll back TransportOrder &quot; + id + &quot; from ACTIVE to OPEN.&quot;);
     }
-<span class="pc bpc" id="L229" title="1 of 4 branches missed.">    if (currentStatus == TransportOrderStatus.ASSIGNED &amp;&amp; newStatus == TransportOrderStatus.OPEN) {</span>
-<span class="fc" id="L230">      throw new TransportOrderInvalidStateException(</span>
+<span class="pc bpc" id="L247" title="1 of 4 branches missed.">    if (currentStatus == TransportOrderStatus.ASSIGNED &amp;&amp; newStatus == TransportOrderStatus.OPEN) {</span>
+<span class="fc" id="L248">      throw new TransportOrderInvalidStateException(</span>
           &quot;Cannot roll back TransportOrder &quot; + id + &quot; from ASSIGNED to OPEN.&quot;);
     }
-<span class="fc" id="L233">  }</span>
+<span class="fc" id="L251">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
