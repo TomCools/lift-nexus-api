@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://lift-nexus.amine-bahij.dev/testing/">
+        <link rel="canonical" href="https://lift-nexus.amine-bahij.dev/demo/">
       
       
-        <link rel="prev" href="../api-usage/">
+        <link rel="prev" href="../optimization/">
       
       
-        <link rel="next" href="../limitations/">
+        <link rel="next" href="../api-usage/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Testing Strategy - Lift Nexus API</title>
+        <title>Demo Guide - Lift Nexus API</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#testing-strategy" class="md-skip">
+        <a href="#demo-guide" class="md-skip">
           Skip to content
         </a>
       
@@ -113,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Testing Strategy
+              Demo Guide
             
           </span>
         </div>
@@ -366,10 +366,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../demo/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Demo Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -385,6 +412,125 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start-the-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Start the application
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-open-swagger-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Open Swagger UI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-inspect-the-seeded-warehouse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Inspect the seeded warehouse
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-submit-a-dispatch-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Submit a dispatch job
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-poll-job-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Poll job status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-inspect-the-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Inspect the result
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-stop-the-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Stop the environment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-just-happened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What just happened?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#explore-further" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Explore further
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -420,37 +566,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Testing Strategy
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
         
   
   
@@ -466,136 +585,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#test-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Test structure
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-is-tested" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What is tested?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#repository-and-persistence-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Repository and persistence tests
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#controller-and-service-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Controller and service tests
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mapper-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Mapper tests
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#solver-constraint-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solver constraint tests
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#coverage-reports" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Coverage reports
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#current-testing-focus" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Current testing focus
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#future-testing-improvements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Future testing improvements
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-philosophy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing philosophy
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -681,10 +670,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#test-structure" class="md-nav__link">
+  <a href="#1-start-the-application" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Test structure
+        1. Start the application
       
     </span>
   </a>
@@ -692,10 +681,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-tested" class="md-nav__link">
+  <a href="#2-open-swagger-ui" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is tested?
+        2. Open Swagger UI
       
     </span>
   </a>
@@ -703,10 +692,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#repository-and-persistence-tests" class="md-nav__link">
+  <a href="#3-inspect-the-seeded-warehouse" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Repository and persistence tests
+        3. Inspect the seeded warehouse
       
     </span>
   </a>
@@ -714,10 +703,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#controller-and-service-tests" class="md-nav__link">
+  <a href="#4-submit-a-dispatch-job" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Controller and service tests
+        4. Submit a dispatch job
       
     </span>
   </a>
@@ -725,10 +714,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mapper-tests" class="md-nav__link">
+  <a href="#5-poll-job-status" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mapper tests
+        5. Poll job status
       
     </span>
   </a>
@@ -736,10 +725,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#solver-constraint-tests" class="md-nav__link">
+  <a href="#6-inspect-the-result" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Solver constraint tests
+        6. Inspect the result
       
     </span>
   </a>
@@ -747,10 +736,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coverage-reports" class="md-nav__link">
+  <a href="#7-stop-the-environment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Coverage reports
+        7. Stop the environment
       
     </span>
   </a>
@@ -758,10 +747,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#current-testing-focus" class="md-nav__link">
+  <a href="#what-just-happened" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Current testing focus
+        What just happened?
       
     </span>
   </a>
@@ -769,21 +758,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#future-testing-improvements" class="md-nav__link">
+  <a href="#explore-further" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Future testing improvements
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-philosophy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing philosophy
+        Explore further
       
     </span>
   </a>
@@ -810,114 +788,104 @@
   
 
 
-<h1 id="testing-strategy">Testing Strategy<a class="headerlink" href="#testing-strategy" title="Permanent link">&para;</a></h1>
-<p>Lift Nexus API uses automated tests to keep the current MVP stable while the domain model, REST API, persistence layer, and optimization logic evolve.</p>
-<p>The goal is not only to increase the coverage percentage. The more important goal is to test the behavior that matters for the current warehouse dispatching workflow.</p>
+<h1 id="demo-guide">Demo Guide<a class="headerlink" href="#demo-guide" title="Permanent link">&para;</a></h1>
+<p>This page walks through the static dispatching workflow in under 5 minutes using the seeded development data. No manual data entry required.</p>
 <div class="admonition info">
-<p class="admonition-title">MVP scope</p>
-<p>The test suite is still evolving. Current tests focus on the most important backend, persistence, API, and solver behavior for Milestone 1.</p>
+<p class="admonition-title">Prerequisites</p>
+<p>Docker and Docker Compose must be installed. All data is pre-seeded — you only need to start the application.</p>
 </div>
 <hr />
-<h2 id="test-structure">Test structure<a class="headerlink" href="#test-structure" title="Permanent link">&para;</a></h2>
-<p>The test source tree follows the main project modules.</p>
-<p>Current test areas include:</p>
+<h2 id="1-start-the-application">1. Start the application<a class="headerlink" href="#1-start-the-application" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+<p>Wait a few seconds for PostgreSQL and the API to start. The <code>dev</code> profile loads sample data automatically.</p>
+<hr />
+<h2 id="2-open-swagger-ui">2. Open Swagger UI<a class="headerlink" href="#2-open-swagger-ui" title="Permanent link">&para;</a></h2>
+<p>Navigate to:</p>
+<div class="highlight"><pre><span></span><code>http://localhost:8080/swagger-ui.html
+</code></pre></div>
+<p>All steps below can be executed directly in Swagger UI. Each endpoint shows the full request/response schema.</p>
+<hr />
+<h2 id="3-inspect-the-seeded-warehouse">3. Inspect the seeded warehouse<a class="headerlink" href="#3-inspect-the-seeded-warehouse" title="Permanent link">&para;</a></h2>
+<p>The <code>DataSeeder</code> creates a small warehouse with 2 forklifts, 4 storage bins, 3 load units, and 3 transport orders — 2 of which are open and ready for dispatch.</p>
+<p><strong>List forklifts:</strong></p>
+<p><code>GET /api/v1/forklifts</code></p>
+<p>You should see <code>FLEET-HEAVY-01</code> (a side loader at the dock) and <code>FLEET-REACH-01</code> (a reach truck in zone A). One is already assigned to an in-progress order.</p>
+<p><strong>List open transport orders:</strong></p>
+<p><code>GET /api/v1/transport-orders/search?status=OPEN</code></p>
+<p>Two open orders are returned — one requiring a side loader (heavy load), one with no specific equipment requirement (light load). These are the work items the solver will assign.</p>
+<hr />
+<h2 id="4-submit-a-dispatch-job">4. Submit a dispatch job<a class="headerlink" href="#4-submit-a-dispatch-job" title="Permanent link">&para;</a></h2>
+<p><code>POST /api/v1/dispatcher/jobs</code></p>
+<p>No request body required. The response is <code>202 Accepted</code> with a job ID:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;jobId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a1b2c3d4-e5f6-7890-abcd-ef1234567890&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The solver starts asynchronously. The job transitions through <code>QUEUED</code> → <code>SOLVING</code> → <code>COMPLETED</code>.</p>
+<hr />
+<h2 id="5-poll-job-status">5. Poll job status<a class="headerlink" href="#5-poll-job-status" title="Permanent link">&para;</a></h2>
+<p><code>GET /api/v1/dispatcher/jobs/{jobId}</code></p>
+<p>Use the <code>jobId</code> from step 4. Poll until <code>status</code> is <code>COMPLETED</code> (typically a few seconds for the seeded dataset):</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a1b2c3d4-e5f6-7890-abcd-ef1234567890&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;COMPLETED&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;createdAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-14T12:00:00Z&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;completedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-14T12:00:04Z&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;finalScore&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0hard/-150soft&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>A <code>finalScore</code> of <code>0hard</code> means no hard constraints were violated — all assignments respect capacity and equipment requirements. The negative soft score reflects the travel distance penalty the solver minimized.</p>
+<hr />
+<h2 id="6-inspect-the-result">6. Inspect the result<a class="headerlink" href="#6-inspect-the-result" title="Permanent link">&para;</a></h2>
+<p>The solved assignments are persisted to the database. To see them:</p>
+<p><strong>Check transport orders after solving:</strong></p>
+<p><code>GET /api/v1/transport-orders/search</code></p>
+<p>The previously open orders should now show <code>status: ASSIGNED</code> and include an <code>assignedForklift</code> field. Each forklift received the orders it is capable of handling based on capacity and equipment compatibility.</p>
+<p><strong>Check forklifts after solving:</strong></p>
+<p><code>GET /api/v1/forklifts</code></p>
+<p>Each forklift's <code>transportOrders</code> array now reflects the sequence the solver determined.</p>
+<hr />
+<h2 id="7-stop-the-environment">7. Stop the environment<a class="headerlink" href="#7-stop-the-environment" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>down
+</code></pre></div>
+<hr />
+<h2 id="what-just-happened">What just happened?<a class="headerlink" href="#what-just-happened" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What the solver did</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Load</td>
+<td>Read all forklifts, storage bins, load units, and open transport orders</td>
+</tr>
+<tr>
+<td>Constraint</td>
+<td>Enforced that no forklift receives an order exceeding its capacity or requiring incompatible equipment</td>
+</tr>
+<tr>
+<td>Optimize</td>
+<td>Sequenced orders to minimize total estimated travel distance</td>
+</tr>
+<tr>
+<td>Persist</td>
+<td>Wrote the solved assignments back to forklifts and transport orders</td>
+</tr>
+</tbody>
+</table>
+<p>This is a <strong>static</strong> dispatch — the solver took a snapshot of the current warehouse state. If the warehouse changes later, a new job must be submitted.</p>
+<hr />
+<h2 id="explore-further">Explore further<a class="headerlink" href="#explore-further" title="Permanent link">&para;</a></h2>
 <ul>
-<li>application and configuration tests</li>
-<li>forklift tests</li>
-<li>load unit tests</li>
-<li>planning tests </li>
-<li>storage bin tests</li>
-<li>transport order tests</li>
+<li>OpenAPI reference: <code>http://localhost:8080/swagger-ui.html</code></li>
+<li>Postman collection: <code>docs/postman/lift-nexus-api-v0.1.0.postman_collection.json</code></li>
+<li><a href="../api-usage/">API Usage</a> — full endpoint reference</li>
+<li><a href="../optimization/">Optimization Approach</a> — how the solver works</li>
 </ul>
-<p>This mirrors the modular structure of the application and makes it easier to understand which part of the system a test belongs to.</p>
-<hr />
-<h2 id="what-is-tested">What is tested?<a class="headerlink" href="#what-is-tested" title="Permanent link">&para;</a></h2>
-<p>The current test suite covers several layers of the application:</p>
-<ul>
-<li>application context startup</li>
-<li>controller behavior</li>
-<li>service behavior</li>
-<li>mapper behavior</li>
-<li>repository and persistence behavior</li>
-<li>OpenAPI generation</li>
-<li>Timefold solver constraint behavior</li>
-</ul>
-<p>The goal is to test the project as a backend system, not only as isolated Java classes.</p>
-<hr />
-<h2 id="repository-and-persistence-tests">Repository and persistence tests<a class="headerlink" href="#repository-and-persistence-tests" title="Permanent link">&para;</a></h2>
-<p>Repository tests are used to verify persistence behavior against the database layer.</p>
-<p>These tests are important because Lift Nexus API uses PostgreSQL and Flyway migrations. The persistence layer is part of the real backend behavior and should not only be tested with mocks.</p>
-<p>The project uses PostgreSQL/Testcontainers test infrastructure so persistence tests can run against a database setup that is closer to the real application environment than an in-memory database.</p>
-<div class="admonition note">
-<p class="admonition-title">Why this matters</p>
-<p>Database behavior is part of the system. Testing repositories with PostgreSQL helps catch persistence and migration issues earlier.</p>
-</div>
-<hr />
-<h2 id="controller-and-service-tests">Controller and service tests<a class="headerlink" href="#controller-and-service-tests" title="Permanent link">&para;</a></h2>
-<p>Controller and service tests check important application behavior around the domain modules.</p>
-<p>These tests help verify that:</p>
-<ul>
-<li>API endpoints behave as expected</li>
-<li>service methods apply the intended business logic</li>
-<li>errors and edge cases are handled consistently</li>
-<li>module behavior does not break during refactoring</li>
-</ul>
-<p>For the current MVP, these tests are useful because the domain model is still evolving.</p>
-<hr />
-<h2 id="mapper-tests">Mapper tests<a class="headerlink" href="#mapper-tests" title="Permanent link">&para;</a></h2>
-<p>Mapper tests verify that data is translated correctly between domain objects and DTOs.</p>
-<p>This matters because the API layer should not expose internal domain objects directly. Mapper tests help protect the boundary between the REST API and the internal model.</p>
-<hr />
-<h2 id="solver-constraint-tests">Solver constraint tests<a class="headerlink" href="#solver-constraint-tests" title="Permanent link">&para;</a></h2>
-<p>Planning constraints are tested directly.</p>
-<p>The current solver-related tests cover constraints such as:</p>
-<ul>
-<li>forklift capacity limit</li>
-<li>forklift travel distance</li>
-<li>transport order equipment requirement</li>
-<li>constraint provider behavior</li>
-</ul>
-<p>This is one of the most important parts of the test suite because the optimization model is a core part of the project.</p>
-<p>Testing constraints directly makes it easier to verify that the solver rules behave as intended before they are used inside a larger dispatching workflow.</p>
-<hr />
-<h2 id="coverage-reports">Coverage reports<a class="headerlink" href="#coverage-reports" title="Permanent link">&para;</a></h2>
-<p>The CI pipeline generates a JaCoCo coverage report.</p>
-<p><a href="../coverage/">View coverage report</a></p>
-<p>Coverage is useful as a visibility tool, but it is not the only measure of test quality.</p>
-<p>A high coverage number does not automatically mean the most important behavior is tested. For this project, meaningful tests around dispatching, persistence, constraints, and domain rules matter more than only increasing the percentage.</p>
-<hr />
-<h2 id="current-testing-focus">Current testing focus<a class="headerlink" href="#current-testing-focus" title="Permanent link">&para;</a></h2>
-<p>The current test focus is:</p>
-<ul>
-<li>keeping the application context stable</li>
-<li>testing repository behavior with PostgreSQL/Testcontainers</li>
-<li>testing controller and service behavior</li>
-<li>checking mapper behavior</li>
-<li>testing Timefold constraints directly</li>
-<li>generating OpenAPI and CI reports</li>
-</ul>
-<p>This is enough for the current static dispatching MVP.</p>
-<hr />
-<h2 id="future-testing-improvements">Future testing improvements<a class="headerlink" href="#future-testing-improvements" title="Permanent link">&para;</a></h2>
-<p>Future milestones should add stronger tests around:</p>
-<ul>
-<li>full dispatch job workflows</li>
-<li>solver failure handling</li>
-<li>edge cases with no available forklifts</li>
-<li>edge cases with incompatible transport orders</li>
-<li>larger dispatching scenarios</li>
-<li>dynamic dispatching and replanning behavior</li>
-<li>benchmark scenarios for optimization quality</li>
-</ul>
-<p>The goal is to grow the test suite together with the project instead of adding unnecessary complexity too early.</p>
-<hr />
-<h2 id="testing-philosophy">Testing philosophy<a class="headerlink" href="#testing-philosophy" title="Permanent link">&para;</a></h2>
-<p>The testing strategy follows the same philosophy as the project architecture:</p>
-<blockquote>
-<p>Keep the system understandable first, then improve it step by step.</p>
-</blockquote>
-<p>For Milestone 1, the test suite should protect the current static dispatching MVP and make future refactoring safer.</p>
-<hr />
 
 
 
