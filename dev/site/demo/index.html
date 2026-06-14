@@ -813,7 +813,7 @@
 <p>You should see <code>FLEET-HEAVY-01</code> (a side loader at the dock) and <code>FLEET-REACH-01</code> (a reach truck in zone A). One is already assigned to an in-progress order.</p>
 <p><strong>List open transport orders:</strong></p>
 <p><code>GET /api/v1/transport-orders/search?status=OPEN</code></p>
-<p>Two open orders are returned — one requiring a side loader (heavy load), one with no specific equipment requirement (light load). These are the work items the solver will assign.</p>
+<p>Two open orders are returned — one requiring a side loader for the heavy load and one requiring a reach truck for the light load. These are the work items the solver will assign.</p>
 <hr />
 <h2 id="4-submit-a-dispatch-job">4. Submit a dispatch job<a class="headerlink" href="#4-submit-a-dispatch-job" title="Permanent link">&para;</a></h2>
 <p><code>POST /api/v1/dispatcher/jobs</code></p>
