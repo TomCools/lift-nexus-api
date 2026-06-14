@@ -238,23 +238,41 @@ public class ForkliftService {
    * @throws IllegalStateException if one or more forklift IDs from the solver solution no longer
    *     exist in the database (stale data)
    */
+  @Deprecated
   @Transactional
   public void updateAssignedOrders(List&lt;Forklift&gt; forklifts) {
-<span class="nc" id="L243">    log.info(&quot;Updating assigned transport orders for Forklifts&quot;);</span>
-<span class="nc" id="L244">    List&lt;Long&gt; ids = forklifts.stream().map(Forklift::getId).toList();</span>
-<span class="nc" id="L245">    List&lt;Forklift&gt; databaseForklifts = forkliftRepository.findAllById(ids);</span>
-<span class="nc bnc" id="L246" title="All 2 branches missed.">    if (databaseForklifts.size() != ids.size()) {</span>
-<span class="nc" id="L247">      throw new IllegalStateException(&quot;One or more forklifts not found during assignment update&quot;);</span>
+<span class="nc" id="L244">    log.info(&quot;Updating assigned transport orders for Forklifts&quot;);</span>
+<span class="nc" id="L245">    List&lt;Long&gt; ids = forklifts.stream().map(Forklift::getId).toList();</span>
+<span class="nc" id="L246">    List&lt;Forklift&gt; databaseForklifts = forkliftRepository.findAllById(ids);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">    if (databaseForklifts.size() != ids.size()) {</span>
+<span class="nc" id="L248">      throw new IllegalStateException(&quot;One or more forklifts not found during assignment update&quot;);</span>
     }
 
-<span class="nc bnc" id="L250" title="All 2 branches missed.">    for (Forklift newForklift : forklifts) {</span>
-<span class="nc" id="L251">      Forklift databaseForklift = findEntityById(newForklift.getId());</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">    for (Forklift newForklift : forklifts) {</span>
+<span class="nc" id="L252">      Forklift databaseForklift = findEntityById(newForklift.getId());</span>
 
-<span class="nc" id="L253">      databaseForklift.getTransportOrders().clear();</span>
-<span class="nc bnc" id="L254" title="All 2 branches missed.">      if (newForklift.getTransportOrders() != null) {</span>
-<span class="nc" id="L255">        databaseForklift.getTransportOrders().addAll(newForklift.getTransportOrders());</span>
+<span class="nc" id="L254">      databaseForklift.getTransportOrders().clear();</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">      if (newForklift.getTransportOrders() != null) {</span>
+<span class="nc" id="L256">        databaseForklift.getTransportOrders().addAll(newForklift.getTransportOrders());</span>
       }
-<span class="nc" id="L257">    }</span>
-<span class="nc" id="L258">  }</span>
+<span class="nc" id="L258">    }</span>
+<span class="nc" id="L259">  }</span>
+
+  /**
+   * Retrieves all {@link Forklift} entities with the object graph required by the Timefold solver.
+   *
+   * &lt;p&gt;This is an &lt;b&gt;internal&lt;/b&gt; method for planning use cases. It intentionally loads the full
+   * planning-relevant graph, including forklift type, current location and assigned transport
+   * orders, because the solver runs asynchronously outside the Hibernate session.
+   *
+   * &lt;p&gt;Do not use this method for normal paginated REST API access.
+   *
+   * @return an unmodifiable list of all planning-ready {@link Forklift} entities
+   */
+  @Transactional(readOnly = true)
+  public List&lt;Forklift&gt; findAllEntitiesForPlanning() {
+<span class="nc" id="L274">    log.info(&quot;Fetching all forklift entities with planning graph&quot;);</span>
+<span class="nc" id="L275">    return List.copyOf(forkliftRepository.findAllForPlanning());</span>
+  }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -32,7 +32,7 @@ LiftNexus API,com.v1rex.liftnexus.planning.exception,DispatchJobErrorCode,0,21,0
 LiftNexus API,com.v1rex.liftnexus.planning.exception,DispatchJobNotFoundException,0,7,0,0,0,2,0,1,0,1
 LiftNexus API,com.v1rex.liftnexus.storagebin.domain,ZoneType,0,33,0,0,0,6,0,1,0,1
 LiftNexus API,com.v1rex.liftnexus.storagebin.domain,Coordinate3D,0,36,0,0,0,5,0,2,0,2
-LiftNexus API,com.v1rex.liftnexus.planning.service,WarehouseDispatcherService,73,229,4,8,14,57,6,10,2,8
+LiftNexus API,com.v1rex.liftnexus.planning.service,WarehouseDispatcherService,73,224,4,8,14,56,6,10,2,8
 LiftNexus API,com.v1rex.liftnexus,LiftNexusApplication,5,3,0,0,2,1,1,1,1,1
 LiftNexus API,com.v1rex.liftnexus.storagebin.controller,StorageBinExceptionHandler,0,22,0,0,0,4,0,2,0,2
 LiftNexus API,com.v1rex.liftnexus.storagebin.controller,StorageBinController,0,35,0,0,0,8,0,3,0,3
@@ -40,7 +40,7 @@ LiftNexus API,com.v1rex.liftnexus.loadunit.exception,LoadUnitNotFoundException,6
 LiftNexus API,com.v1rex.liftnexus.loadunit.exception,LoadUnitDomainException,0,5,0,0,0,2,0,1,0,1
 LiftNexus API,com.v1rex.liftnexus.loadunit.exception,LoadUnitErrorCode,0,21,0,0,0,3,0,1,0,1
 LiftNexus API,com.v1rex.liftnexus.loadunit.exception,LoadUnitTrackingCodeExistsException,0,6,0,0,0,2,0,1,0,1
-LiftNexus API,com.v1rex.liftnexus.storagebin.service,StorageBinService,7,115,0,2,2,24,1,8,1,7
+LiftNexus API,com.v1rex.liftnexus.storagebin.service,StorageBinService,15,115,0,2,4,24,2,8,2,7
 LiftNexus API,com.v1rex.liftnexus.forklift.mapper,ForkliftTypeMapper,0,45,0,4,0,17,0,5,0,3
 LiftNexus API,com.v1rex.liftnexus.forklift.mapper,ForkliftMapper,1,97,1,19,0,22,1,12,0,3
 LiftNexus API,com.v1rex.liftnexus.transportorder.dto,TransportOrderRequest,0,15,0,0,0,1,0,1,0,1
@@ -54,12 +54,12 @@ LiftNexus API,com.v1rex.liftnexus.forklift.exception,ForkliftErrorCode,0,39,0,0,
 LiftNexus API,com.v1rex.liftnexus.forklift.exception,ForkliftDomainException,0,5,0,0,0,2,0,1,0,1
 LiftNexus API,com.v1rex.liftnexus.loadunit.domain,LoadUnitStatus,0,33,0,0,0,6,0,1,0,1
 LiftNexus API,com.v1rex.liftnexus.forklift.service,ForkliftTypeService,0,70,0,2,0,12,0,7,0,6
-LiftNexus API,com.v1rex.liftnexus.forklift.service,ForkliftService,53,209,6,4,12,44,4,14,1,12
+LiftNexus API,com.v1rex.liftnexus.forklift.service,ForkliftService,61,209,6,4,14,44,5,14,2,12
 LiftNexus API,com.v1rex.liftnexus.transportorder.controller,TransportOrderExceptionHandler,0,22,0,0,0,4,0,2,0,2
 LiftNexus API,com.v1rex.liftnexus.transportorder.controller,TransportOrderController,0,44,0,0,0,9,0,4,0,4
 LiftNexus API,com.v1rex.liftnexus.transportorder.domain,TransportOrderStatus,0,33,0,0,0,6,0,1,0,1
 LiftNexus API,com.v1rex.liftnexus.transportorder.domain,TransportOrder,16,0,6,0,1,0,4,0,1,0
-LiftNexus API,com.v1rex.liftnexus.transportorder.service,TransportOrderService,37,198,4,12,9,40,5,13,2,8
+LiftNexus API,com.v1rex.liftnexus.transportorder.service,TransportOrderService,45,198,4,12,11,40,6,13,3,8
 LiftNexus API,com.v1rex.liftnexus.planning.controller,DispatchJobExceptionHandler,18,4,0,0,3,1,1,1,1,1
 LiftNexus API,com.v1rex.liftnexus.planning.controller,WarehouseDispatcherController,0,41,0,0,0,10,0,4,0,4
 LiftNexus API,com.v1rex.liftnexus.storagebin.exception,StorageBinCodeExistsException,0,6,0,0,0,2,0,1,0,1

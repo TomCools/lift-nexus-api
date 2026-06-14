@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/api-usage/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/api-usage/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/architecture/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/architecture/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/domain-model/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/demo/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/limitations/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/domain-model/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/optimization/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/limitations/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/project-overview/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/optimization/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/roadmap/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/project-overview/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
-         <loc>https://v1rex.github.io/lift-nexus-api/testing/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <loc>https://lift-nexus.amine-bahij.dev/roadmap/</loc>
+         <lastmod>2026-06-14</lastmod>
+    </url>
+    <url>
+         <loc>https://lift-nexus.amine-bahij.dev/testing/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
 </urlset>

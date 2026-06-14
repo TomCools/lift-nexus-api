@@ -10,10 +10,10 @@
       
       
       
-        <link rel="canonical" href="https://v1rex.github.io/lift-nexus-api/api-usage/">
+        <link rel="canonical" href="https://lift-nexus.amine-bahij.dev/api-usage/">
       
       
-        <link rel="prev" href="../optimization/">
+        <link rel="prev" href="../demo/">
       
       
         <link rel="next" href="../testing/">
@@ -76,6 +76,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#api-usage" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -361,6 +366,33 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Demo Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -370,6 +402,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Usage
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -387,6 +439,185 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typical-static-dispatching-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical static dispatching flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-by-step-walkthrough" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step-by-step walkthrough
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step-by-step walkthrough">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-forklift-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Create forklift types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-register-forklifts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Register forklifts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-create-storage-bins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Create storage bins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-register-load-units" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Register load units
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-create-transport-orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Create transport orders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-submit-a-dispatch-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Submit a dispatch job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-poll-job-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Poll job status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-terminate-a-job-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Terminate a job (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#seeded-development-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seeded development data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#endpoint-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Endpoint summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -490,6 +721,176 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typical-static-dispatching-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical static dispatching flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-by-step-walkthrough" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step-by-step walkthrough
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step-by-step walkthrough">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-forklift-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Create forklift types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-register-forklifts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Register forklifts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-create-storage-bins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Create storage bins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-register-load-units" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Register load units
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-create-transport-orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Create transport orders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-submit-a-dispatch-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Submit a dispatch job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-poll-job-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Poll job status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-terminate-a-job-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Terminate a job (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#seeded-development-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seeded development data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#endpoint-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Endpoint summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -509,9 +910,250 @@
   
 
 
-  <h1>API Usage</h1>
-
-<p>Coming soon </p>
+<h1 id="api-usage">API Usage<a class="headerlink" href="#api-usage" title="Permanent link">&para;</a></h1>
+<p>This page explains how to use the Lift Nexus API for the current static dispatching workflow.</p>
+<div class="admonition info">
+<p class="admonition-title">MVP scope</p>
+<p>This documentation reflects the v0.1.0 static dispatching MVP. The API does not yet support authentication, real-time replanning, or production deployment. See <a href="../limitations/">Known Limitations</a> for details.</p>
+</div>
+<hr />
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<p>Start the application and PostgreSQL database:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build
+</code></pre></div>
+<p>The API will be available at <code>http://localhost:8080</code>. Swagger UI provides interactive documentation at:</p>
+<div class="highlight"><pre><span></span><code>http://localhost:8080/swagger-ui.html
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Explore Swagger UI</p>
+<p>Swagger UI shows the full request and response schemas for every endpoint. Use it to inspect field names, data types, validation rules, and example payloads. This page focuses on the workflow — the exact schemas are best explored interactively.</p>
+</div>
+<hr />
+<h2 id="typical-static-dispatching-flow">Typical static dispatching flow<a class="headerlink" href="#typical-static-dispatching-flow" title="Permanent link">&para;</a></h2>
+<p>The current MVP supports a one-shot optimization workflow:</p>
+<ol>
+<li>Create forklift types and forklifts — the vehicles that execute work.</li>
+<li>Create storage bins — the warehouse locations.</li>
+<li>Create load units — the goods that need to be moved.</li>
+<li>Create transport orders — work items describing movements.</li>
+<li>Submit a dispatch job — the solver runs asynchronously.</li>
+<li>Poll the job status — monitor progress until completion.</li>
+<li>Inspect the result — check forklift assignments and solver score.</li>
+</ol>
+<p>This flow is <strong>static</strong>: the solver takes a snapshot of the current warehouse state. If the warehouse changes after a job starts, the plan is not automatically updated. See <a href="../optimization/">Optimization Approach</a> for the architectural context.</p>
+<hr />
+<h2 id="step-by-step-walkthrough">Step-by-step walkthrough<a class="headerlink" href="#step-by-step-walkthrough" title="Permanent link">&para;</a></h2>
+<h3 id="1-create-forklift-types">1. Create forklift types<a class="headerlink" href="#1-create-forklift-types" title="Permanent link">&para;</a></h3>
+<p>Forklift types define the technical capabilities of your fleet (model name, capacity, equipment category, energy specs).</p>
+<p><strong>Endpoint:</strong> <code>POST /api/v1/forklift-types</code></p>
+<p>Example fields: <code>modelName</code>, <code>equipmentType</code>, <code>maxCapacityKg</code>, <code>totalBatteryCapacitykWh</code>, <code>baseEnergyConsumptionPerMeter</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># List all forklift types (paginated)</span>
+GET<span class="w"> </span>/api/v1/forklift-types
+</code></pre></div>
+<h3 id="2-register-forklifts">2. Register forklifts<a class="headerlink" href="#2-register-forklifts" title="Permanent link">&para;</a></h3>
+<p>Each forklift belongs to a forklift type, has a unique fleet number, and can be assigned a current location and operational status.</p>
+<p><strong>Endpoint:</strong> <code>POST /api/v1/forklifts</code></p>
+<p>Example fields: <code>fleetNumber</code>, <code>forkliftTypeId</code>, <code>currentStorageBinId</code> (optional), <code>status</code>, <code>currentBatteryPercentage</code>.</p>
+<p>Additional forklift endpoints:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/forklifts</code></td>
+<td>List all (paginated, 15 per page)</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/forklifts/{id}</code></td>
+<td>Get by ID</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/forklifts/search?minCapacity=…&amp;status=…</code></td>
+<td>Filter by capacity or status</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/api/v1/forklifts/{id}/location</code></td>
+<td>Move to a different storage bin</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/v1/forklifts/{id}/status?status=…</code></td>
+<td>Change operational status</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-create-storage-bins">3. Create storage bins<a class="headerlink" href="#3-create-storage-bins" title="Permanent link">&para;</a></h3>
+<p>Storage bins are warehouse locations identified by a code and a 3D coordinate. Each bin belongs to a zone type (e.g., <code>STORAGE</code>, <code>STAGING_IN</code>, <code>STAGING_OUT</code>).</p>
+<p><strong>Endpoint:</strong> <code>POST /api/v1/storage-bins</code></p>
+<p>Example fields: <code>binCode</code>, <code>coordinate</code> (x, y, z), <code>zoneType</code>, <code>maxWeightCapacityKg</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># List all storage bins (paginated)</span>
+GET<span class="w"> </span>/api/v1/storage-bins
+</code></pre></div>
+<h3 id="4-register-load-units">4. Register load units<a class="headerlink" href="#4-register-load-units" title="Permanent link">&para;</a></h3>
+<p>Load units represent physical goods stored in the warehouse. Each has a unique tracking code, a weight, a status, and an optional storage bin location.</p>
+<p><strong>Endpoint:</strong> <code>POST /api/v1/load-units</code></p>
+<p>Example fields: <code>trackingCode</code>, <code>weightKg</code>, <code>status</code>, <code>currentStorageBinId</code>.</p>
+<p>Additional load unit endpoints:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/load-units</code></td>
+<td>List all (paginated)</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/load-units/{id}</code></td>
+<td>Get by ID</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/load-units/tracking/{trackingCode}</code></td>
+<td>Find by tracking code</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/load-units/status/{status}</code></td>
+<td>Filter by status</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-create-transport-orders">5. Create transport orders<a class="headerlink" href="#5-create-transport-orders" title="Permanent link">&para;</a></h3>
+<p>A transport order describes a movement: move a specific load unit from a source bin to a destination bin. You can optionally specify a required equipment type, which the solver will respect when assigning forklifts.</p>
+<p><strong>Endpoint:</strong> <code>POST /api/v1/transport-orders</code></p>
+<p>Example fields: <code>targetLoadUnitId</code>, <code>sourceBinId</code>, <code>destinationBinId</code>, <code>requiredEquipment</code> (optional).</p>
+<p>Additional transport order endpoints:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/transport-orders/{id}</code></td>
+<td>Get by ID</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/transport-orders/search?status=…&amp;minWeight=…</code></td>
+<td>Search with filters</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/api/v1/transport-orders/{id}/status</code></td>
+<td>Update status along lifecycle</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-submit-a-dispatch-job">6. Submit a dispatch job<a class="headerlink" href="#6-submit-a-dispatch-job" title="Permanent link">&para;</a></h3>
+<p>Once the warehouse state is ready, submit a dispatch job. The solver runs asynchronously and returns a job ID for tracking.</p>
+<p><strong>Endpoint:</strong> <code>POST /api/v1/dispatcher/jobs</code></p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Response (HTTP 202)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;jobId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a1b2c3d4-e5f6-7890-abcd-ef1234567890&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The job progresses through states: <code>QUEUED</code> → <code>SOLVING</code> → <code>COMPLETED</code> (or <code>FAILED</code> / <code>ABORTED</code>).</p>
+<h3 id="7-poll-job-status">7. Poll job status<a class="headerlink" href="#7-poll-job-status" title="Permanent link">&para;</a></h3>
+<p>Use the job ID to check progress:</p>
+<p><strong>Endpoint:</strong> <code>GET /api/v1/dispatcher/jobs/{jobId}</code></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a1b2c3d4-e5f6-7890-abcd-ef1234567890&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;COMPLETED&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;createdAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-13T14:30:00Z&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;completedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-13T14:30:05Z&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;finalScore&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0hard/-150soft&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Wait until the status is <code>COMPLETED</code> before inspecting assignments.</p>
+<h3 id="8-terminate-a-job-optional">8. Terminate a job (optional)<a class="headerlink" href="#8-terminate-a-job-optional" title="Permanent link">&para;</a></h3>
+<p>A running or queued job can be aborted:</p>
+<p><strong>Endpoint:</strong> <code>DELETE /api/v1/dispatcher/jobs/{jobId}</code></p>
+<p>Returns <code>204 No Content</code> on success. The job is marked as <code>ABORTED</code> and partial results are discarded.</p>
+<hr />
+<h2 id="seeded-development-data">Seeded development data<a class="headerlink" href="#seeded-development-data" title="Permanent link">&para;</a></h2>
+<p>When the application starts with the <code>dev</code> profile (default in Docker Compose), the <code>DataSeeder</code> populates the database with sample data:</p>
+<ul>
+<li>2 forklift types (a side loader and a reach truck)</li>
+<li>4 storage bins (dock, two storage zones, shipping)</li>
+<li>3 load units of varying weights</li>
+<li>2 forklifts</li>
+<li>3 transport orders (one already assigned, two open)</li>
+</ul>
+<p>This enables testing of the dispatch flow immediately without creating data manually.</p>
+<hr />
+<h2 id="endpoint-summary">Endpoint summary<a class="headerlink" href="#endpoint-summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Base path</th>
+<th>Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forklift Types</td>
+<td><code>/api/v1/forklift-types</code></td>
+<td><code>GET /</code>, <code>GET /{id}</code>, <code>POST /</code></td>
+</tr>
+<tr>
+<td>Forklifts</td>
+<td><code>/api/v1/forklifts</code></td>
+<td><code>GET /</code>, <code>GET /{id}</code>, <code>GET /search</code>, <code>POST /</code>, <code>PUT /{id}/location</code>, <code>PATCH /{id}/status</code></td>
+</tr>
+<tr>
+<td>Storage Bins</td>
+<td><code>/api/v1/storage-bins</code></td>
+<td><code>GET /</code>, <code>GET /{id}</code>, <code>POST /</code></td>
+</tr>
+<tr>
+<td>Load Units</td>
+<td><code>/api/v1/load-units</code></td>
+<td><code>GET /</code>, <code>GET /{id}</code>, <code>GET /tracking/{code}</code>, <code>GET /status/{status}</code>, <code>POST /</code></td>
+</tr>
+<tr>
+<td>Transport Orders</td>
+<td><code>/api/v1/transport-orders</code></td>
+<td><code>GET /{id}</code>, <code>GET /search</code>, <code>POST /</code>, <code>PUT /{id}/status</code></td>
+</tr>
+<tr>
+<td>Dispatcher</td>
+<td><code>/api/v1/dispatcher/jobs</code></td>
+<td><code>POST /</code>, <code>GET /{jobId}</code>, <code>DELETE /{jobId}</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="current-limitations">Current limitations<a class="headerlink" href="#current-limitations" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>No authentication or authorization.</strong> All endpoints are publicly accessible. Security is out of scope for the current MVP.</li>
+<li><strong>Static one-shot dispatching.</strong> The solver processes a warehouse snapshot. It does not react to changes in real time.</li>
+<li><strong>Simplified warehouse topology.</strong> Distances are estimated using 3D coordinates. The system does not model aisles, one-way paths, or blocked zones.</li>
+<li><strong>Limited constraint set.</strong> Three constraints are active: forklift capacity, equipment compatibility, and travel distance. See <a href="../optimization/">Optimization Approach</a> for the full constraint model.</li>
+<li><strong>Not production-ready.</strong> The API is designed for local development and portfolio demonstration, not for a live warehouse operations environment.</li>
+</ul>
+<p>See <a href="../limitations/">Known Limitations</a> for a more detailed discussion.</p>
 
 
 

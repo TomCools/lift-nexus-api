@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://v1rex.github.io/lift-nexus-api/domain-model/">
+        <link rel="canonical" href="https://lift-nexus.amine-bahij.dev/domain-model/">
       
       
         <link rel="prev" href="../architecture/">
@@ -76,6 +76,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#domain-model" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -316,6 +321,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domain Model
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -333,6 +358,135 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#domain-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forklift-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forklift Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forklifts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forklifts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-bins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage Bins
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-units" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load Units
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transport-orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transport Orders
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dispatch-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispatch Jobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#warehouse-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Warehouse Schedule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplified-relationship-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Simplified relationship summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-model-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current model boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -353,6 +507,33 @@
     
   
     Optimization Approach
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Demo Guide
   
 
     
@@ -490,6 +671,126 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#domain-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forklift-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forklift Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forklifts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forklifts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-bins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage Bins
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-units" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load Units
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transport-orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transport Orders
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dispatch-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispatch Jobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#warehouse-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Warehouse Schedule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplified-relationship-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Simplified relationship summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-model-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current model boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -509,9 +810,227 @@
   
 
 
-  <h1>Domain Model</h1>
+<h1 id="domain-model">Domain Model<a class="headerlink" href="#domain-model" title="Permanent link">&para;</a></h1>
+<p>Lift Nexus API models a simplified warehouse dispatching domain.</p>
+<p>The current MVP focuses on the objects needed to create a warehouse state, start a dispatch job, and assign transport orders to forklifts.</p>
+<div class="admonition info">
+<p class="admonition-title">MVP scope</p>
+<p>The domain model is intentionally simplified. It is designed to support the current static dispatching workflow, not to represent every detail of a real warehouse management system.</p>
+</div>
+<hr />
+<h2 id="domain-overview">Domain overview<a class="headerlink" href="#domain-overview" title="Permanent link">&para;</a></h2>
+<p>The main domain concepts are:</p>
+<ul>
+<li><strong>Forklift Types</strong> define the technical capabilities of forklifts.</li>
+<li><strong>Forklifts</strong> execute transport orders.</li>
+<li><strong>Storage Bins</strong> represent warehouse locations.</li>
+<li><strong>Load Units</strong> represent physical goods or containers stored in the warehouse.</li>
+<li><strong>Transport Orders</strong> describe movements from a source bin to a target bin.</li>
+<li><strong>Dispatch Jobs</strong> represent optimization runs.</li>
+<li><strong>Warehouse Schedule</strong> represents the assignment result of a dispatch job.</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+    ForkliftType[Forklift Type]
+    Forklift[Forklift]
+    StorageBin[Storage Bin]
+    LoadUnit[Load Unit]
+    TransportOrder[Transport Order]
+    DispatchJob[Dispatch Job]
+    WarehouseSchedule[Warehouse Schedule]
 
-<p>Coming Soon. </p>
+    ForkliftType --&gt; Forklift
+    StorageBin --&gt; LoadUnit
+    LoadUnit --&gt; TransportOrder
+    Forklift --&gt; DispatchJob
+    TransportOrder --&gt; DispatchJob
+    DispatchJob --&gt; WarehouseSchedule</code></pre>
+<hr />
+<h2 id="forklift-types">Forklift Types<a class="headerlink" href="#forklift-types" title="Permanent link">&para;</a></h2>
+<p>A forklift type describes the technical category of a forklift.</p>
+<p>It can define properties such as:</p>
+<ul>
+<li>model name </li>
+<li>maximum load capacity</li>
+<li>physical or operational characteristics</li>
+</ul>
+<p>In the current MVP, forklift types are useful because not every forklift should be treated as identical. Different forklifts may have different capacities and therefore may not be able to execute every transport order.</p>
+<p>Example: </p>
+<ul>
+<li>
+<p>Small electric forklift</p>
+<ul>
+<li>lower capacity</li>
+<li>useful for lighter load units</li>
+</ul>
+</li>
+<li>
+<p>Heavy forklift</p>
+<ul>
+<li>higher capacity</li>
+<li>useful for heavier load units</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="forklifts">Forklifts<a class="headerlink" href="#forklifts" title="Permanent link">&para;</a></h2>
+<p>A forklift represents a vehicle that can execute transport orders inside the warehouse.</p>
+<p>A Forklift has: </p>
+<ul>
+<li>a <a href="#forklift-types-">forklift type</a></li>
+<li>a current <a href="#storage-bins-">storage bin</a> (current location of the Forklift inside the warehouse)</li>
+<li>an availability state (e.g., available, busy)</li>
+<li>a list of assigned transport orders during planning</li>
+</ul>
+<p>In the optimization model, forklifts are part of the planning problem and receive ordered transport assignments.</p>
+<p>The order of assigned transport orders matters because the forklift's next travel distance depends on where the previous order ended.</p>
+<pre class="mermaid"><code>flowchart LR
+    CurrentLocation[Current Forklift Location]
+    OrderA[Transport Order A]
+    OrderB[Transport Order B]
+    OrderC[Transport Order C]
+
+    CurrentLocation --&gt; OrderA
+    OrderA --&gt; OrderB
+    OrderB --&gt; OrderC</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Why order matters</p>
+<p>The system does not only decide which forklift handles an order. It also considers the sequence of orders assigned to a forklift, because each completed order changes the forklift's next starting location.</p>
+</div>
+<hr />
+<h2 id="storage-bins">Storage Bins<a class="headerlink" href="#storage-bins" title="Permanent link">&para;</a></h2>
+<p>A storage bin represents a location inside the warehouse.</p>
+<p>In the current MVP, storage bins have coordinates. These coordinates are used to estimate distances between locations.</p>
+<p>A storage bin can be used as: </p>
+<ul>
+<li>the current location of a forklift </li>
+<li>the current location of a load unit </li>
+<li>the source location of a transport order </li>
+<li>the target location of a transport order</li>
+</ul>
+<p>The current distance model is simplified and based on warehouse coordinates. It does not yet model real warehouse paths, aisles, blocked zones, or traffic rules.</p>
+<p>See <a href="../limitations/#simplified-warehouse-topology">Known Limitations</a> for more detail.</p>
+<h2 id="load-units">Load Units<a class="headerlink" href="#load-units" title="Permanent link">&para;</a></h2>
+<p>A load unit represents a physical item, pallet, container, or unit that can be moved inside the warehouse.</p>
+<p>A load unit can have:</p>
+<ul>
+<li>weight</li>
+<li>current storage bin</li>
+<li>identifying information</li>
+</ul>
+<p>Transport orders usually refer to a load unit that needs to be moved from one storage bin to another.</p>
+<p>The weight of a load unit is important because the assigned forklift must be able to carry it.</p>
+<hr />
+<h2 id="transport-orders">Transport Orders<a class="headerlink" href="#transport-orders" title="Permanent link">&para;</a></h2>
+<p>A transport order describes a movement that should happen inside the warehouse.</p>
+<p>A transport order connects:</p>
+<ul>
+<li>a load unit</li>
+<li>a source storage bin</li>
+<li>a target storage bin</li>
+</ul>
+<p>In the current MVP, transport orders are the main work items that need to be assigned to forklifts.</p>
+<p>A simplified transport order answers:
+<div class="highlight"><pre><span></span><code>Move this load unit from this source bin to this target bin.
+</code></pre></div></p>
+<p>During optimization, transport orders are assigned to forklifts and arranged in a sequence.</p>
+<h2 id="dispatch-jobs">Dispatch Jobs<a class="headerlink" href="#dispatch-jobs" title="Permanent link">&para;</a></h2>
+<p>A dispatch job represents one optimization run.</p>
+<p>The current MVP uses a static dispatching workflow:</p>
+<ol>
+<li>The current warehouse state is available.</li>
+<li>A dispatch job is created.</li>
+<li>The solver receives the planning problem.</li>
+<li>Timefold calculates a solution.</li>
+<li>The resulting assignments are stored.</li>
+</ol>
+<pre class="mermaid"><code>flowchart LR
+    WarehouseState[Warehouse State]
+    DispatchJob[Dispatch Job]
+    Solver[Timefold Solver]
+    Result[Warehouse Schedule]
+
+    WarehouseState --&gt; DispatchJob
+    DispatchJob --&gt; Solver
+    Solver --&gt; Result</code></pre>
+<p>Dispatch jobs make the optimization workflow explicit. Instead of directly assigning orders inside a controller, the system treats solving as a separate process with its own status and result.</p>
+<hr />
+<h2 id="warehouse-schedule">Warehouse Schedule<a class="headerlink" href="#warehouse-schedule" title="Permanent link">&para;</a></h2>
+<p>The warehouse schedule represents the assignment result of a dispatch job.</p>
+<p>It describes:</p>
+<ul>
+<li>which transport orders were assigned</li>
+<li>which forklift should execute them</li>
+<li>in which sequence they should be executed</li>
+<li>what score or planning result was produced by the solver</li>
+</ul>
+<p>The current result should be understood as a planning recommendation for the simplified MVP, not as a real-world executable warehouse schedule.</p>
+<hr />
+<h2 id="simplified-relationship-summary">Simplified relationship summary<a class="headerlink" href="#simplified-relationship-summary" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>classDiagram
+    direction LR
+
+    class ForkliftType {
+        modelName
+        maxLoadCapacity
+    }
+
+    class Forklift {
+        currentLocation
+        availabilityState
+    }
+
+    class StorageBin {
+        coordinate
+    }
+
+    class LoadUnit {
+        weight
+        currentStorageBin
+    }
+
+    class TransportOrder {
+        sourceBin
+        targetBin
+        loadUnit
+    }
+
+    class DispatchJob {
+        status
+    }
+
+    class WarehouseSchedule {
+        score
+        assignments
+    }
+
+    ForkliftType "1" --&gt; "*" Forklift : defines
+    StorageBin "1" --&gt; "*" Forklift : current location
+    StorageBin "1" --&gt; "*" LoadUnit : stores
+    LoadUnit "1" --&gt; "*" TransportOrder : moved by
+    StorageBin "1" --&gt; "*" TransportOrder : source
+    StorageBin "1" --&gt; "*" TransportOrder : target
+    DispatchJob "1" --&gt; "1" WarehouseSchedule : produces
+    WarehouseSchedule "1" --&gt; "*" TransportOrder : sequences
+    WarehouseSchedule "1" --&gt; "*" Forklift : assigns work to</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Simplified model</p>
+<p>This diagram is meant to explain the current domain concepts. It is not a complete production warehouse data model.</p>
+</div>
+<hr />
+<h2 id="current-model-boundaries">Current model boundaries<a class="headerlink" href="#current-model-boundaries" title="Permanent link">&para;</a></h2>
+<p>The current domain model intentionally does not include every possible warehouse concept.</p>
+<p>Not yet modeled in detail:</p>
+<ul>
+<li>users and roles</li>
+<li>real warehouse topology</li>
+<li>traffic rules</li>
+<li>charging stations</li>
+<li>battery-aware dispatching</li>
+<li>operator shifts</li>
+<li>real-time execution tracking</li>
+<li>external warehouse systems</li>
+</ul>
+<p>These boundaries keep Milestone 1 focused on the core dispatching problem.</p>
 
 
 

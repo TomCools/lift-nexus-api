@@ -160,5 +160,22 @@ public class StorageBinService {
 <span class="nc" id="L160">    log.info(&quot;Fetching all managed storage bin entities without pagination&quot;);</span>
 <span class="nc" id="L161">    return storageBinRepository.findAll();</span>
   }
+
+  /**
+   * Retrieves all {@link StorageBin} entities without pagination.
+   *
+   * &lt;p&gt;This is an &lt;b&gt;internal&lt;/b&gt; method that should be used with care when the total number of
+   * bins is expected to be small, or when the caller intentionally loads the full collection, for
+   * example when building the Timefold planning problem.
+   *
+   * &lt;p&gt;Do not use this method for normal paginated REST API access.
+   *
+   * @return an unmodifiable list of all {@link StorageBin} entities
+   */
+  @Transactional(readOnly = true)
+  public List&lt;StorageBin&gt; findAllEntitiesForPlanning() {
+<span class="nc" id="L177">    log.info(&quot;Fetching all storage bin entities for planning without pagination&quot;);</span>
+<span class="nc" id="L178">    return List.copyOf(storageBinRepository.findAllForPlanning());</span>
+  }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

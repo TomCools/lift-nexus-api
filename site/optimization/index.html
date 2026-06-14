@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://v1rex.github.io/lift-nexus-api/optimization/">
+        <link rel="canonical" href="https://lift-nexus.amine-bahij.dev/optimization/">
       
       
         <link rel="prev" href="../domain-model/">
       
       
-        <link rel="next" href="../api-usage/">
+        <link rel="next" href="../demo/">
       
       
         
@@ -76,6 +76,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#optimization-approach" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -343,6 +348,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimization Approach
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -361,6 +386,179 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-timefold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Timefold?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-are-hard-and-soft-constraints-in-timefold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What are hard and soft constraints in Timefold?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-gets-optimized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What gets optimized?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-dispatching-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static dispatching workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#planning-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planning model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current constraints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Current constraints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forklift-capacity-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forklift capacity constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#equipment-requirement-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Equipment requirement constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#travel-distance-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Travel distance constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-current-optimization-does-not-do-yet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the current optimization does not do yet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-optimization-directions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future optimization directions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Demo Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -490,6 +688,143 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-timefold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Timefold?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-are-hard-and-soft-constraints-in-timefold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What are hard and soft constraints in Timefold?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-gets-optimized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What gets optimized?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-dispatching-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static dispatching workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#planning-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planning model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current constraints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Current constraints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forklift-capacity-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forklift capacity constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#equipment-requirement-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Equipment requirement constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#travel-distance-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Travel distance constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-current-optimization-does-not-do-yet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the current optimization does not do yet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-optimization-directions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future optimization directions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -509,9 +844,231 @@
   
 
 
-  <h1>Optimization Approach</h1>
+<h1 id="optimization-approach">Optimization Approach<a class="headerlink" href="#optimization-approach" title="Permanent link">&para;</a></h1>
+<p>Lift Nexus API uses Timefold Solver to experiment with constraint-based warehouse dispatching.</p>
+<p>The current MVP focuses on <strong>static dispatching</strong>. The system takes the current warehouse state, creates a dispatch job, builds a warehouse schedule, sends it to the solver, and stores the solved schedule after optimization.</p>
+<div class="admonition info">
+<p class="admonition-title">MVP scope</p>
+<p>The optimization model is intentionally small. The goal of Milestone 1 is to understand how an optimization solver can be integrated into a Spring Boot backend, not to model every real warehouse constraint yet.</p>
+</div>
+<hr />
+<h2 id="why-timefold">Why Timefold?<a class="headerlink" href="#why-timefold" title="Permanent link">&para;</a></h2>
+<p>Timefold is used because the problem is constraint-based.</p>
+<p>The project does not only need to store warehouse data. It needs to search for a good assignment and sequence of transport orders under constraints.</p>
+<p>Using a solver allows the project to express planning rules as constraints and let the solver search for a better schedule.</p>
+<p>For this MVP, Timefold helps explore how optimization can be integrated into a backend application with:</p>
+<ul>
+<li>REST APIs</li>
+<li>persistence</li>
+<li>asynchronous dispatch jobs</li>
+<li>stored planning results</li>
+<li>tests and documentation</li>
+</ul>
+<hr />
+<h2 id="what-are-hard-and-soft-constraints-in-timefold">What are hard and soft constraints in Timefold?<a class="headerlink" href="#what-are-hard-and-soft-constraints-in-timefold" title="Permanent link">&para;</a></h2>
+<p>The project uses score-based optimization.</p>
+<p>A useful way to think about the model is:</p>
+<ul>
+<li><strong>hard constraints</strong> define rules that should not be violated</li>
+<li><strong>soft constraints</strong> define preferences that should be optimized</li>
+</ul>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code>Hard constraint:
+A forklift should not receive work it cannot physically handle.
 
-<p>Coming soon. </p>
+Soft constraint:
+Prefer schedules with shorter travel distance.
+</code></pre></div>
+<p>This separation is useful because not every rule has the same importance.</p>
+<p>Some rules are required for a valid solution. Other rules improve the quality of the solution.</p>
+<hr />
+<h2 id="what-gets-optimized">What gets optimized?<a class="headerlink" href="#what-gets-optimized" title="Permanent link">&para;</a></h2>
+<p>The current problem is a simplified vehicle routing and dispatching problem.</p>
+<p>Given:</p>
+<ul>
+<li>a set of forklifts</li>
+<li>a set of open transport orders</li>
+<li>current forklift locations</li>
+<li>source and target storage bins</li>
+<li>load units and their weights</li>
+</ul>
+<p>the solver should produce a warehouse schedule that answers:</p>
+<blockquote>
+<p>Which forklift should execute which transport order, and in which sequence?</p>
+</blockquote>
+<p>This is more than a simple assignment problem because the order of transport orders matters. After a forklift completes one transport order, its next starting location changes.</p>
+<pre class="mermaid"><code>flowchart LR
+    ForkliftLocation[Current Forklift Location]
+    OrderASource[Order A Source]
+    OrderATarget[Order A Target]
+    OrderBSource[Order B Source]
+    OrderBTarget[Order B Target]
+
+    ForkliftLocation --&gt; OrderASource
+    OrderASource --&gt; OrderATarget
+    OrderATarget --&gt; OrderBSource
+    OrderBSource --&gt; OrderBTarget</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Why sequence matters</p>
+<p>If a forklift executes Order A before Order B, the travel distance can be different than executing Order B before Order A. The route sequence therefore affects the quality of the solution.</p>
+</div>
+<hr />
+<h2 id="static-dispatching-workflow">Static dispatching workflow<a class="headerlink" href="#static-dispatching-workflow" title="Permanent link">&para;</a></h2>
+<p>The current optimization workflow is static.</p>
+<pre class="mermaid"><code>flowchart LR
+    WarehouseState[Warehouse State Snapshot]
+    DispatchJob[Dispatch Job]
+    WarehouseSchedule[Warehouse Schedule / Planning Solution]
+    Timefold[Timefold Solver]
+    SolvedSchedule[Solved Warehouse Schedule]
+    Database[(Database)]
+
+    WarehouseState --&gt; DispatchJob
+    DispatchJob --&gt; WarehouseSchedule
+    WarehouseSchedule --&gt; Timefold
+    Timefold --&gt; SolvedSchedule
+    SolvedSchedule --&gt; Database</code></pre>
+<p>A dispatch job represents one optimization run.</p>
+<p>The application builds a <code>WarehouseSchedule</code> from the current warehouse state. This schedule acts as the planning solution that is passed to Timefold Solver.</p>
+<p>Before solving, the warehouse schedule contains the planning data. After solving, it contains the optimized assignment and sequence of transport orders.</p>
+<p>The solver does not directly update the database. The application receives the solved schedule and then persists the result or updates the relevant database state.</p>
+<p>The current workflow is static. If the warehouse state changes later, the current MVP does not automatically update the plan.</p>
+<p>See <a href="../limitations/#static-dispatching-only">Known Limitations</a> for more detail.</p>
+<hr />
+<h2 id="planning-model">Planning model<a class="headerlink" href="#planning-model" title="Permanent link">&para;</a></h2>
+<p>The planning model is centered around the <code>WarehouseSchedule</code>.</p>
+<p>In the current MVP, the warehouse schedule acts as the planning solution. It collects the data needed by the solver and later contains the optimized result.</p>
+<p>The important planning concepts are:</p>
+<ul>
+<li><strong>Warehouse Schedule</strong>: the planning solution passed to Timefold</li>
+<li><strong>Forklifts</strong>: vehicles that can execute transport orders</li>
+<li><strong>Transport Orders</strong>: work items that need to be assigned and sequenced</li>
+<li><strong>Storage Bins</strong>: source, target, and current locations</li>
+<li><strong>Load Units</strong>: physical units moved by transport orders</li>
+<li><strong>Score</strong>: the optimization result that describes solution quality</li>
+</ul>
+<p>At a high level, Timefold receives a warehouse schedule, assigns and sequences transport orders for forklifts, and returns a solved warehouse schedule.</p>
+<pre class="mermaid"><code>flowchart TD
+    Forklifts[Forklifts]
+    Orders[Transport Orders]
+    WarehouseSchedule[Warehouse Schedule]
+    Constraints[Constraints]
+    Timefold[Timefold Solver]
+    SolvedSchedule[Solved Warehouse Schedule]
+
+    Forklifts --&gt; WarehouseSchedule
+    Orders --&gt; WarehouseSchedule
+    WarehouseSchedule --&gt; Timefold
+    Constraints --&gt; Timefold
+    Timefold --&gt; SolvedSchedule</code></pre>
+<hr />
+<h2 id="current-constraints">Current constraints<a class="headerlink" href="#current-constraints" title="Permanent link">&para;</a></h2>
+<p>The current constraint model is intentionally limited.</p>
+<p>The MVP focuses on a small set of constraints that are enough to make the first dispatching workflow meaningful and understandable.</p>
+<p>Current constraints include:</p>
+<ul>
+<li>
+<p><strong>Forklift capacity limit</strong><br />
+  A forklift should not receive a transport order if the load unit is heavier than the forklift type's maximum capacity.</p>
+</li>
+<li>
+<p><strong>Transport order equipment requirement</strong><br />
+  A transport order that requires a specific equipment type should be assigned to a forklift with a matching equipment type.</p>
+</li>
+<li>
+<p><strong>Forklift travel distance</strong><br />
+  The solver should prefer schedules where forklifts travel less total distance.</p>
+</li>
+</ul>
+<p>The first two constraints are hard constraints. They describe rules that should not be violated.</p>
+<p>The travel distance constraint is a soft constraint. It improves the quality of the solution by preferring shorter routes.</p>
+<div class="admonition dev-note">
+<p class="admonition-title">Developer note</p>
+<p>More constraints do not automatically make the model better.</p>
+<p>For the current MVP, I prefer a smaller constraint model that I can understand, test, and improve step by step.</p>
+</div>
+<hr />
+<h3 id="forklift-capacity-constraint">Forklift capacity constraint<a class="headerlink" href="#forklift-capacity-constraint" title="Permanent link">&para;</a></h3>
+<p>The forklift capacity constraint checks whether a forklift can physically carry the load unit of a transport order.</p>
+<p>If a transport order is assigned to a forklift, the load unit weight should not exceed the forklift type's maximum capacity.</p>
+<p>Simplified:</p>
+<div class="highlight"><pre><span></span><code>load unit weight
+must be less than or equal to
+assigned forklift maximum capacity
+</code></pre></div>
+<p>If the load unit is too heavy for the assigned forklift, the solution receives a hard penalty.</p>
+<p>This prevents the solver from creating schedules where a forklift receives work that it cannot physically handle.</p>
+<hr />
+<h3 id="equipment-requirement-constraint">Equipment requirement constraint<a class="headerlink" href="#equipment-requirement-constraint" title="Permanent link">&para;</a></h3>
+<p>One current hard constraint checks whether a transport order requires a specific equipment type.</p>
+<p>If a transport order has a required equipment type, the assigned forklift should have a matching equipment type through its forklift type.</p>
+<p>Simplified:</p>
+<p><div class="highlight"><pre><span></span><code>transport order required equipment
+must match
+assigned forklift equipment type
+</code></pre></div>
+If the required equipment does not match the assigned forklift's equipment type, the solution receives a hard penalty.</p>
+<p>This keeps the solver from treating all forklifts as interchangeable. Some transport orders may require equipment that only certain forklift types can provide.</p>
+<h3 id="travel-distance-constraint">Travel distance constraint<a class="headerlink" href="#travel-distance-constraint" title="Permanent link">&para;</a></h3>
+<p>One important soft constraint is forklift travel distance.</p>
+<p>The idea is to penalize schedules where forklifts travel more than necessary.</p>
+<p>For each forklift, the distance calculation follows the sequence of assigned transport orders:</p>
+<ol>
+<li>Start at the forklift's current location.</li>
+<li>Travel to the source bin of the first transport order.</li>
+<li>Move from the source bin to the target bin.</li>
+<li>Use the target bin as the next starting location.</li>
+<li>Repeat this for the next assigned transport order.</li>
+</ol>
+<p>Simplified:</p>
+<pre class="mermaid"><code>flowchart LR
+    ForkliftLocation[Current Forklift Location]
+    OrderSource[Order Source Location]
+    OrderTarget[Order Target Location]
+    NextOrderSource[Next Order Source Location]
+    NextOrderTarget[Next Order Target Location]
+
+    ForkliftLocation --&gt; OrderSource
+    OrderSource --&gt; OrderTarget
+    OrderTarget --&gt; NextOrderSource
+    NextOrderSource --&gt; NextOrderTarget</code></pre>
+<p>This makes the sequence of transport orders important. A different order can produce a different total travel distance.</p>
+<div class="admonition warning">
+<p class="admonition-title">Simplified distance model</p>
+<p>The current MVP uses warehouse coordinates to estimate travel distance. It does not yet use a full warehouse topology with aisles, blocked paths, one-way routes, or real pathfinding.</p>
+</div>
+<p>See <a href="../limitations/#simplified-warehouse-topology">Known Limitations</a> for more detail.</p>
+<hr />
+<h2 id="what-the-current-optimization-does-not-do-yet">What the current optimization does not do yet<a class="headerlink" href="#what-the-current-optimization-does-not-do-yet" title="Permanent link">&para;</a></h2>
+<p>The current optimization model is not a complete real-world warehouse optimizer.</p>
+<p>It does not yet include:</p>
+<ul>
+<li>real warehouse pathfinding</li>
+<li>dynamic replanning while orders are being executed</li>
+<li>forklift battery level</li>
+<li>charging decisions</li>
+<li>operator shifts</li>
+<li>traffic or congestion inside the warehouse</li>
+<li>real-time telemetry</li>
+<li>validated real-world warehouse data</li>
+</ul>
+<p>These limitations are intentional for the current milestone.</p>
+<p>The goal is to first build a working and understandable optimization foundation before adding more realistic planning behavior.</p>
+<p>See <a href="../limitations/">Known Limitations</a> and <a href="../roadmap/">Roadmap</a> for more detail.</p>
+<hr />
+<h2 id="future-optimization-directions">Future optimization directions<a class="headerlink" href="#future-optimization-directions" title="Permanent link">&para;</a></h2>
+<p>Future milestones may improve the optimization model with:</p>
+<ul>
+<li>dynamic dispatching and replanning</li>
+<li>richer transport order priorities</li>
+<li>better warehouse topology modeling</li>
+<li>more realistic travel-distance calculations</li>
+<li>energy-aware forklift charging decisions</li>
+<li>benchmark scenarios with larger datasets</li>
+<li>comparison against simple baseline assignment strategies</li>
+</ul>
+<p>The long-term goal is to make optimization quality visible and measurable instead of only saying that the solver works.</p>
+<p>See <a href="../roadmap/">Roadmap</a> for more detail.</p>
 
 
 
