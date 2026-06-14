@@ -72,6 +72,19 @@ The goal is to experiment with backend architecture and optimization in a realis
 - Validate database changes through Flyway migrations
 - Generate and inspect API documentation through Swagger UI
 
+
+## Demo
+
+<p>
+  <img src="docs/assets/demo.gif" alt="Lift Nexus API demo" width="800">
+</p>
+
+This demo shows the `v0.1.0` workflow running locally with Docker Compose and Postman: seeded warehouse data, a submitted dispatch job, and the final solver result.
+
+For the full walkthrough, see the [Demo documentation](https://lift-nexus.amine-bahij.dev/site/demo/).
+
+
+
 ## Getting Started
 
 ### Prerequisites
