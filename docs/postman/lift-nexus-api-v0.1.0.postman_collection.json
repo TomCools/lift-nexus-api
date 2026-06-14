@@ -1,0 +1,210 @@
+{
+  "info": {
+    "name": "Lift Nexus API v0.1.0",
+    "description": "Demo collection for the static dispatching MVP. Start the app with `docker compose up -d`, then run the requests in order: inspect seeded data, submit a dispatch job, poll status, and inspect the result.\n\nAll data is pre-seeded — no manual setup required.\n\nSwagger UI: http://localhost:8080/swagger-ui.html",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Demo — Static Dispatching Workflow",
+      "description": "Run these requests in order to see the end-to-end dispatch flow.",
+      "item": [
+        {
+          "name": "01 List forklifts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Has forklifts\", () => pm.expect(pm.response.json().content.length).to.be.greaterThan(0));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/forklifts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "forklifts"]
+            },
+            "description": "Lists all forklifts in the fleet. Seeded data includes FLEET-HEAVY-01 and FLEET-REACH-01."
+          }
+        },
+        {
+          "name": "02 List open transport orders",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Has open orders\", () => pm.expect(pm.response.json().content.length).to.be.greaterThan(0));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/transport-orders/search?status=OPEN",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "transport-orders", "search"],
+              "query": [
+                { "key": "status", "value": "OPEN" }
+              ]
+            },
+            "description": "Finds transport orders with status OPEN. The seeded data has 2 open orders ready for dispatch."
+          }
+        },
+        {
+          "name": "03 Submit dispatch job",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 202\", () => pm.response.to.have.status(202));",
+                  "const jobId = pm.response.json().jobId;",
+                  "pm.expect(jobId).to.not.be.undefined;",
+                  "pm.collectionVariables.set(\"jobId\", jobId);",
+                  "pm.test(\"jobId captured\", () => pm.expect(jobId).to.match(/^[0-9a-f-]+$/));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dispatcher/jobs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dispatcher", "jobs"]
+            },
+            "description": "Submits a new optimization job. The solver runs asynchronously. The response contains a jobId used in the next requests. No request body needed."
+          }
+        },
+        {
+          "name": "04 Poll job status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const status = pm.response.json().status;",
+                  "pm.test(\"Job has status\", () => pm.expect([\"QUEUED\",\"SOLVING\",\"COMPLETED\",\"FAILED\"]).to.include(status));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dispatcher/jobs/{{jobId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dispatcher", "jobs", "{{jobId}}"]
+            },
+            "description": "Polls the status of the dispatch job. Re-run this request until status is COMPLETED. The seeded dataset typically solves in a few seconds."
+          }
+        },
+        {
+          "name": "05 Inspect transport orders after solving",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const assigned = pm.response.json().content.filter(o => o.assignedForklift);",
+                  "pm.test(\"Orders have assignments\", () => pm.expect(assigned.length).to.be.greaterThan(0));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/transport-orders/search",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "transport-orders", "search"]
+            },
+            "description": "Checks transport orders after dispatch. Previously OPEN orders should now show status ASSIGNED and include an assignedForklift field."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reference — Read Endpoints",
+      "description": "Additional GET endpoints for exploring the warehouse state.",
+      "item": [
+        {
+          "name": "Get forklift by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/forklifts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "forklifts", "1"]
+            }
+          }
+        },
+        {
+          "name": "List forklift types",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/forklift-types",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "forklift-types"]
+            }
+          }
+        },
+        {
+          "name": "List storage bins",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/storage-bins",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "storage-bins"]
+            }
+          }
+        },
+        {
+          "name": "List load units",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/load-units",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "load-units"]
+            }
+          }
+        },
+        {
+          "name": "Get transport order by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/transport-orders/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "transport-orders", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

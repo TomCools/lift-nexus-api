@@ -29,6 +29,7 @@ nav:
   - Architecture: architecture.md
   - Domain Model: domain-model.md
   - Optimization Approach: optimization.md
+  - Demo Guide: demo.md
   - API Usage: api-usage.md
   - Testing Strategy: testing.md
   - Known Limitations: limitations.md
