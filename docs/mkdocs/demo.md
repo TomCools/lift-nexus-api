@@ -43,7 +43,7 @@ You should see `FLEET-HEAVY-01` (a side loader at the dock) and `FLEET-REACH-01`
 
 `GET /api/v1/transport-orders/search?status=OPEN`
 
-Two open orders are returned — one requiring a side loader (heavy load), one with no specific equipment requirement (light load). These are the work items the solver will assign.
+Two open orders are returned — one requiring a side loader for the heavy load and one requiring a reach truck for the light load. These are the work items the solver will assign.
 
 ---
 
