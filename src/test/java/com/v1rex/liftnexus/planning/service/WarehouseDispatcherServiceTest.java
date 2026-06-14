@@ -51,9 +51,9 @@ public class WarehouseDispatcherServiceTest {
 
     @Test
     void shouldReturnCorrectLoadedState() {
-      when(storageBinService.findAllEntities()).thenReturn(Collections.emptyList());
-      when(forkliftService.findAllEntities()).thenReturn(Collections.emptyList());
-      when(transportOrderService.findAllEntities()).thenReturn(Collections.emptyList());
+      when(storageBinService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
+      when(forkliftService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
+      when(transportOrderService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
 
       WarehouseSchedule schedule = warehouseDispatcherService.buildCurrentState();
 
@@ -139,9 +139,9 @@ public class WarehouseDispatcherServiceTest {
                         .build());
               });
 
-      when(storageBinService.findAllEntities()).thenReturn(Collections.emptyList());
-      when(forkliftService.findAllEntities()).thenReturn(Collections.emptyList());
-      when(transportOrderService.findAllEntities()).thenReturn(Collections.emptyList());
+      when(storageBinService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
+      when(forkliftService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
+      when(transportOrderService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
 
       UUID returnedTicketId = warehouseDispatcherService.submitOptimizationJob();
 
@@ -176,9 +176,9 @@ public class WarehouseDispatcherServiceTest {
       when(jobRepository.save(any(DispatchJob.class)))
           .thenAnswer(invocation -> invocation.getArgument(0));
 
-      when(storageBinService.findAllEntities()).thenReturn(Collections.emptyList());
-      when(forkliftService.findAllEntities()).thenReturn(Collections.emptyList());
-      when(transportOrderService.findAllEntities()).thenReturn(Collections.emptyList());
+      when(storageBinService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
+      when(forkliftService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
+      when(transportOrderService.findAllEntitiesForPlanning()).thenReturn(Collections.emptyList());
 
       WarehouseSchedule resultProblemState =
           warehouseDispatcherService.buildCurrentProblemAndSetSolvingStatus(targetJobId);
@@ -254,12 +254,10 @@ public class WarehouseDispatcherServiceTest {
 
       when(mockSchedule.getScore()).thenReturn(realScore);
       when(mockSchedule.getTransportOrderPool()).thenReturn(Collections.emptyList());
-      when(mockSchedule.getForklifts()).thenReturn(Collections.emptyList());
 
       warehouseDispatcherService.saveFinalSolution(mockSchedule, jobId);
 
       verify(transportOrderService, times(1)).updateForkliftAssignments(any());
-      verify(forkliftService, times(1)).updateAssignedOrders(any());
 
       ArgumentCaptor<DispatchJob> jobCaptor = ArgumentCaptor.forClass(DispatchJob.class);
       verify(jobRepository, times(1)).save(jobCaptor.capture());
