@@ -18,6 +18,8 @@
     <br />
     <a href="https://lift-nexus.amine-bahij.dev/"><strong>Read the docs »</strong></a>
     &middot;
+    <a href="https://lift-nexus.amine-bahij.dev/site/demo/"><strong>▶ 5-minute demo »</strong></a>
+    &middot;
     <a href="#getting-started">Getting started</a>
     &middot;
     <a href="https://github.com/v1rex/lift-nexus-api/issues">Roadmap</a>
