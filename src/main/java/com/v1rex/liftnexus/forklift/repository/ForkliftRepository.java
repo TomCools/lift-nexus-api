@@ -40,4 +40,16 @@ public interface ForkliftRepository extends JpaRepository<Forklift, Long> {
     """)
   Page<Forklift> findByForkliftType_MaxCapacityKgGreaterThanEqual(
       @Param("minCapacity") Integer minCapacity, Pageable pageable);
+
+  @EntityGraph(
+      attributePaths = {
+        "forkliftType",
+        "currentStorageBin",
+        "transportOrders",
+        "transportOrders.targetLoadUnit",
+        "transportOrders.sourceBin",
+        "transportOrders.targetBin"
+      })
+  @Query("SELECT DISTINCT f FROM Forklift f")
+  List<Forklift> findAllForPlanning();
 }

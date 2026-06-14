@@ -173,7 +173,7 @@ public class DataSeeder implements CommandLineRunner {
             .targetBin(zoneB)
             .targetLoadUnit(lu3)
             .status(TransportOrderStatus.OPEN)
-            .requiredEquipment(EquipmentType.STANDARD)
+            .requiredEquipment(EquipmentType.REACH_TRUCK)
             .build();
 
     transportOrderRepository.saveAll(List.of(activeOrder, heavyOrder, openOrder));

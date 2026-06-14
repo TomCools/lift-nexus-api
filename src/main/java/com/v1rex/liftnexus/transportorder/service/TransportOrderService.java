@@ -200,6 +200,24 @@ public class TransportOrderService {
   }
 
   /**
+   * Retrieves all {@link TransportOrder} entities with the object graph required by the Timefold
+   * solver.
+   *
+   * <p>This is an <b>internal</b> method for planning use cases. It intentionally loads load units,
+   * source bins, target bins and assigned forklifts because the solver evaluates constraints
+   * outside the Hibernate session.
+   *
+   * <p>Do not use this method for normal paginated REST API access.
+   *
+   * @return an unmodifiable list of all planning-ready {@link TransportOrder} entities
+   */
+  @Transactional(readOnly = true)
+  public List<TransportOrder> findAllEntitiesForPlanning() {
+    log.info("Fetching all transport order entities with planning graph");
+    return List.copyOf(transportOrderRepository.findAllForPlanning());
+  }
+
+  /**
    * Enforces the transport-order state machine rules to prevent invalid status transitions.
    *
    * <p>Currently enforced rules:

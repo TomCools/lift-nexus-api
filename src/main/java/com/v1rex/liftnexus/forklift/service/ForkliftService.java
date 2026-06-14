@@ -238,6 +238,7 @@ public class ForkliftService {
    * @throws IllegalStateException if one or more forklift IDs from the solver solution no longer
    *     exist in the database (stale data)
    */
+  @Deprecated
   @Transactional
   public void updateAssignedOrders(List<Forklift> forklifts) {
     log.info("Updating assigned transport orders for Forklifts");
@@ -255,5 +256,22 @@ public class ForkliftService {
         databaseForklift.getTransportOrders().addAll(newForklift.getTransportOrders());
       }
     }
+  }
+
+  /**
+   * Retrieves all {@link Forklift} entities with the object graph required by the Timefold solver.
+   *
+   * <p>This is an <b>internal</b> method for planning use cases. It intentionally loads the full
+   * planning-relevant graph, including forklift type, current location and assigned transport
+   * orders, because the solver runs asynchronously outside the Hibernate session.
+   *
+   * <p>Do not use this method for normal paginated REST API access.
+   *
+   * @return an unmodifiable list of all planning-ready {@link Forklift} entities
+   */
+  @Transactional(readOnly = true)
+  public List<Forklift> findAllEntitiesForPlanning() {
+    log.info("Fetching all forklift entities with planning graph");
+    return List.copyOf(forkliftRepository.findAllForPlanning());
   }
 }

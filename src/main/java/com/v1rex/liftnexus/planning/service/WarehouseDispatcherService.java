@@ -104,9 +104,9 @@ public class WarehouseDispatcherService {
     // transportOrders
     //  by implementing a more efficient data retrieval strategy (e.g., pagination, selective field
     // fetching, or caching).
-    List<StorageBin> storageBins = storageBinService.findAllEntities();
-    List<Forklift> forklifts = forkliftService.findAllEntities();
-    List<TransportOrder> transportOrders = transportOrderService.findAllEntities();
+    List<StorageBin> storageBins = storageBinService.findAllEntitiesForPlanning();
+    List<Forklift> forklifts = forkliftService.findAllEntitiesForPlanning();
+    List<TransportOrder> transportOrders = transportOrderService.findAllEntitiesForPlanning();
 
     log.debug(
         "Found {} storageBins, {} forklifts, and {} transportOrders in DB.",
@@ -268,7 +268,7 @@ public class WarehouseDispatcherService {
     try {
       // Persist the optimised assignments to the underlying domain entities
       transportOrderService.updateForkliftAssignments(solution.getTransportOrderPool());
-      forkliftService.updateAssignedOrders(solution.getForklifts());
+      // forkliftService.updateAssignedOrders(solution.getForklifts());
 
       job.setStatus(JobStatus.COMPLETED);
       if (solution.getScore() != null) {

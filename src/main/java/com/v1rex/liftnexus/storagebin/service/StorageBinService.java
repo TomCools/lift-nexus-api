@@ -160,4 +160,21 @@ public class StorageBinService {
     log.info("Fetching all managed storage bin entities without pagination");
     return storageBinRepository.findAll();
   }
+
+  /**
+   * Retrieves all {@link StorageBin} entities without pagination.
+   *
+   * <p>This is an <b>internal</b> method that should be used with care when the total number of
+   * bins is expected to be small, or when the caller intentionally loads the full collection, for
+   * example when building the Timefold planning problem.
+   *
+   * <p>Do not use this method for normal paginated REST API access.
+   *
+   * @return an unmodifiable list of all {@link StorageBin} entities
+   */
+  @Transactional(readOnly = true)
+  public List<StorageBin> findAllEntitiesForPlanning() {
+    log.info("Fetching all storage bin entities for planning without pagination");
+    return List.copyOf(storageBinRepository.findAllForPlanning());
+  }
 }
