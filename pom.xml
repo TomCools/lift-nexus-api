@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.v1rex</groupId>
     <artifactId>lift-nexus-api</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
     <name>LiftNexus API</name>
     <description>High-performance asynchronous optimization and dispatching engine for intralogistics assets using Timefold and Spring Boot.</description>
     <url>https://github.com/v1rex/lift-nexus-api</url>
